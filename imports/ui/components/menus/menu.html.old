@@ -1,0 +1,43 @@
+<template name="menu">
+
+	<div id="menu-screen" class="menu-screen">
+		<ul class="menu">
+			<!-- Migrated -->
+			<li class="menu-option active button_kitbagList" data-toggle=".kitbagList">
+				Browse Kitbags
+			</li>
+			<!-- Migrated -->
+			<li class="menu-option active button_newKitbag" data-toggle=".kitbagAddEdit">
+				Add a new Kitbag
+			</li>
+			<!-- Migrated -->
+			<li class="menu-option active button_orgList superAdmin" data-toggle=".orgList">
+				Browse Organisations
+			</li>
+			<!-- Migrated -->
+			<li class="menu-option active button_newOrg" data-toggle=".orgAddEdit">
+				Add a new Organisation
+			</li>
+			<!-- Migrated -->
+			<li class="menu-option active button_settings" data-toggle=".settings">
+				Settings
+			</li>
+			<!-- Migrated -->
+			{{#if currentUser}}
+				<li class="menu-option active button_users adminOnly" data-toggle=".users">
+					Browse Users
+				</li>
+			{{/if}}
+			Not migrated:
+			<ul>
+				<li class="menu-option strike"><i>Check a kitbag</i></li>
+				<li class="menu-option strike"><i>Complete existing kitbag check</i></li>
+				<li class="menu-option strike"><i>Quick After-Mission Report</i></li>
+				<li class="menu-option strike"><i>View kitbag check history</i></li>
+				<li class="menu-option strike"><i>View Tasks</i></li>
+				<li class="menu-option strike"><i>View Notifications</i></li>
+			</ul>
+		</ul>
+	</div>
+
+</template>

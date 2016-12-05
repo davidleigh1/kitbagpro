@@ -1,0 +1,26 @@
+<template name="orgAdd">
+
+	<h1>Insert Org</h1>
+
+	<div class="screen-wrapper">
+
+	{{#if Template.subscriptionsReady}}
+
+		{{> quickForm
+			collection      	 = "Orgs"
+			id              	 = "insertOrgForm"
+			input-col-class 	 = "col-sm-10"
+			label-class     	 = "col-sm-2"
+			meteormethod    	 = "addOrg"
+			template        	 = "bootstrap3-horizontal"
+			type            	 = "method"
+		}}
+
+	{{else}}
+		Not Ready Yet...
+		{{>loading}}
+	{{/if}}
+
+	</div>
+
+</template>

@@ -1,0 +1,235 @@
+<template name="orgView">
+
+
+<!--
+Examples:
+https://elgg.org/plugins/350857/icons/1899256.jpg
+http://vendroid.venmond.com/img/screenshot/vendroid-09.jpg
+http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
+
+
+ -->
+
+{{#if Template.subscriptionsReady}}
+
+<div class="screen-wrapper objAddEdit orgView">
+		<!-- Page Heading -->
+<!-- 		{{> pageHeader
+			pageTitle = getTitle
+			pageSubtitle = ""
+			faIcon = getIcon
+			}} -->
+
+	{{#with thisOrg}}
+	<div class="row">
+
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+
+<!-- 					{{> pageHeader
+						pageTitle = getTitle
+						pageSubtitle = ""
+						faIcon = getIcon
+						}} -->
+
+						<!-- <i class="fa fa-building"></i> -->
+						{{orgTitle}}
+						<small>{{pageSubtitle}}</small>
+
+					</h3>
+				</div>
+				<div class="panel-body">
+					<!-- <h2>Bordered with Striped Rows</h2> -->
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<!-- <thead>
+								<tr>
+									<th>Page</th>
+									<th>Visits</th>
+									<th>% New Visits</th>
+									<th>Revenue</th>
+								</tr>
+							</thead> -->
+							<tbody>
+								<tr>
+									<th class="col-xs-2">Name</th>
+									<td class="col-xs-10">{{orgTitle}}</td>
+								</tr>
+								<tr>
+									<th>Status</th>
+									<td><span class="label {{getOrgStatusTag.labelClass}}">{{getOrgStatusTag.labelText}}</span></td>
+								</tr>
+								<tr>
+									<th>Description</th>
+									<td>{{orgDesc}}</td>
+								</tr>
+								<tr>
+									<th>Website</th>
+									<td><a href="{{orgUrl}}">{{orgUrl}}</a></td>
+								</tr>
+								<tr>
+									<th>Contact Person</th>
+									<td>{{orgContactPerson}}</td>
+								</tr>
+								<tr>
+									<th>Contact Phone</th>
+									<td>{{orgContactPhone}}</td>
+								</tr>
+								<tr>
+									<th>Contact Email</th>
+									<td><a href="mailto:{{orgContactEmail}}">{{orgContactEmail}}</a></td>
+								</tr>
+								<tr>
+									<th>Profile Photo</th>
+									<td>{{orgImgLarge}}</td>
+								</tr>
+								<tr>
+									<th>Profile Icon</th>
+									<td>{{orgImgSmall}}</td>
+								</tr>
+								<tr>
+									<th>Admin Details</th>
+								</tr>
+								<tr>
+									<th>API-ID <span class="subtitle">(External ID)</span></th>
+									<td>{{orgId}}</td>
+								</tr>
+								<tr>
+									<th>DB-ID <span class="subtitle">(Internal ID)</span></th>
+									<td>{{_id}}</td>
+								</tr>
+								<tr>
+									<th>Created</th>
+									<td>{{createdAt}}</td>
+								</tr>
+								<tr>
+									<th>Last Updated</th>
+									<td>{{updatedAt}}</td>
+								</tr>
+								<tr>
+									<th>Owner</th>
+									<td>
+									{{#if userNameLookup owner "html"}}
+										{{userNameLookup owner "html"}} (api: {{userNameLookup owner "apiId"}} / db: {{owner}})
+									{{else}}
+										{{owner}} (User details not found)
+									{{/if}}
+									</td>
+								</tr>
+								<tr>
+									<th>Account Data</th>
+									<td>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</td>
+								</tr>
+							</tbody>
+						</table>
+					<!-- /table-responsive -->
+
+					<!-- Control Buttons -->
+					<a href="edit.html" data-original-title="Edit Organisation" data-toggle="tooltip" type="button" class="btn btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit Profile</a>
+					<a href="#" class="btn btn-primary"><i class="fa fa-fw fa-dashboard"></i> Analytics</a>
+					<a href="/users/list?org=thisOrgId" class="btn btn-primary"><i class="fa fa-fw fa-users"></i> User List</a>
+
+					</div>
+				<!-- /panel-body -->
+				</div>
+			<!-- /panel-default -->
+			</div>
+		<!-- /col-12 -->
+		</div>
+	<!-- /row -->
+	</div>
+	{{/with}}
+
+<hr>
+<!--
+	<div class="row">
+		<form id="add-edit-org" class="add-edit-org">
+			<div class="formline">
+				<label for="orgId">Org ID:</label>
+				<input type="text" id="orgId" name="orgId" data-submit="true" placeholder="ID is generated on submission" disabled="disabled">
+			</div>
+			<div class="formline">
+				<label for="orgStatus">Status:</label>
+				<select class="statusSelectList" name="orgStatus" data-submit="true">
+					{{#each listOrgStatuses}}
+						<option value="{{this}}">{{this}}</option>
+					{{/each}}
+				</select>
+			</div>
+
+
+
+
+			<div class="formline">
+				<label for="orgTitle">Name:</label>
+				<input type="text" name="orgTitle" data-submit="true" placeholder="Organisation Name">
+			</div>
+			<div class="formline">
+				<label for="orgDesc">Description:<span class="subtitle">(max 400 chars)</span></label>
+				<input type="text" name="orgDesc" data-submit="true" placeholder="Brief summary of organisation and its goals">
+			</div>
+			<div class="formline">
+				<label for="orgUrl">Website:</label>
+				<input type="url" name="orgUrl" data-submit="true" placeholder="Website/homepage URL" value="">
+			</div>
+			<div class="formline">
+				<label for="orgContactPerson">Contact Person:</label>
+				<input type="text" name="orgContactPerson" data-submit="true" placeholder="Name of contact person">
+			</div>
+			<div class="formline">
+				<label for="orgContactPhone">Contact Phone:</label>
+				<input type="text" name="orgContactPhone" data-submit="true" placeholder="Contact phone number">
+			</div>
+			<div class="formline">
+				<label for="orgContactEmail">Contact Email:</label>
+				<input type="email" name="orgContactEmail" data-submit="true" placeholder="Contact email address">
+			</div>
+			<div class="formline">
+				<label for="orgImgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
+				<input type="url" name="orgImgLarge" data-submit="true" placeholder="URL for larger organization logo (max 512x512 / *.jpg or *.png)">
+			</div>
+			<div class="formline">
+				<label for="orgImgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
+				<input type="url" name="orgImgSmall" data-submit="true" placeholder="URL for smaller organization logo icon (max 32x32 / *.jpg or *.png)">
+			</div>
+			<div class="formline">
+				<label for="createdAt">Created:</label>
+				<input type="text" id="createdAt" name="createdAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="formline">
+				<label for="updatedAt">Last Updated:</label>
+				<input type="text" id="updatedAt" name="updatedAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="formline">
+				<label for="owner">Owner:</label>
+				<input type="text" id="owner" name="owner" data-submit="true" placeholder="Your User ID will be recorded on submission" disabled="disabled" value="{{nameFromOwner}}">
+			</div>
+			<div class="formline">
+				<label for="account_data">Account Data:</label>
+				<textarea>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</textarea>
+			</div>
+
+			<input type="hidden" name="orgAssocKitbags" data-type="array" data-submit="true">
+
+			<button class="submit">Submit</button>
+			<button class="cancel">Cancel</button>
+		</form>
+	</div>
+-->
+
+
+
+	<!-- Initialize -->
+	<!-- {{initialize}} -->
+
+</div>
+<!-- /screen-wrapper -->
+
+
+{{else}}
+	{{>loading}}
+{{/if}}
+
+</template>

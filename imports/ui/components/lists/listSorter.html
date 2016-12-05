@@ -1,0 +1,46 @@
+<template name="listSorter">
+	<!-- TODO: On mobile, the dropdown should be underlined link. See Stackoverflow mobile.  -->
+			<!--
+			<select class="listSorter" name="ListSorter">
+				<option value="none">Unsorted</option>
+				<option value="title_asc">Alphabetic &darr;</option>
+				<option value="title_desc">Alphabetic &uarr;</option>
+				<option value="created_asc">Created Date &darr;</option>
+				<option value="created_desc">Created Date &uarr;</option>
+				<option value="updated_new_first" disabled>Last Updated &darr;</option>
+				<option value="updated_old_first" disabled>Last Updated &uarr;</option>
+			</select>
+
+	//  sorttitle
+	//  sortcreated
+	//  sortkbcount
+	//  sortupdated
+	//  sortassocorgtitle
+
+			-->
+
+	<div class="{{obj}}ListSorter listSorter">
+		<label for="my{{Obj}}s">Sort {{Obj}}s by:
+			<select class="listSort" name="{{obj}}ListSorter">
+				<option value="none">Unsorted</option>
+				<option value="sorttitle_asc">Alphabetic &darr;</option>
+				<option value="sorttitle_desc">Alphabetic &uarr;</option>
+				{{#if gCurrentRoute "kitbagList"}}
+					<option value="sortassocorgtitle_asc">Alpha by Org &darr;</option>
+					<option value="sortassocorgtitle_desc">Alpha by Org &uarr;</option>
+				{{/if}}
+				<!-- TODO: Add last created date  -->
+				<option value="sortcreated_desc">Created Date &darr;</option>
+				<option value="sortcreated_asc">Created Date &uarr;</option>
+				{{#if gCurrentRoute "orgList"}}
+					<option value="sortkbcount_asc">Kitbags &darr;</option>
+					<option value="sortkbcount_desc">Kitbags &uarr;</option>
+				{{/if}}
+				<!-- TODO: Add last modified date  -->
+				<option value="sortupdated_asc">Last Updated &darr;</option>
+				<option value="sortupdated_desc">Last Updated &uarr;</option>
+			</select>
+		</label>
+	</div>
+
+</template>

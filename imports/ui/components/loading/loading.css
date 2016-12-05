@@ -1,0 +1,47 @@
+.loadingIcon {
+	text-align: center;
+	margin-top: 10px;
+}
+
+.loadingText {
+	text-align: center;
+	margin-top: 12px;
+    margin-left: 6px;
+    /*font-weight: bold;*/
+}
+
+.container {
+	/*background-color: white;*/
+	position:absolute;
+	left:0;right:0;top:0;bottom:0;
+	overflow:hidden;
+}
+.center {
+	position:absolute;
+	left:50%; top:50%;
+}
+.center-container {
+	position:absolute;
+	left:-2500px;top:-2500px;
+	width:5000px;height:5000px;
+	line-height:5000px;
+	text-align:center;
+	overflow: hidden;
+}
+.dyn-box {
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 100%;
+
+	/* Purely asthetic below this point */
+    /*background: rgb(248, 248, 248);*/
+    background: rgba(0, 0, 0, 0.2);
+    padding: 13px;
+    border-radius: 11px;
+    font-family: "Open Sans", sans-serif;
+}
+.dyn-body {
+	padding: 10px;
+	/* background:white; */
+	/* color:red; */
+}

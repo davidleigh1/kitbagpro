@@ -1,0 +1,107 @@
+<template name="orgAddEdit">
+
+<div class="screen-wrapper objAddEdit orgAddEdit">
+		<!-- Page Heading -->
+		{{> pageHeader
+			pageTitle = getTitle
+			pageSubtitle = ""
+			faIcon = getIcon
+			}}
+
+<!-- 	<div class="row">
+		<h1 class="page-header">
+			<i class="{{getIcon}}"></i> {{getTitle}}
+		</h1>
+	</div> -->
+	<!-- /row -->
+
+	<div class="row">
+		<form id="add-edit-org" class="add-edit-org">
+			<div class="addEditFormline">
+				<label for="orgId">Org ID:</label>
+				<input type="text" id="orgId" name="orgId" data-submit="true" placeholder="ID is generated on submission" disabled="disabled">
+			</div>
+
+			<div class="addEditFormline">
+				<label for="orgStatus">Status:</label>
+				<!-- <input type="text" name="orgStatus" data-submit="true" placeholder="Current status of this Org"> -->
+				<select class="statusSelectList" name="orgStatus" data-submit="true">
+					{{#each listOrgStatuses}}
+						<option value="{{this}}">{{this}}</option>
+					{{/each}}
+				</select>
+			</div>
+
+
+
+
+			<div class="addEditFormline">
+				<label for="orgTitle">Name:</label>
+				<input type="text" name="orgTitle" data-submit="true" placeholder="Organisation Name">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgDesc">Description:<span class="subtitle">(max 400 chars)</span></label>
+				<input type="text" name="orgDesc" data-submit="true" placeholder="Brief summary of organisation and its goals">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgUrl">Website:</label>
+				<input type="url" name="orgUrl" data-submit="true" placeholder="Website/homepage URL" value="">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgContactPerson">Contact Person:</label>
+				<input type="text" name="orgContactPerson" data-submit="true" placeholder="Name of contact person">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgContactPhone">Contact Phone:</label>
+				<input type="text" name="orgContactPhone" data-submit="true" placeholder="Contact phone number">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgContactEmail">Contact Email:</label>
+				<input type="email" name="orgContactEmail" data-submit="true" placeholder="Contact email address">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgImgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
+				<input type="url" name="orgImgLarge" data-submit="true" placeholder="URL for larger organization logo (max 512x512 / *.jpg or *.png)">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgImgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
+				<input type="url" name="orgImgSmall" data-submit="true" placeholder="URL for smaller organization logo icon (max 32x32 / *.jpg or *.png)">
+			</div>
+			<div class="addEditFormline">
+				<label for="createdAt">Created:</label>
+				<input type="text" id="createdAt" name="createdAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="addEditFormline">
+				<label for="updatedAt">Last Updated:</label>
+				<input type="text" id="updatedAt" name="updatedAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="addEditFormline">
+				<label for="owner">Owner:</label>
+				<input type="text" id="owner" name="owner" data-submit="true" placeholder="Your User ID will be recorded on submission" disabled="disabled" value="{{nameFromOwner}}">
+			</div>
+			<div class="addEditFormline">
+				<label for="account_data">Account Data:</label>
+				<textarea>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</textarea>
+			</div>
+
+			<input type="hidden" name="orgAssocKitbagIds" data-type="array" data-submit="true">
+			<input type="hidden" name="createdVia" data-type="text" value="ManualFormEntry" data-submit="true">
+			<input type="hidden" name="createdBy" data-type="text" value="{{usernameString}}" data-submit="true">
+
+			<div class="addEditFormline">
+				<!-- <input type="submit" value="Submit"> -->
+				<button class="btn btn-primary submit">Submit</button>
+				<button class="btn btn-outline-primary cancel">Cancel</button>
+			</div>
+
+		</form>
+
+	</div>
+	<!-- /row -->
+
+	<!-- Initialize -->
+	<!-- {{initialize}} -->
+
+</div>
+<!-- /screen-wrapper -->
+</template>

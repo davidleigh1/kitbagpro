@@ -1,0 +1,92 @@
+body {
+	margin-top: 0 !important;
+}
+
+.fullpage-wrapper {
+}
+
+/* IMPORTANT - THE img- PREFIX IS REQUIRED IN ORDER THAT THE CLASSES CAN BE CORRECTLY ADDED AND REMOVED!! */
+
+.img-uh_italy {
+	background: url(wallpaper/uh_italy.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+.img-forest_orange_blanket {
+	background: url(wallpaper/forest_orange_blanket.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+.img-mada-evac {
+	background: url(wallpaper/mda_evac.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+.img-tram {
+	background: url(wallpaper/sf_tram_1006_566.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+.img-icrc {
+	background: url(wallpaper/icrc.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+.img-snow {
+	background: url(wallpaper/snow_904_566.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+.img-wild {
+	background: url(wallpaper/wilderness_1006_566.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+
+
+
+
+.login-panel {
+	margin-top: 25%;
+}
+
+.login-panel > .panel-body {
+/*	-webkit-box-shadow: 3px 3px 5px 6px #ccc;*/
+/*	-moz-box-shadow: 3px 3px 5px 6px #ccc;*/
+/*	box-shadow: 7px 7px 10px 0px #aaa;*/
+}

@@ -1,0 +1,45 @@
+<template name="dashboardPaneladminLine">
+
+<!--
+
+objectName = "Kitbags";
+baseUrl = "/bags/list";
+queryStr = "?kitbagstatus=^(?!.*active|hidden|trashed).*$";
+
+
+-->
+
+
+
+	<!-- ADMIN LINE TEMPLATE -->
+	<div class="panel-footer">
+
+			<a href="{{baseUrl}}">
+				<div class="adminOnly">
+					Find All <small>(no filter)</small>
+					<span class="pull-right">
+						{{#if selectAllCount 'Kitbags'}}
+							{{selectAllCount 'Kitbags'}}
+						{{else}}
+							<span class="noDataReturned"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span>
+						{{/if}}
+					</span>
+				</div>
+			</a>
+
+			{{#if discrepancy (totalSum (getCount 'activeKitbags') (getCount 'hiddenKitbags') (getCount 'trashedKitbags'))  (selectAllCount 'Kitbags') }}
+				<a href="{{baseUrl}}{{queryStr}}>
+					<div class="alert alert-danger">
+						Discrepancy
+						<span class="pull-right">
+							{{discrepancy (totalSum (getCount 'activeKitbags') (getCount 'hiddenKitbags') (getCount 'trashedKitbags'))  (selectAllCount 'Kitbags')}}
+						</span>
+					</div>
+				</a>
+			{{/if}}
+
+			<div class="clearfix"></div>
+	</div>
+
+
+</template>

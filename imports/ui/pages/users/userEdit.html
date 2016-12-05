@@ -1,0 +1,106 @@
+<template name="userEdit">
+
+	<h1>Edit User</h1>
+
+	<div class="screen-wrapper">
+
+	{{#if Template.subscriptionsReady}}
+
+		<!--
+		{{ > quickForm
+			autosave     = autoSaveMode
+			collection   = "Meteor.users"
+			doc          = selectedUserDoc
+			id           = "updateUserForm"
+			type         = "method-update"
+			meteormethod = "updateUserMethod"
+		}}
+		-->
+			<!-- autosave     = autoSaveMode -->
+			<!-- omitFields   = "itemAssocKitbagCount,updatedAt,updatedBy" -->
+
+		{{#autoForm
+			autosave     = autoSaveMode
+			collection   = "Meteor.users"
+			doc          = selectedUserDoc
+			id           = "updateUserForm"
+			type         = "method-update"
+			meteormethod = "updateUserMethod"
+			class		 = "form-horizontal"
+			template	 = "bootstrap3-horizontal"
+		}}
+
+ 			<!-- <fieldset> -->
+
+			<!-- USER PERSONAL ATTRIBUTES -->
+			<legend>User Details</legend>
+				{{> afQuickField name='profile.displayName' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='profile.userCallsign' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='profile.phoneNumber' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='emails.0.address' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{#if glb_userIsSuperAdmin}}
+					<div class="adminOnly">
+					{{> afQuickField name='emails.0.verified' label-class="col-sm-2" input-col-class="col-sm-10"}}
+					</div>
+				{{/if}}
+				{{> afQuickField name='profile.userNotes' rows=4 label-class="col-sm-2" input-col-class="col-sm-10"}}
+
+			<!-- USER WITHIN ORG STRUCTURE -->
+			<legend>User Affiliations</legend>
+				{{#if glb_userIsSuperAdmin}}
+					<div class="adminOnly">
+					{{> afQuickField name='profile.userAssocOrg' label-class="col-sm-2" input-col-class="col-sm-10"}}
+					</div>
+				{{/if}}
+				{{> afQuickField name='profile.userDivision' label-class="col-xs-2" input-col-class="col-xs-10" }}
+				{{> afQuickField name='profile.userTeam' label-class="col-sm-2" input-col-class="col-sm-10"}}
+
+			<!-- LOGIN / USER ACCOUNT -->
+			<legend>User Account</legend>
+				{{> afQuickField name='profile.userStatus' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='username' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				<!-- {{> afQuickField name='profile.adminResetPassword' label-class="col-sm-2" input-col-class="col-sm-10" }} -->
+				{{> afQuickField name='profile.userType' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='profile.profilePicture' label-class="col-sm-2" input-col-class="col-sm-10"}}
+
+			<!-- INVENTORY -->
+			<legend>Inventory</legend>
+				{{> afQuickField name='profile.defaultStore' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='profile.userKitbags' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				<!-- {{> afQuickField name='profile.userKitbagCount' label-class="col-sm-2" input-col-class="col-sm-10"}} -->
+
+			<!-- SYSTEM INFO -->
+			<legend>System Information</legend>
+				{{> afQuickField name='profile.userId' label-class="col-sm-2" input-col-class="col-sm-10"}}
+			<!-- </fieldset> -->
+		<!-- </div> -->
+
+			<button type="submit" class="btn btn-primary">Submit</button>
+			<button type="cancel" class="btn btn-default">Cancel</button>
+		{{/autoForm}}
+
+<!-- 			{{> afQuickField name="_id" label="dbId"}}
+			{{> afQuickField name="itemId"}}
+			{{> afQuickField name="itemTitle"}}
+			{{> afQuickField name="itemDetail"}}
+			{{> afQuickField name="itemSize"}} -->
+
+<!-- 			{{#unless autoSaveMode}}
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
+					<button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button>
+				</div>
+			{{/unless}} -->
+
+		<!-- {{/autoForm}} -->
+
+
+
+	{{else}}
+		Not Ready Yet...
+		{{>loading}}
+	{{/if}}
+
+	</div>
+
+</template>

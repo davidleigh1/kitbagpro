@@ -1,0 +1,15 @@
+<template name="noListObjectsFound">
+
+	<tr>
+			<td colspan="7">
+				<div class="resNote">
+					{{#unless customMessage}}
+						No {{objectName}} found
+					{{else}}
+						{{customMessage}}
+					{{/unless}}
+				</div>
+			</td>
+	</tr>
+
+</template>

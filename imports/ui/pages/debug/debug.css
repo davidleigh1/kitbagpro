@@ -1,0 +1,8 @@
+.debug-panel p {
+	line-height: 0.8em;
+	/* background-color: yellow; */
+}
+.debug-results {
+	position: absolute;
+	left: 200px;
+}

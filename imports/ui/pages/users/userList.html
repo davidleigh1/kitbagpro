@@ -1,0 +1,121 @@
+<template name="userList">
+
+	<!-- Page Heading -->
+	{{> pageHeader
+		pageTitle = "Users"
+		pageSubtitle = ""
+		faIcon = "fa-users"
+		}}
+
+	<!-- Control Panel -->
+	<div class="row">
+		<div class="col-lg-12 tableControlPanel">
+			<!-- Control Buttons -->
+			<!-- fa-fw  makes the icons 'fixed width' -->
+			<a href="/users/create/{{getMyOrgId}}" class="btn btn-primary">
+				<i class="fa fa-fw fa-user-plus"></i> Add User
+			</a>
+			<a href="#" class="btn btn-primary disabled">
+				<i class="fa fa-fw fa-users"></i> Add Users
+			</a>
+			<a href="/items/duplicate/{{itemId}}" class="btn btn-primary disabled">
+				<i class="fa fa-fw fa-pencil-square-o"></i> Edit Users
+			</a>
+			{{#if glb_userIsSuperAdmin}}
+				<a href="#" class="btn btn-danger delete disabled">
+					<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
+				</a>
+			{{/if}}
+			{{#if glb_userIsOrgAdmin}}
+				<a href="#" class="btn btn-label-default trash disabled">
+					<i class="fa fa-fw fa-trash"></i> Trash
+				</a>
+			{{/if}}
+			<a href="#" class="btn btn-info" id="toggleUserFilter">
+				<i class="fa fa-fw fa-filter"></i> Filter List
+			</a>
+		</div>
+	</div>
+
+	<div class="row userFilterRow">
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading userFilter">
+					<h3 class="panel-title">
+						{{>userLogo}}
+						Users
+					</h3>
+				</div>
+				<div class="panel-body">
+					<!-- Filtered list of users -->
+					{{> listFilter
+						obj="user"
+						Obj="User"
+						full="user"
+						Full="User"
+						}}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.row -->
+
+
+
+
+{{#if Template.subscriptionsReady}}
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="table-responsive">
+				<table class="table table-bordered-XXX table-hover table-striped-XXX">
+					<thead>
+						<tr>
+							<th class="hidden-xs 						userlistProfileName">Name</th>
+							<th class="hidden-xs						userlistStatus">Status</th>
+							<th class="hidden-xs 						userlistCallsign">Callsign</th>
+							<th class="hidden-xs 					 	userlistDivision">Division</th>
+							<th class="hidden-xs 					 	userlistTeam">Team</th>
+							<th class="hidden-xs 					 	userlistKitbagCount">Kitbags</th>
+							<th class="hidden-xs 					 	userlistSuperAdmin">Level</th>
+							{{#if glb_userIsSuperAdmin}}
+							<th class="hidden-xs hidden-sm 				userAssocOrg adminOnly">Organisation</th>
+							{{/if}}
+							<th class="									userlistUsername">Username</th>
+							<th class="hidden-xs hidden-sm 				userlistEmail">Email</th>
+							<th class="hidden-xs hidden-sm hidden-md 	userId">User ID</th>
+							{{#if glb_userIsSuperAdmin}}
+							<th class="hidden-xs hidden-sm hidden-md 	userDbId adminOnly">DB ID</th>
+							{{/if}}
+							<th class="hidden-xs hidden-sm hidden-md 	userlistCreatedAt">CreatedAt</th>
+							<th class="hidden-xs 					 	userlistActions">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						{{#if Template.subscriptionsReady}}
+							{{#if objectsFiltered "UserList" filterVar}}
+								{{#each objectsFiltered "UserList" filterVar}}
+									{{ >userLine thisUser=this listType="userList" }}
+								{{/each}}
+							{{else}}
+								{{ >noListObjectsFound objectName="UserList" customMessage="No Users found.  Please review your search keywords, filters or user view permission." }}
+							{{/if}}
+						{{else}}
+							loading...
+						{{/if}}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+{{else}}
+	{{>loading}}
+{{/if}}
+
+	<!-- /.row -->
+<!-- </div> -->
+</template>

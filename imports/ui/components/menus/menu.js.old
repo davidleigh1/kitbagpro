@@ -1,0 +1,27 @@
+import './menu.html';
+import './menu.css';
+
+console.log("Loaded menu.css");
+
+Template.menu.helpers({
+	isOwner: function () {
+		// return this.owner == Meteor.userId();
+	}
+});
+
+Template.menu.events({
+	// TODO: Check if menu has togDiv and toggle on that param
+	'click .accounts-dialog': function(event, template) {
+		console.log(event.target.dataset);
+		// if (typeof event.target.dataset.toggle != "undefined"){
+		// 	$('.screen-wrapper').hide();
+		// 	$(event.target.dataset.toggle).toggle();
+		// }
+	},
+	'click .trash': function(event) {
+		// Meteor.call("trashKitbag",this._id);
+	},
+	'click .toggle-private': function(event){
+		// Meteor.call("setPrivate",this._id, !this.private);
+	}
+});

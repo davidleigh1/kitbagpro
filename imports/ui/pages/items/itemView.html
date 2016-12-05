@@ -1,0 +1,457 @@
+<template name="itemView">
+
+<!--
+Examples:
+https://elgg.item/plugins/350857/icons/1899256.jpg
+http://vendroid.venmond.com/img/screenshot/vendroid-09.jpg
+http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
+ -->
+
+{{#if Template.subscriptionsReady}}
+
+<div class="screen-wrapper objAddEdit itemView">
+		<!-- Page Heading -->
+	<!--{{> pageHeader
+			pageTitle = getTitle
+			pageSubtitle = ""
+			faIcon = getIcon
+			}} -->
+
+	{{#with thisItem}}
+	<div class="row">
+
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="">
+						{{>itemLogo}}
+						{{itemTitle}}
+						<small>{{pageSubtitle}}</small>
+					</h3>
+				</div>
+				<div class="panel-body">
+
+					<!-- Control Panel -->
+					<div class="row">
+						<div class="col-lg-12 tableControlPanel">
+							<!-- Control Buttons -->
+							<!-- fa-fw  makes the icons 'fixed width' -->
+							<a href="./edit" class="btn btn-primary">
+								<i class="fa fa-fw fa-edit"></i> Edit Item
+							</a>
+							<a href="./edit#itemAssocKitbags" class="btn btn-primary">
+								<i class="fa fa-fw fa-medkit"></i> Assign to Kitbag
+							</a>
+							<a href="/items/duplicate/{{itemId}}" class="btn btn-primary">
+								<i class="fa fa-fw fa-files-o"></i> Duplicate
+							</a>
+							{{#if glb_userIsSuperAdmin}}
+								<a href="#" class="btn btn-danger delete">
+									<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
+								</a>
+							{{/if}}
+							{{#if glb_userIsOrgAdmin}}
+								<a href="#" class="btn btn-label-default trash {{#if isTrashed}}disabled{{/if}}">
+									<i class="fa fa-fw fa-trash"></i> Trash
+								</a>
+							{{/if}}
+							<a href="/dashboard" class="btn btn-info">
+								<i class="fa fa-fw fa-dashboard"></i> Analytics
+							</a>
+							<a href="#itemKitbagListPanel" class="btn btn-info">
+								<i class="fa fa-fw fa-medkit"></i> Kitbag List
+							</a>
+							<a href="/users/list?item=thisItemId" class="btn btn-info">
+								<i class="fa fa-fw fa-users"></i> View Inventory
+							</a>
+						</div>
+					</div>
+
+					<!-- <h2>Bordered with Striped Rows</h2> -->
+					<!--{{#if itemDesc}}
+						<div class="well">
+							{{itemDesc}}
+						</div>
+					{{/if}} -->
+					<div class="table-responsive">
+						<table class="table table-hover table-condensed">
+
+							<tbody>
+
+								<tr>
+									<th colspan="2" class="table-divider">Item Details</th>
+								</tr>
+
+								{{#if glb_userIsSuperAdmin}}
+									<tr class="adminOnly">
+										<th>Organisation</th>
+										<td>
+											{{#if itemAssocOrg}}
+												<span title="{{itemAssocOrg}}">{{lookupFieldFromOrg itemAssocOrg 'orgTitle'}} ({{itemAssocOrg}})</span>
+											{{else}}
+												Organisation not found
+											{{/if}}
+										</td>
+									</tr>
+								{{/if}}
+
+
+								<tr>
+									<th class="col-xs-2">Item</th>
+									<td class="col-xs-10"><strong>{{itemTitle}}</strong></td>
+								</tr>
+								<tr>
+									<th>Detail</th>
+									<td>{{itemDetail}}</td>
+								</tr>
+								<tr>
+									<th>Status</th>
+									<td><span class="label {{gItemStatusTag.labelClass}}">{{gItemStatusTag.labelText}}</span></td>
+								</tr>
+								<tr>
+									<th>Description</th>
+									<td>{{itemDesc}}</td>
+								</tr>
+								<tr>
+									<th>Age Group</th>
+									<td>{{patientAgeGroup}}</td>
+								</tr>
+								<tr>
+									<th>Size</th>
+									<td>{{itemSize}}</td>
+								</tr>
+
+								<tr>
+									<th colspan="2" class="table-divider">Inventory Management</th>
+								</tr>
+
+								<tr>
+									<th>Kitbags with this Item</th>
+									<td>{{itemAssocKitbagCount}}</td>
+								</tr>
+
+								<tr>
+									<th>List of Kitbags</th>
+									<td>
+										{{assocKitbags}}
+										<!--
+ 										{{#each assocKitbags}}
+											{{#with thisKitbag kitbagId}}
+												<a href="/bags/{{kitbagId}}/view">
+													{{lookupFieldFromKb kitbagId 'kitbagTitle'}}
+												</a>
+												<span class="label {{gKitbagStatusTag.labelClass}} pull-right">
+													{{gKitbagStatusTag.labelText }}
+												</span>
+												<small><span class="text-muted kitbagIdCol">
+													{{kitbagId}}{{assignedBag}}
+												</span></small>
+												<br>
+											{{/with}}
+										{{/each}}
+										-->
+									</td>
+								</tr>
+								<tr>
+									<th>Is Mandatory for Service</th>
+									<td>{{#if itemIsMandatory}}<i class="fa fa-check text-muted" aria-hidden="true"></i>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td>
+								</tr>
+								<tr>
+									<th>Min Quantity (Qmin)</th>
+									<td>{{itemQMin}}</td>
+								</tr>
+								<tr>
+									<th>Recommended (Qrec)</th>
+									<td>{{itemQRecommended}}</td>
+								</tr>
+								<tr>
+									<th>Max Quantity (Qmax)</th>
+									<td>{{itemQMax}}</td>
+								</tr>
+
+
+								<tr>
+									<th colspan="2" class="table-divider">Manufacturer Details</th>
+								</tr>
+
+								<tr>
+									<th>Brand</th>
+									<td>{{itemManufacturer}}</td>
+								</tr>
+								<tr>
+									<th>Model</th>
+									<td>{{itemModel}}</td>
+								</tr>
+								<tr>
+									<th>Org SKU</th>
+									<td>{{itemSku}}</td>
+								</tr>
+								<tr>
+									<th>MfrPart #</th>
+									<td>{{itemPartNumber}}</td>
+								</tr>
+								<tr>
+									<th>EAN/UPC</th>
+									<td>{{itemEanUpc}}</td>
+								</tr>
+
+								<tr>
+									<th colspan="2" class="table-divider">Advanced Details</th>
+								</tr>
+
+								<tr>
+									<th>URL</th>
+									<td><a href="{{itemUrl}}" target="_blank">{{itemUrl}}</a></td>
+								</tr>
+								<tr>
+									<th>Profile Photo</th>
+									<td class="hover_img">
+
+										{{>urlImagePreviewRollover
+											imageUrl = itemImgLarge
+											imagePreviewText = (joinTextInList "Photo of '<b>" itemTitle "</b>'. Click to open in a new tab." )
+											imageAltText = (joinTextInList "Photo of '" itemTitle "'. Click or mouseover to view." )
+											imagePreviewHeight = "50%"
+										}}
+
+									</td>
+								</tr>
+								<tr>
+									<th>Profile Icon</th>
+									<td class="hover_img">
+
+										{{>urlImagePreviewRollover
+											imageUrl = itemImgSmall
+											imagePreviewText = (joinTextInList "Icon preview for '<b>" itemTitle "</b>'. Click to open in a new tab." )
+											imageAltText = (joinTextInList "Icon image for '" itemTitle "'. Click or mouseover to view." )
+											imagePreviewHeight = "20%"
+										}}
+
+									</td>
+								</tr>
+							<!-- start -->
+							</tbody>
+						</table>
+					<!-- /table-responsive -->
+					</div>
+
+					<!-- /panel-body -->
+				</div>
+				<!-- /panel-default -->
+			</div>
+			<!-- /col-12 -->
+		</div>
+
+
+		<!-- ITEMS MINILIST (listing 'assocKitbags') -->
+		<div class="col-lg-12">
+			<div class="panel panel-default" id="itemKitbagListPanel">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-fw fa-medkit"></i> Kitbags Containing This Item ({{get_itemBagsFound}})</h3>
+				</div>
+				<div class="panel-body">
+					<!-- <h2>Bordered with Striped Rows</h2> -->
+
+					<div class="table-responsive">
+						<table class="table table-bordered-XXX table-hover table-striped-XXX table-condensed">
+							<thead>
+								<tr>
+									<th class="hidden-xs">Kitbag</th>
+									{{#if glb_userIsSuperAdmin}}
+										<th class="hidden-xs adminOnly">Org</th>
+									{{/if}}
+									<th class="hidden-xs">Status</th>
+									<th class="hidden-xs text-center todo">Items</th>
+									<th class="hidden-xs text-center todo">Users</th>
+									<th class="hidden-xs hidden-sm">Bag ID</th>
+									<th class="visible-lg">Created</th>
+									<th class="hidden-xs hidden-sm hidden-md">Owner</th>
+									<th class="text-right">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<!-- Show 'Loading...' if not ready -->
+								{{#if Template.subscriptionsReady}}
+									<!-- Show 'noListObjectsFound' template if none found -->
+									{{#if objectsFiltered "kitbagsContainingThisItem" noFilter minilistFilter}}
+										<!-- Select subset of kitbag docs based on user/template filters-->
+										{{#each objectsFiltered "kitbagsContainingThisItem" noFilter minilistFilter}}
+											{{ >kitbagLine thisKitbag=this listType="itemView" }}
+										{{/each}}
+									{{else}}
+										{{ >noListObjectsFound objectName="kitbags containing this item were" }}
+									{{/if}}
+								{{else}}
+									loading...
+								{{/if}}
+
+							</tbody>
+						</table>
+					</div>
+
+				<!-- /panel-body -->
+				</div>
+			<!-- /panel-default -->
+			</div>
+		<!-- /col-12 -->
+		</div>
+
+
+		<div class="col-lg-12">
+			<div class="panel panel-info" id="systemInfo">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-fw fa-database"></i> System Info</h3>
+				</div>
+				<div class="panel-body">
+					<!-- <h2>Bordered with Striped Rows</h2> -->
+					<div class="table-responsive">
+						<table class="table table-hover table-condensed">
+							<!-- <thead>
+								<tr>
+									<th>Page</th>
+									<th>Visits</th>
+									<th>% New Visits</th>
+									<th>Revenue</th>
+								</tr>
+							</thead> -->
+							<tbody>
+								<!-- end -->
+								<tr>
+									<th>External ID</th>
+									<td><code>{{itemId}}</code></td>
+								</tr>
+								<tr>
+									<th>Internal ID</th>
+									<td>{{_id}}</td>
+								</tr>
+								<tr>
+									<th>Created</th>
+									<td>{{createdAt}} by {{#if createdBy}}<code>{{createdBy}}</code>{{else}}Unknown{{/if}}</td>
+								</tr>
+								<tr>
+									<th>Last Updated</th>
+									<td>{{updatedAt}} by {{#if updatedBy}}<code>{{updatedBy}}</code>{{else}}Unknown{{/if}}</td>
+								</tr>
+								<tr>
+									<th>Created Via</th>
+									<td>{{#if createdVia}}<code>{{createdVia}}</code>{{else}}Unknown{{/if}}</td>
+								</tr>
+								<!-- <tr>
+									<th>Owner</th>
+									<td>
+									{{#if userNameLookup owner "html"}}
+										{{userNameLookup owner "html"}} (api_id: <code>{{userNameLookup owner "apiId"}}</code> / db_id: {{owner}})
+									{{else}}
+										{{owner}}<span class="subtitle">(User details not found)</span>
+									{{/if}}
+									</td>
+								</tr> -->
+								<tr>
+									<th>Account Data</th>
+									<td>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</td>
+								</tr>
+							</tbody>
+						</table>
+					<!-- /table-responsive -->
+					</div>
+				<!-- /panel-body -->
+				</div>
+			<!-- /panel-default -->
+			</div>
+		<!-- /col-12 -->
+		</div>
+	<!-- /row -->
+	</div>
+	{{/with}}
+
+<!--
+	<div class="row">
+		<form id="add-edit-item" class="add-edit-item">
+			<div class="formline">
+				<label for="itemId">Item ID:</label>
+				<input type="text" id="itemId" name="itemId" data-submit="true" placeholder="ID is generated on submission" disabled="disabled">
+			</div>
+			<div class="formline">
+				<label for="itemStatus">Status:</label>
+				<select class="statusSelectList" name="itemStatus" data-submit="true">
+					{{#each listItemStatuses}}
+						<option value="{{this}}">{{this}}</option>
+					{{/each}}
+				</select>
+			</div>
+
+
+
+
+			<div class="formline">
+				<label for="itemTitle">Name:</label>
+				<input type="text" name="itemTitle" data-submit="true" placeholder="Item Name">
+			</div>
+			<div class="formline">
+				<label for="itemDesc">Description:<span class="subtitle">(max 400 chars)</span></label>
+				<input type="text" name="itemDesc" data-submit="true" placeholder="Brief summary of Item and its goals">
+			</div>
+			<div class="formline">
+				<label for="itemUrl">Website:</label>
+				<input type="url" name="itemUrl" data-submit="true" placeholder="Website/homepage URL" value="">
+			</div>
+			<div class="formline">
+				<label for="itemContactPerson">Contact Person:</label>
+				<input type="text" name="itemContactPerson" data-submit="true" placeholder="Name of contact person">
+			</div>
+			<div class="formline">
+				<label for="itemContactPhone">Contact Phone:</label>
+				<input type="text" name="itemContactPhone" data-submit="true" placeholder="Contact phone number">
+			</div>
+			<div class="formline">
+				<label for="itemContactEmail">Contact Email:</label>
+				<input type="email" name="itemContactEmail" data-submit="true" placeholder="Contact email address">
+			</div>
+			<div class="formline">
+				<label for="itemImgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
+				<input type="url" name="itemImgLarge" data-submit="true" placeholder="URL for larger itemanization logo (max 512x512 / *.jpg or *.png)">
+			</div>
+			<div class="formline">
+				<label for="itemImgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
+				<input type="url" name="itemImgSmall" data-submit="true" placeholder="URL for smaller itemanization logo icon (max 32x32 / *.jpg or *.png)">
+			</div>
+			<div class="formline">
+				<label for="createdAt">Created:</label>
+				<input type="text" id="createdAt" name="createdAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="formline">
+				<label for="updatedAt">Last Updated:</label>
+				<input type="text" id="updatedAt" name="updatedAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="formline">
+				<label for="owner">Owner:</label>
+				<input type="text" id="owner" name="owner" data-submit="true" placeholder="Your User ID will be recorded on submission" disabled="disabled" value="{{nameFromOwner}}">
+			</div>
+			<div class="formline">
+				<label for="account_data">Account Data:</label>
+				<textarea>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</textarea>
+			</div>
+
+			<input type="hidden" name="itemAssocKitbags" data-type="array" data-submit="true">
+
+			<button class="submit">Submit</button>
+			<button class="cancel">Cancel</button>
+		</form>
+	</div>
+-->
+
+
+
+	<!-- Initialize -->
+	<!-- {{initialize}} -->
+
+</div>
+<!-- /screen-wrapper -->
+
+
+{{else}}
+	{{>loading}}
+{{/if}}
+
+</template>

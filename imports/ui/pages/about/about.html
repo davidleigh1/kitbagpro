@@ -1,0 +1,87 @@
+<template name="about">
+
+		<div class="screen-wrapper faq">
+
+			<!-- Page Heading -->
+			{{> pageHeader
+				pageTitle = "FAQs"
+				pageSubtitle = ""
+				faIcon = "fa-question-circle-o"
+				}}
+
+			<div class="faqWrapper">
+				<span class="faqQ"><h3>Can I use KitbagPro without my organisation's approval?</h3></span>
+				<p class="faqA">'Unofficial' organisations are available on a limited, on-request, basis but are subject to some restrictions:
+					<ul>
+						<li>Maximum of five first responders/users.</li>
+						<li>Maximum of five kitbags.</li>
+						<li>Each user can still see their own inventory, but centralised visiblity of other users' inventory is not available.</li>
+						<li>Owners of 'official' accounts can request that duplicate (or similarly named) 'unofficial' accounts be closed/merged.</li>
+					</ul>
+				<span class="faqTags">
+					<span class="faqTag">New Account</span>
+					<span class="faqTag">Official</span>
+				</span>
+				</p>
+			</div>
+
+			<div class="faqWrapper">
+				<span class="faqQ"><h3>Can I duplicate an object?</h3></span>
+				<p class="faqA">Objects can be duplicated from the control panel at the top of each object page. All fields will be duplicated except where noted:
+					<ul>
+						<li>A new <code>Internal ID</code> will be generated. This value can be modified before saving. Please note that the <code>Internal ID</code> and <code>External ID</code> of an object cannot be modified once created. If a change in the <code>Internal ID</code> is required, duplication (and deletion of the original) is the recommended solution.</li>
+						<li>Values for <code>Created On</code> and <code>Created By</code> will be updated to reflect the user making the duplicate.</li>
+						<li>Values for <code>Last Updated On</code> and <code>Lasted Updated By</code> will be cleared.</li>
+						<li>The value for <code>Created Via</code> will be changed to 'ManualDuplicate' regardless of the previous value.</li>
+						<li>In the <code>Description</code> or <code>Notes</code> field for the newly created object, a note such as <span class="faq-quote">Duplicated from POV Jumpbag (#12345)</span> will be appended. You are welcome to delete this note.</li>
+					</ul>
+				<span class="faqTags">
+					<span class="faqTag">Account Admin</span>
+				</span>
+				</p>
+			</div>
+
+
+		</div>
+
+		<div class="screen-wrapper about">
+
+			<!-- Page Heading -->
+			{{> pageHeader
+				pageTitle = "Credits and Acknowlegements"
+				pageSubtitle = ""
+				faIcon = "fa-paper-plane"
+				}}
+
+			<ul>
+				<li>KitbagPro was developed on <a href="https://www.meteor.com" target="_blank">Meteor</a> using <a href="https://www.meteor.com/blaze" target="_blank">Blaze</a>, Meteor's frontend rendering system.</li>
+				<!-- <li>Thanks to <b>saimeunt</b> on <a href="http://stackoverflow.com/questions/25804879/" target="_target">StackOverflow</a> for helping me reach my breakthough on real-time filtering in Meteor/Blaze.</li> -->
+				<li>The theme is based on <a href="http://startmeteorjs.com/themes/sb-admin-meteor/" target="_blank">SB Admin Meteor</a> (and <a href="http://startbootstrap.com/template-overviews/sb-admin-2/" target="_blank">Start Bootstrap SB Admin 2 template</a>) which was adapted for Meteor by <a href="https://github.com/lmaccherone" target="_blank">Larry Maccherone</a> and features <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>, <a href="http://fortawesome.github.io/Font-Awesome/" target="_blank">Font-Awesome</a> a host of other great plugins.</li>
+				<li>Some Meteor Packages also deserving credit:</li>
+					<ul>
+						<li>
+							<a href="https://atmospherejs.com/aldeed/simple-schema" target="_blank"><code>aldeed:simple-schema</code></a> - super easy schemas and auto-validation for Mongo and autoforms
+						</li>
+						<li>
+							<a href="https://atmospherejs.com/aldeed/collection2" target="_blank"><code>aldeed:collection2</code></a> - plus excellent tutorials at: <a href="https://themeteorchef.com/snippets/using-the-collection2-package/#tmc-what-is-collection2" target="_blank">themeteorchef.com</a>
+						</li>
+						<!-- <li>
+							<a href="https://github.com/kadirahq/meteor-debug" target="_blank"><strike><code>kadira:debug</code> or <code>meteorhacks:kadira</code></strike></a> - debugging and performance monitoring by <a href="https://kadira.io/platform/kadira-debug/overview" target="_blank">Kadira</a>
+						</li> -->
+						<li>
+							<a href="https://github.com/kadirahq/flow-router" target="_blank"><code>FlowRouter</code></a> with <a href="https://github.com/kadirahq/blaze-layout" target="_blank"><code>BlazeLayout</code></a> for template rendering and <a href="https://atmospherejs.com/zimme/active-route" target="_blank"><code>zimme:active-route</code></a> for tracking the currently active route.
+						</li>
+						<li><a href="https://github.com/msavin/Mongol"><code>msavin:mongol</code></a> - in-app development GUI/Editor for local MongoDB</li>
+						<li><a href="https://atmospherejs.com/jesperwe/bootstrap-select"><code>jesperwe:bootstrap-select</code></a> - Meteor wrapper for Silvio Moreto's <a href="http://silviomoreto.github.io/bootstrap-select/examples/">bootstrap-select</a> jQuery plugin</li>
+						<li></li>
+						<li></li>
+					</ul>
+				<li>List of components at: https://github.com/rsercano/mongoclient/wiki</li>
+				<li>http://robertdickert.com/blog/2014/05/09/set-up-navigation-with-iron-router-and-bootstrap/</li>
+				<li></li>
+			</ul>
+
+
+		</div>
+
+</template>

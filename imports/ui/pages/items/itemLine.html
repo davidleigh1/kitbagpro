@@ -1,0 +1,249 @@
+<template name="itemLine">
+
+{{#with thisItem}}
+	<tr data-sorttitle="{{toLower itemTitle}}" data-sortcreated="{{createdAt}}" data-sortkbcount="{{#if itemAssocKitbagCount }}{{itemAssocKitbagCount}}{{else}}0{{/if}}" data-sortupdated="{{createdAt}}" >
+
+		<!-- Small screens only! -->
+		<td class="visible-xs col-xs-3">
+			<!-- Top line -->
+			<a href="/items/{{itemId}}/view">
+			<div>
+				{{#unless itemTitle}}
+					<span class="resNote">Item not found (itemID: {{itemId}})</span>
+				{{else}}
+					<a href="/items/{{itemId}}/view">{{highlight itemTitle filterVar suppressHightlight}}</a>
+				{{/unless}}
+			</div>
+			<!-- /Top line -->
+			<!-- Bottom line -->
+			<div>
+				{{#if itemAssocKitbagCount }}
+						<!-- <a href="/bags/list?o={{itemId}}" class="itemlistSubtitle make-block">{{plural itemAssocKitbagCount "kitbag" "kitbags"}}</a> -->
+						<span class="itemlistSubtitle">{{plural itemAssocKitbagCount "kitbag" "kitbags"}}</span>
+				<!-- {{else}} -->
+				{{/if}}
+			</div>
+			<!-- /Bottom line -->
+			</a>
+		</td>
+		<!-- /Small screens only! -->
+
+		<td class="hidden-xs itemTitleCol">{{#unless itemTitle}}<span class="resNote">'itemTitle' not found</span>{{else}}<a href="/items/{{itemId}}/view">{{highlight itemTitle filterVar suppressHightlight}}</a>{{/unless}}</td>
+
+		<!-- Item Status Tag -->
+		<td class="hidden-xs itemStatusCol"><span class="label {{gItemStatusTag.labelClass}}">{{gItemStatusTag.labelText}}</span></td>
+
+		<td class="hidden-xs itemDetailCol">{{itemDetail}}</td>
+		<td class="hidden-xs patientAgeGroupCol">{{patientAgeGroup}}</td>
+		<td class="hidden-xs itemSizeCol">{{itemSize}}</td>
+		<td class="hidden-xs itemManufacturerCol">{{itemManufacturer}}</td>
+		<td class="hidden-xs itemModelCol">{{itemModel}}</td>
+
+		<!-- Item Kitbag Count -->
+		<td class="hidden-xs itemAssocKitbagCountCol todo">{{#if itemAssocKitbagCount }}<a href="/bags/list?kitbagassocitem={{itemId}}" class="make-block">{{itemAssocKitbagCount}}</a>{{else}}0{{/if}}</td>
+
+		<!-- Associated Org (Calculated) -->
+		{{#if glb_userIsSuperAdmin}}
+			<td class="hidden-xs hidden-sm hidden-md orgCol adminOnly">
+				{{getOrgDataForThisItem itemId "kitbagAssocOrgTitle"}}
+			</td>
+		{{/if}}
+
+		<!-- Associated Org (From Document) -->
+		{{#if glb_userIsSuperAdmin}}
+			<td class="hidden-xs hidden-sm hidden-md itemOrgCol adminOnly">
+				{{lookupFieldFromOrg itemAssocOrg 'orgTitle'}} <small>({{itemAssocOrg}})</small>
+			</td>
+		{{/if}}
+
+		<!-- Kitbag ID -->
+		<td class="hidden-xs hidden-sm hidden-md itemSkuCol">
+			{{#unless itemId}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{highlight itemId filterVar suppressHightlight}}
+			{{/unless}}
+		</td>
+
+		<!-- DB ID -->
+		{{#if glb_userIsSuperAdmin}}
+			<td class="hidden-xs dbidCol adminOnly">
+				{{_id}}
+			</td>
+		{{/if}}
+
+		<!-- Owner -->
+		<!-- <td class="hidden-xs hidden-sm hidden-md itemOwnerCol">
+			TODO: Look up user name rather than ID
+			TODO: Link to User page
+			<a href="/users/{{owner}}/view">{{lookupUser owner}}</a>
+			{{#if userNameLookup owner "html"}}{{userNameLookup owner "html"}}{{else}}{{owner}}<span class="subtitle">(User details not found)</span>{{/if}}
+		</td> -->
+
+		<td class="hidden-xs itemIsMandatoryCol text-center">{{#if itemIsMandatory}}<i class="fa fa-check text-muted" aria-hidden="true"></i>{{/if}}</td>
+
+		<td class="hidden-xs itemQMinCol">{{itemQMin}} / {{itemQRecommended}} / {{itemQMax}}</td>
+		<!-- Combined inventory volumes
+ 		<td class="hidden-xs itemQMinCol">{{itemQMin}}</td>
+		<td class="hidden-xs itemQRecommendedCol">{{itemQRecommended}}</td>
+		<td class="hidden-xs itemQMaxCol">{{itemQMax}}</td>
+		-->
+
+		<!-- CREATED -->
+		<td class="visible-lg itemCreatedAtCol">
+			{{#unless createdAt}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{formatDate createdAt 'naa!'}}
+			{{/unless}}
+			<!--
+			{{#if createdBy}}
+				<span class="text-muted"><br/>by {{createdBy}}</span>
+			{{/if}}
+			-->
+		</td>
+		<!-- Combined Created
+ 		<td class="visible-lg itemCreatedAtCol">{{#unless createdAt}}<span class="resNote">N/A</span>{{else}}{{formatDate createdAt 'naa!'}}{{/unless}}</td>
+		<td class="hidden-xs createdByCol">{{createdBy}}</td>
+		-->
+
+		<!-- UPDATED -->
+		<td class="hidden-xs updatedAtCol">
+			{{#unless updatedAt}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{formatDate updatedAt 'naa!'}}
+			{{/unless}}
+			<!--
+			{{#if createdBy}}
+				<span class="text-muted"><br/>by {{updatedBy}}</span>
+			{{/if}}
+			-->
+		</td>
+		<!-- Combined Updated
+		<td class="hidden-xs updatedAtCol">{{#unless updatedAt}}<span class="resNote">N/A</span>{{else}}{{formatDate updatedAt 'naa!'}}{{/unless}}</td>
+		<td class="hidden-xs updatedByCol">{{updatedBy}}</td>
+		-->
+
+		<!-- <td class="hidden-xs assocKitbagsCol">{{assocKitbags}}</td> -->
+		<!-- <td class="hidden-xs itemIdCol">{{itemId}}</td> -->
+
+		<!-- PART NUMBER -->
+		<td class="hidden-xs itemPartNumberCol">{{itemPartNumber}}</td>
+
+		<!-- EAN/UPC -->
+		<td class="hidden-xs itemEanUpcCol">{{itemEanUpc}}</td>
+
+		<!-- SKU -->
+		<td class="hidden-xs itemSkuCol">{{itemSku}}</td>
+
+		<!-- URL -->
+		<!--
+		<td class="hidden-xs itemUrlCol">{{itemUrl}}</td>
+		-->
+
+
+		<td class="hidden-xs hidden-sm hidden-md itemControlCol">
+			<div class="controlWrapper">
+				<!-- {{#if isOwner}}
+				<button class="toggle-private">
+					{{#if private}}
+						<i class="fa fa-fw fa-user-secret" title="Private"></i>
+					{{else}}
+						<i class="fa fa-fw fa-globe" title="Public"></i>
+					{{/if}}
+				</button>
+				{{/if}} -->
+				<button class="delete" data-item="{{itemId}}" title="Trash"><i class="fa fa-fw fa-trash"></i></button>
+				<button class="edit" data-item="{{itemId}}" title="Edit"><i class="fa fa-fw fa-pencil"></i></button>
+				<button class="showDetail" data-item="{{itemId}}" title="View"><i class="fa fa-fw fa-eye"></i></button>
+			</div>
+		</td>
+
+		<!-- Dropdown Menu -->
+
+		<td class="itemActionsCol col-sm-1 col-xs-9">
+			<!-- TODO: Change this to icons on narrow responsive views -->
+			<div class="pull-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						Actions
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu pull-right" role="menu">
+						<!-- Small screens only! -->
+						<li class="visible-xs">
+							<a class="viewItemDetails" data-action="showItemDetails" data-item="{{itemId}}" href="#"><i class='fa fa-fw fa-list'></i> View Details</a>
+						</li>
+						<li class="visible-xs divider"></li>
+						<!-- /Small screens only! -->
+						<li>
+							<a class="edit" data-action="editItemDetails" data-item="{{itemId}}" href="#"><i class="fa fa-fw fa-pencil"></i> Edit</a>
+						</li>
+						{{#if glb_userIsSuperAdmin}}
+							<li>
+								<a class="toggleStatus" data-action="toggleStatus" data-item="{{itemId}}" href="#"><i class='fa fa-fw fa-{{changeItemStatus.icon}}'></i>
+									{{> changeItemStatus}}
+								<!--{{#if ({{kitbagStatus}} == "Active")}}
+										Make Hidden
+									{{else}}
+										Make Active
+									{{/if}} -->
+								</a>
+							</li>
+						{{/if}}
+						{{#if glb_userIsSuperAdmin}}
+							<li class="divider"></li>
+							<li>
+								<a class="trash" data-action="trashItem" data-item="{{itemId}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
+							</li>
+						{{/if}}
+						{{#if glb_userIsSuperAdmin}}
+							<li class="divider"></li>
+							<li>
+								<a class="delete" data-action="deleteItem" data-item="{{itemId}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
+							</li>
+						{{/if}}
+
+					</ul>
+					<!-- /dropdown menu -->
+				</div>
+				<!-- /button group which contains the dropdown -->
+
+				<!-- Show status below menu on small screens -->
+				<div class="visible-xs-block">
+					<span class="label {{gItemStatusTag.labelClass}}">{{gItemStatusTag.labelText}}</span>
+				</div>
+				<!-- /status label -->
+
+			</div>
+			<!-- <button class="edit" data-bag="{{kitbagId}}">Edit</button>
+			{{#if isOwner}}
+				<button class="toggle-private">
+					{{#if private}}
+						Prvt
+					{{else}}
+						Pub
+					{{/if}}
+				</button>
+			{{/if}}
+			{{#if isOwner}}
+				<button class="delete" data-bag="{{kitbagId}}">X</button>
+			{{/if}} -->
+		</td>
+	</tr>
+{{/with}}
+
+</template>
+
+<!--
+createdAt : Wed Mar 16 2016 02:08:27 GMT+0200 (Jerusalem Standard Time)
+itemContactEmail : "contactus@icrc.item"
+itemContactPerson : "Redman Crossy"
+itemDesc : "The official mission statement says that: "The International Committee of the Red Cross (ICRC) is an impartial, neutral, and independent itemanization whose exclusively humanitarian mission is to protect the lives and dignity of victims of war and internal violence and to provide them with assistance."
+itemImgLarge : "https://www.icrc.item/sites/default/themes/icrc_theme/images/who-we-are/mandate-and-mission.jpg"
+itemImgSmall : "https://www.icrc.item/sites/default/themes/icrc_theme/images/en/icon-128.png"
+itemTitle : "International Red Cross"
+itemUrl : "https://www.icrc.item"
+owner : "v3TTtttNdEZZQP6TL"
+ -->

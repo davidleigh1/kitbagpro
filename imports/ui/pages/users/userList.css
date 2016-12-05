@@ -1,0 +1,56 @@
+/* USER LIST */
+
+/*
+.userline.header {
+	font-weight: bold;
+	border-bottom: 2px solid gray;
+}
+
+.userline {
+	min-height: 12px;
+	font-size: 0.6em;
+	border-bottom: 1px dotted gray;
+}
+
+.userlistProfileName{
+	width: 20%;
+	border-right: 1px dotted gray;
+}
+.userlistId{
+	width: 20%;
+	border-right: 1px dotted gray;
+}
+.userlistEmail{
+	width: 10%;
+	border-right: 1px dotted gray;
+}
+.userlistCreatedAt{
+	width: 10%;
+	border-right: 1px dotted gray;
+}
+.userlistUsername{
+	width: 10%;
+	border-right: 1px dotted gray;
+}
+.userlistService{
+	width: 10%;
+	border-right: 1px dotted gray;
+}
+.userlistSuperAdmin{
+	width: 5%;
+}
+
+.userline > span {
+		display: inline-block;
+		padding: 4px;
+		margin: 1px;
+		vertical-align: top;
+}
+
+*/
+.currentUser {
+	background-color: rgba(255, 255, 0, 0.2);
+	color:brown;
+	font-weight: bold
+}
+

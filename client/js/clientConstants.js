@@ -1,0 +1,1 @@
+// Variables available for use in CLIENT scope only

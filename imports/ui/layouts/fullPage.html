@@ -1,0 +1,35 @@
+<template name="fullPage">
+	<div class="fullpage-wrapper">
+
+		{{#if Template.subscriptionsReady}}
+			{{>Template.dynamic template=main}}
+		{{else}}
+			{{>loading}}
+		{{/if}}
+
+	</div>
+
+</template>
+
+
+<template name="fullPage_old">
+	<div id="fullpage-wrapper">
+        <div id="page-wrapper">
+            <div class="container-fluid">
+
+				{{#if Template.subscriptionsReady}}
+					{{>Template.dynamic template=main}}
+				{{else}}
+					{{>loading}}
+				{{/if}}
+
+
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /#page-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+</template>
+

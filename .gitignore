@@ -1,0 +1,8 @@
+node_modules/
+notes/
+_notes/
+.notes/
+*.txt
+settings-development.json
+settings-production.json
+desktop.ini

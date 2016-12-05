@@ -1,0 +1,29 @@
+<template name="mainLayout">
+	<div id="wrapper">
+		{{>Template.dynamic template=nav}}
+		<!-- Main content -->
+        <div id="page-wrapper">
+
+
+            <div class="container-fluid">
+			<!-- sAlert JS code in mainLayout.js -->
+			{{> sAlert}}
+
+				{{#if Template.subscriptionsReady}}
+					{{>Template.dynamic template=main}}
+					{{>Template.dynamic template=footer}}
+					<!-- {{>globalFooter}} -->
+				{{else}}
+					{{>loading}}
+				{{/if}}
+
+
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /#page-wrapper -->
+
+	</div>
+	<!-- /#wrapper -->
+</template>
+

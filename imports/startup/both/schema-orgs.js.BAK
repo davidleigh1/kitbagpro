@@ -1,0 +1,165 @@
+console.log("RUNNING OrgSchema");
+
+import { Orgs } from '/imports/api/orgs/orgs.js';
+// import { listOrgStatuses } from '/imports/api/orgs/orgs.js';
+import { appSettings } from '/imports/startup/both/sharedConstants.js';
+
+
+/*
+MyCollections = ( typeof MyCollections != "undefined" && typeof MyCollections == "object" ) ? MyCollections : {};
+MyCollections.Orgs = new Mongo.Collection("orgs");
+
+MyCollections.listOrgStatuses = ["Active","Hidden","Deleted"];*/
+/*
+
+
+Orgs2.allow({
+	insert: () => false,
+	update: () => false,
+	remove: () => false
+});
+
+Orgs2.deny({
+	insert: () => true,
+	update: () => true,
+	remove: () => true
+});
+*/
+
+// https://atmospherejs.com/aldeed/simple-schema
+
+let OrgSchema = new SimpleSchema({
+	"orgId": {
+		type: String,
+		optional: false,
+		max: 20,
+		label: "Organisation ID"
+	},
+	"orgStatus": {
+		type: String,
+		allowedValues: appSettings.orgs.statuses,
+		optional: true,
+		defaultValue: function () {
+			if (this.isSet == true){
+				return this.value;
+			}
+		},
+		// defaultValue: "Active",
+		// autoValue: function () {
+		// 	if (this.isSet == true){
+		// 		return this.value;
+		// 	} else {
+		// 		return "Active"; /* This replaces the need for the defaultValue setting*/
+		// 	}
+			// return (this.isSet == true) ? this.value : "Hidden";
+		// },
+		label: "Organisation Status"
+	},
+	"orgTitle": {
+		type: String,
+		optional: false,
+		label: "Organisation Name",
+		defaultValue: function () {
+			if (this.isSet == true){
+				return this.value;
+			}
+		}
+	},
+	"orgDesc": {
+		type: String,
+		optional: true,
+		max: 400,
+		label: "Organisation Description"
+	},
+
+	/* CONTACT DETAILS */
+
+	"orgIsOfficial": {
+		type: Boolean,
+		optional: true,
+		label: "Is Official"
+	},
+	"orgContactPerson": {
+		type: String,
+		optional: true,
+		label: "Contact Person"
+	},
+	"orgContactPhone": {
+		type: String,
+		optional: true,
+		label: "Contact Phone Number"
+	},
+	"orgContactEmail": {
+		type: String,
+		optional: true,
+		label: "Contact Email Address"
+	},
+	"orgUrl": {
+		type: String,
+		optional: true,
+		label: "Organisation Website"
+	},
+
+	/* BRANDING + RESOURCES */
+
+	"orgImgLarge": {
+		type: String,
+		optional: true,
+		label: "Profile Photo"
+	},
+	"orgImgSmall": {
+		type: String,
+		optional: true,
+		label: "Profile Icon"
+	},
+
+	/* DATA ADMIN + LOGGING */
+
+	"createdVia": {
+		type: String,
+		optional: true,
+		allowedValues: appSettings.global.createdVia,
+		label: "Creation Method"
+	},
+	"createdAt": {
+		type: Date,
+		optional: false,
+		label: "Created Date"
+	},
+	"createdBy": {
+		type: String,
+		optional: true,
+		label: "Created By User"
+	},
+	"updatedAt": {
+		type: Date,
+		optional: false,
+		label: "Last Updated Date"
+	},
+	"updatedBy": {
+		type: String,
+		optional: true,
+		label: "Last Updated By User"
+	},
+	// "owner": {
+	// 	type: String,
+	// 	optional: true, // TODO - Disabled for testing only!  Owner should be required for new record.
+	// 	label: "Owner"
+	// },
+
+	/* ASSOCIATED KITBAGS */
+
+	"orgAssocKitbagCount": {
+		type: Number,
+		optional: true,
+		label: "Count of the Organisation's kitbags"
+	},
+	"orgAssocKitbagIds": {
+		type: [String],
+		optional: true,
+		label: "List of IDs of Organisation's kitbags"
+	},
+});
+
+// console.log(OrgSchema);
+Orgs.attachSchema( OrgSchema );

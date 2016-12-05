@@ -1,0 +1,109 @@
+<template name="itemAddEdit">
+
+<div class="screen-wrapper objAddEdit itemAddEdit">
+		<!-- Page Heading -->
+		{{> pageHeader
+			pageTitle = getTitle
+			pageSubtitle = ""
+			faIcon = getIcon
+			}}
+
+<!-- 	<div class="row">
+		<h1 class="page-header">
+			<i class="{{getIcon}}"></i> {{getTitle}}
+		</h1>
+	</div> -->
+	<!-- /row -->
+
+	<div class="row">
+		<form id="add-edit-item" class="add-edit-item">
+			<div class="addEditFormline">
+				<label for="itemId">Item ID:</label>
+				<input type="text" id="itemId" name="itemId" data-submit="true" placeholder="ID is generated on submission" disabled="disabled">
+			</div>
+
+			<div class="addEditFormline">
+				<label for="itemStatus">Status:</label>
+				<!-- <input type="text" name="itemStatus" data-submit="true" placeholder="Current status of this Item"> -->
+				<select class="statusSelectList" name="itemStatus" data-submit="true">
+					{{#each listItemStatuses}}
+						<option value="{{this}}">{{this}}</option>
+					{{/each}}
+				</select>
+			</div>
+
+
+
+
+			<div class="addEditFormline">
+				<label for="itemTitle">Name:</label>
+				<input type="text" name="itemTitle" data-submit="true" placeholder="Item Name">
+			</div>
+			<div class="addEditFormline">
+				<label for="itemDesc">Description:<span class="subtitle">(max 400 chars)</span></label>
+				<input type="text" name="itemDesc" data-submit="true" placeholder="Brief summary of Item and its goals">
+			</div>
+			<div class="addEditFormline">
+				<label for="itemUrl">Website:</label>
+				<input type="url" name="itemUrl" data-submit="true" placeholder="Website/homepage URL" value="">
+			</div>
+			<div class="addEditFormline">
+				<label for="itemContactPerson">Contact Person:</label>
+				<input type="text" name="itemContactPerson" data-submit="true" placeholder="Name of contact person">
+			</div>
+			<div class="addEditFormline">
+				<label for="itemContactPhone">Contact Phone:</label>
+				<input type="text" name="itemContactPhone" data-submit="true" placeholder="Contact phone number">
+			</div>
+			<div class="addEditFormline">
+				<label for="itemContactEmail">Contact Email:</label>
+				<input type="email" name="itemContactEmail" data-submit="true" placeholder="Contact email address">
+			</div>
+			<div class="addEditFormline">
+				<label for="itemImgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
+				<input type="url" name="itemImgLarge" data-submit="true" placeholder="URL for larger organisation logo (max 512x512 / *.jpg or *.png)">
+			</div>
+			<div class="addEditFormline">
+				<label for="itemImgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
+				<input type="url" name="itemImgSmall" data-submit="true" placeholder="URL for smaller organisation logo icon (max 32x32 / *.jpg or *.png)">
+			</div>
+			<div class="addEditFormline">
+				<label for="createdAt">Created:</label>
+				<input type="text" id="createdAt" name="createdAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="addEditFormline">
+				<label for="updatedAt">Last Updated:</label>
+				<input type="text" id="updatedAt" name="updatedAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<!-- <div class="addEditFormline">
+				<label for="owner">Owner:</label>
+				<input type="text" id="owner" name="owner" data-submit="true" placeholder="Your User ID will be recorded on submission" disabled="disabled" value="{{nameFromOwner}}">
+			</div> -->
+			<div class="addEditFormline">
+				<label for="account_data">Account Data:</label>
+				<textarea>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</textarea>
+			</div>
+
+			<input type="hidden" name="itemAssocKitbagIds" data-type="array" data-submit="true">
+			<input type="hidden" name="createdVia" data-type="text" value="ManualFormEntry" data-submit="true">
+			<input type="hidden" name="createdBy" data-type="text" value="{{usernameString}}" data-submit="true">
+
+
+
+			<div class="addEditFormline">
+				<!-- <input type="submit" value="Submit"> -->
+				<button class="btn btn-primary submit">Submit</button>
+				<button class="btn btn-outline-primary cancel">Cancel</button>
+			</div>
+
+		</form>
+
+	</div>
+	<!-- /row -->
+
+	<!-- Initialize -->
+	<!-- {{initialize}} -->
+
+</div>
+<!-- /screen-wrapper -->
+</template>

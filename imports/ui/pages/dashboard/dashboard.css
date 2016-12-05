@@ -1,0 +1,31 @@
+.panel-footer.panel-bottom-line {
+	background-color: rgba(51, 122, 183, 0.15);
+}
+
+.panel-footer a {
+	text-decoration: inherit !important;
+	color: inherit !important;
+}
+
+.transparent,.trans {
+	opacity: 0.4;
+}
+
+.transparent:hover,.trans:hover {
+	opacity: 1;
+}
+
+.panel-line {
+    display: block;
+}
+
+.sillyLittleTitle {
+	font-size: small;
+	display: inline-block;
+	/* border: 1px dotted; */
+	line-height: 0.9em;
+	vertical-align: middle;
+	padding: 4px 5px;
+	text-transform: uppercase;
+	/* font-variant: small-caps; */
+}

@@ -1,0 +1,104 @@
+<template name="sidebarMenuItems">
+
+<!-- Sidebar Menu Items -->
+<!-- These collapse to the responsive navigation menu on small screens -->
+<div class="collapse navbar-collapse navbar-ex1-collapse" id="#navbar-ex1-collapse">
+	<ul class="nav navbar-nav side-nav">
+
+		<!--
+		<li class="{{ isActiveRoute 'startScreen' }}">
+			<a href="/loading"><i class="fa fa-fw fa-youtube-play"></i> Start</a>
+		</li> -->
+		<li class="{{ isActiveRoute 'dashboard' }}">
+			<a href="/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
+		</li>
+
+		<!-- ORGANISATIONS -->
+		<li class="{{ isActiveRoute 'orgList' }}">
+			<a href="/orgs/list"><i class="fa fa-fw fa-building"></i> Organisations</a>
+		</li>
+		<li class="sub-item {{ isActiveRoute 'orgAdd' }}">
+			<a href="/orgs/create"><i class="fa fa-fw fa-plus"></i> Add Organisation</a>
+		</li>
+		<!-- /ORGANISATIONS -->
+
+		<!-- KITBAGS -->
+		<li class="{{ isActiveRoute 'kitbagList' }}">
+			<a href="/bags/list"><i class="fa fa-fw fa-medkit"></i> Kitbags</a>
+		</li>
+		<li class="sub-item {{ isActiveRoute 'kitbagAdd' }}">
+			<a href="/bags/create/:_orgId"><i class="fa fa-fw fa-plus"></i> Add Kitbag</a>
+		</li>
+		<!-- /KITBAGS -->
+
+		<!-- ITEMS -->
+		<li class="{{ isActiveRoute 'itemList' }}">
+			<a href="/items/list"><i class="fa fa-fw fa-stethoscope"></i> Items</a>
+		</li>
+		<li class="sub-item {{ isActiveRoute 'itemAdd' }}">
+			<a href="/items/create/:_orgId"><i class="fa fa-fw fa-plus"></i> Add Item</a>
+		</li>
+		<!-- /ITEMS -->
+
+
+
+		<li class="{{ isActiveRoute 'mySettings' }}">
+			<a href="/settings"><i class="fa fa-fw fa-cogs"></i> Settings</a>
+		</li>
+
+		{{#if glb_userIsSuperAdmin}}
+			<li class="{{ isActiveRoute 'usersList' }} adminOnly">
+				<a href="/users/list"><i class="fa fa-fw fa-users"></i> Users</a>
+			</li>
+		{{/if}}
+
+		<li>
+			<a href="javascript:void(0);" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-arrows-v"></i> Theme Content <i class="fa fa-fw fa-caret-down"></i></a>
+			<ul id="demo" class="collapse">
+
+				<!-- SB-Admin Template Menu Items -->
+				<li class="{{ isActiveRoute 'charts' }}">
+					<a href="/charts"><i class="fa fa-fw fa-bar-chart-o"></i> Charts</a>
+				</li>
+				<li class="{{ isActiveRoute 'tables' }}">
+					<a href="/tables"><i class="fa fa-fw fa-table"></i> Tables</a>
+				</li>
+				<li class="{{ isActiveRoute 'forms' }}">
+					<a href="/forms"><i class="fa fa-fw fa-edit"></i> Forms</a>
+				</li>
+				<li class="{{ isActiveRoute 'bootstrapElements' }}">
+					<a href="/bootstrapElements"><i class="fa fa-fw fa-desktop"></i> Bootstrap Elements</a>
+				</li>
+				<li class="{{ isActiveRoute 'bootstrapGrid' }}">
+					<a href="/bootstrapGrid"><i class="fa fa-fw fa-wrench"></i> Bootstrap Grid</a>
+				</li>
+				<li class="{{ isActiveRoute 'blankPage' }}">
+					<a href="/blankPage"><i class="fa fa-fw fa-file"></i> Blank Page</a>
+				</li>
+				<li class="{{ isActiveRoute 'indexRTL' }}">
+					<a href="/indexRTL"><i class="fa fa-fw fa-dashboard"></i> עברית</a>
+				</li>
+			</ul>
+		</li>
+		<!-- <li class="menu-option active button_settings" data-toggle=".settings"> -->
+		<li class="{{ isActiveRoute 'about' }}">
+			<a href="/about"><i class="fa fa-fw fa-info-circle"></i> About</a>
+		</li>
+<!-- 		<li class="{{ isActiveRoute 'login' }}">
+			<a href="/login"><i class="fa fa-fw fa-sign-in"></i> Login</a>
+		</li> -->
+		<li>
+			<div style="width: 190px;font-size: 80%;padding: 10px 15px;margin: 10px;border: 1px dotted gray;    background-color: wheat;">
+				{{currentUser.getDisplayName}}<br>
+				{{currentUser.username}}<br>
+				{{currentUser.getEmail}}<br>
+				{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'orgTitle'}}<br>
+				{{currentUser.getType.label}} ({{currentUser.getType.value}})<br>
+				{{currentUser.getUserId}} ({{currentUser._id}})
+			</div>
+		</li>
+	</ul>
+</div>
+<!-- /.navbar-collapse -->
+
+</template>

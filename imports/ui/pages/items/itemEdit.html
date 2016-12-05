@@ -1,0 +1,46 @@
+<template name="itemEdit">
+
+	<h1>Edit Item</h1>
+
+	<div class="screen-wrapper">
+
+	{{#if Template.subscriptionsReady}}
+
+		{{ > quickForm
+			autosave     = autoSaveMode
+			collection   = Items
+			doc          = selectedItemDoc
+			id           = "updateItemForm"
+			meteormethod = "updateItem"
+			omitFields   = "itemAssocKitbagCount,updatedAt,updatedBy"
+			type         = "method-update"
+		}}
+
+
+			<!-- type         = formType -->
+
+<!-- 			{{> afQuickField name="_id" label="dbId"}}
+			{{> afQuickField name="itemId"}}
+			{{> afQuickField name="itemTitle"}}
+			{{> afQuickField name="itemDetail"}}
+			{{> afQuickField name="itemSize"}} -->
+
+<!-- 			{{#unless autoSaveMode}}
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
+					<button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button>
+				</div>
+			{{/unless}} -->
+
+		<!-- {{/autoForm}} -->
+
+
+
+	{{else}}
+		Not Ready Yet...
+		{{>loading}}
+	{{/if}}
+
+	</div>
+
+</template>

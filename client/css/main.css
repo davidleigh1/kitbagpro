@@ -1,0 +1,459 @@
+/*!
+ * Start Bootstrap - SB Admin Bootstrap Admin Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Global Styles */
+
+body {
+	/*margin-top: 100px;*/
+	/*padding-top: 50px;*/
+	background-color: #f8f8f8;
+	font-family: 'Open Sans', sans-serif;
+}
+
+/*@media(min-width:768px) {
+	body {
+		margin-top: 50px;
+	}
+}*/
+
+#wrapper {
+	padding-left: 0;
+}
+
+#page-wrapper {
+	width: 100%;
+	padding: 0;
+	margin-top: 50px;
+	background-color: #fff;
+}
+
+.huge {
+	font-size: 50px;
+	line-height: normal;
+}
+
+@media(min-width:768px) {
+	#wrapper {
+		padding-left: 225px;
+	}
+
+	#page-wrapper {
+		padding: 10px;
+	}
+}
+
+/* NOTIFICATIONS */
+
+.s-alert-box {
+	z-index: 999999 !important;
+}
+
+
+
+/* Top Navigation */
+
+/*  Navbar logo */
+
+img.nav-logo {
+		display: inline-block;
+}
+
+div.nav-logotype {
+		display: inline-block;
+		padding-left: 5px;
+		font-weight: bold;
+}
+
+/* Hide 'KitbagPro' text on mobile */
+@media (max-width: 380px) {
+	div.nav-logotype {
+		display: none !important;
+	}
+}
+
+/*  / Navbar logo */
+
+/* Override to keep header on a single line  */
+
+.navbar-header {
+		float: initial;
+}
+
+.nav.navbar-right {
+		float: right;
+}
+
+@media (max-width: 768px) {
+	.login-link-text {
+		display: none;
+	}
+}
+
+/* /override */
+
+
+a#login-name-link,
+a#login-sign-in-link {
+	color: #999;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+.top-nav {
+	padding: 0 15px;
+}
+
+.top-nav>li {
+	display: inline-block;
+	float: left;
+}
+
+.top-nav>li>a {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	line-height: 20px;
+	color: #999;
+}
+
+.top-nav>li>a:hover,
+.top-nav>li>a:focus,
+.top-nav>.open>a,
+.top-nav>.open>a:hover,
+.top-nav>.open>a:focus {
+	color: #fff;
+	background-color: #000;
+}
+
+.top-nav>.open>.dropdown-menu {
+	float: left;
+	position: absolute;
+	margin-top: 0;
+	border: 1px solid rgba(0,0,0,.15);
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	background-color: #fff;
+	-webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+	box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+
+.top-nav>.open>.dropdown-menu>li>a {
+	white-space: normal;
+}
+
+ul.message-dropdown {
+	padding: 0;
+	max-height: 250px;
+	overflow-x: hidden;
+	overflow-y: auto;
+}
+
+li.message-preview {
+	width: 275px;
+	border-bottom: 1px solid rgba(0,0,0,.15);
+}
+
+li.message-preview>a {
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+li.message-footer {
+	margin: 5px 0;
+}
+
+ul.alert-dropdown {
+	width: 200px;
+}
+
+/* Side Navigation */
+
+@media(min-width:768px) {
+
+	.side-nav {
+		position: fixed;
+		top: 51px;
+		left: 225px;
+		width: 225px;
+		margin-left: -225px;
+		border: none;
+		border-radius: 0;
+		overflow-y: auto;
+		/*background-color: #222;*/
+		background-color: #f8f8f8;
+		bottom: 0;
+		overflow-x: hidden;
+		padding-bottom: 40px;
+	}
+
+	.navbar-default .navbar-nav>.active>a,
+	.navbar-default .navbar-nav>.active>a:focus,
+	.navbar-default .navbar-nav>.active>a:hover {
+		border: 1px rgba(35, 82, 124, 0.1) solid;
+	}
+
+
+	.side-nav>li>a {
+		width: 225px;
+		color: #337ab7 !important;
+	}
+
+	/*.navbar-nav li>a:hover {*/
+	.side-nav li.active>a {
+		color: #23527c !important;
+		font-weight: bold !important;
+	}
+
+	.side-nav li>a:hover,
+	.side-nav li>a:focus,
+	.side-nav>li>ul>li>a:hover {
+		outline: none;
+		background-color: #eee !important;
+	}
+}
+
+.side-nav>li>ul {
+	padding: 0;
+}
+
+.side-nav>li>ul>li>a {
+	display: block;
+	padding: 10px 15px 10px 38px;
+	text-decoration: none;
+	/*color: #999;*/
+	color: #337ab7;
+}
+
+/*.side-nav>li>ul>li>a:hover {
+	color: red;
+}*/
+
+li.sub-item {
+	margin-left: 20px;
+}
+
+
+/* Flot Chart Containers */
+
+.flot-chart {
+	display: block;
+	height: 400px;
+}
+
+.flot-chart-content {
+	width: 100%;
+	height: 100%;
+}
+
+/* Custom Colored Panels */
+
+.huge {
+	font-size: 40px;
+}
+
+.panel-green {
+	border-color: #5cb85c;
+}
+
+.panel-green > .panel-heading {
+	border-color: #5cb85c;
+	color: #fff;
+	background-color: #5cb85c;
+}
+
+.panel-green > a {
+	color: #5cb85c;
+}
+
+.panel-green > a:hover {
+	color: #3d8b3d;
+}
+
+.panel-red {
+	border-color: #d9534f;
+}
+
+.panel-red > .panel-heading {
+	border-color: #d9534f;
+	color: #fff;
+	background-color: #d9534f;
+}
+
+.panel-red > a {
+	color: #d9534f;
+}
+
+.panel-red > a:hover {
+	color: #b52b27;
+}
+
+.panel-yellow {
+	border-color: #f0ad4e;
+}
+
+.panel-yellow > .panel-heading {
+	border-color: #f0ad4e;
+	color: #fff;
+	background-color: #f0ad4e;
+}
+
+.panel-yellow > a {
+	color: #f0ad4e;
+}
+
+.panel-yellow > a:hover {
+	color: #df8a13;
+}
+
+/* Brown = http://www.htmlcsscolor.com/hex/8A6D3B */
+
+.panel-brown {
+	border-color: #8a6d3b;
+}
+
+.panel-brown > .panel-heading {
+	border-color: #8a6d3b;
+	color: #fff;
+	background-color: #8a6d3b;
+}
+
+.panel-brown > a {
+	color: #8a6d3b;
+}
+
+.panel-brown > a:hover {
+	color: #46381e;
+}
+
+/* Labels - Extended */
+
+.label-retired {
+		color: #5cb85c;
+		border: 1px dotted rgba(92, 184, 92, 0.6);
+		background-color: rgba(92, 184, 92, 0.1);
+}
+
+.label-official {
+    margin-left: 5px;
+    background-color: #f2c314;
+    /* border: 1px solid #c7254e; */
+    /* color: #c7254e; */
+    /* color: white; */
+    /* color: #f2c314; */
+    /* font-weight: bold !important; */
+    background-color: burgundy;
+    background-color: #c7254e;
+}
+
+.official-line-wrapper {
+	color: #c7254e;
+	margin-left: 5px;
+}
+
+
+/* Buttons - Extended */
+
+.btn-label-default {
+	color: #FFFFFF;
+	background-color: #95A5A6;
+	border-color: #7F8C8D;
+}
+
+.btn-label-default:hover,
+.btn-label-default:focus,
+.btn-label-default:active,
+.btn-label-default.active,
+.open .dropdown-toggle.btn-label-default {
+	color: #FFFFFF;
+	background-color: #808080;
+	border-color: #7F8C8D;
+}
+
+.btn-label-default:active,
+.btn-label-default.active,
+.open .dropdown-toggle.btn-label-default {
+	background-image: none;
+}
+
+.btn-label-default.disabled,
+.btn-label-default[disabled],
+fieldset[disabled] .btn-label-default,
+.btn-label-default.disabled:hover,
+.btn-label-default[disabled]:hover,
+fieldset[disabled] .btn-label-default:hover,
+.btn-label-default.disabled:focus,
+.btn-label-default[disabled]:focus,
+fieldset[disabled] .btn-label-default:focus,
+.btn-label-default.disabled:active,
+.btn-label-default[disabled]:active,
+fieldset[disabled] .btn-label-default:active,
+.btn-label-default.disabled.active,
+.btn-label-default[disabled].active,
+fieldset[disabled] .btn-label-default.active {
+	background-color: #95A5A6;
+	border-color: #7F8C8D;
+}
+
+.btn-label-default .badge {
+	color: #95A5A6;
+	background-color: #FFFFFF;
+}
+
+/* Header / User Menu Bar */
+
+.userString{
+    margin-right: 8px;
+    /*font-weight: bold;*/
+}
+
+span.adminUserString {
+	display: block;
+	font-size: 0.7em;
+	font-variant: small-caps;
+	text-transform: uppercase;
+	text-align: center;
+	line-height: 5px;
+	background-color: yellow;
+	color: #c7254e;
+	padding: 3px 0;
+}
+
+span.userOrgString {
+	display: block;
+	font-size: 0.7em;
+	font-variant: small-caps;
+	text-transform: uppercase;
+	text-align: center;
+	line-height: 5px;
+	padding: 3px 0;
+}
+
+span.userDetailsInMenu {
+    font-size: 0.8em;
+    line-height: 1;
+    padding: 0 3px;
+    display: block;
+}
+
+
+
+/* Forms - autoform  -  add and edit forms */
+/* https://github.com/aldeed/meteor-autoform#how-can-i-show-an-asterisk-after-the-label-for-required-fields */
+[data-required] label:after {
+	content: '*';
+}
+
+/* PASSWORD UPDATE DIALOG */
+
+input#changePasswordInput {
+    width: 99%;
+    display: inline-block;
+}
+
+img.showPasswordIcon {
+    margin: -30px;
+    /* display: inline; */
+    /* float: right; */
+}

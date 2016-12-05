@@ -1,0 +1,57 @@
+<template name="listFilter">
+
+{{#if Template.subscriptionsReady}}
+
+	<div class="listFilterControl">
+		<!-- All Users / My Users Filter (Admin Only) -->
+		<div class="{{obj}}ListFilter listFilter">
+			{{#if glb_userIsSuperAdmin}}
+				<label for="all{{Obj}}s"><input type="radio" name="{{obj}}ListFilter" id="all{{Obj}}s" value="all{{Obj}}s" checked><span class="adminOnly">All {{Obj}}s</span></label>
+				<label for="my{{Obj}}s"><input type="radio" name="{{obj}}ListFilter" id="my{{Obj}}s" value="my{{Obj}}s">My {{Obj}}s</label>
+			{{/if}}
+		</div>
+
+		<!-- List Sorter -->
+		{{> listSorter}}
+
+		<!-- Freetext entry -->
+
+	<!-- <div>
+		<input type="text" name="focus" required class="search-box" placeholder="Enter search term" />
+			<button class="close-icon" type="reset">CLEAR</button>
+	</div> -->
+	<div class="filterInputWrapper">
+		<input type="text" name="{{obj}}ListFilter" id="{{obj}}ListFilter" class="filterField filterInput" data-submit="false" placeholder="Type here to filter {{full}}s" value="{{filter}}">
+		<button class="listFilterClear close-button">&nbsp;</button>
+	</div>
+		obj: <code>{{obj}}</code><br>
+		listFilterString: <code>{{filterVar}}</code><br>
+		listDataSelect: <code>{{get_defineDataset}}</code><br>
+		int_resultsCount:
+		<code>
+			{{#if thisObj obj "org"}} 		{{get_orgsFound}} 		{{/if}}
+			{{#if thisObj obj "kitbag"}} 	{{get_orgBagsFound}} 	{{/if}}
+			{{#if thisObj obj "itemBags"}} 	{{get_itemBagsFound}} 	{{/if}}
+			{{#if thisObj obj "item"}} 		{{get_itemsFound}} 		{{/if}}
+			{{#if thisObj obj "user"}} 		{{get_usersFound}} 		{{/if}}
+			{{#if thisObj obj "orgUser"}} 	{{get_orgUsersFound}} 	{{/if}}
+		</code>
+	</div>
+
+{{else}}
+	{{>loading}}
+{{/if}}
+
+</template>
+
+<!--
+
+Use as follows - please note the string should be singular and with appropriate capitalization!
+{{> listFilter
+obj="org"
+Obj="Org"
+full="organisation"
+Full="Organisation"
+}}
+
+-->

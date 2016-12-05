@@ -1,0 +1,313 @@
+<template name="userView">
+
+{{#if Template.subscriptionsReady}}
+
+<div class="screen-wrapper objAddEdit userView">
+
+	{{#with thisUser}}
+	<div class="row">
+
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="">
+						{{>itemLogo}}
+						{{profile.displayName}}
+						<small>{{pageSubtitle}}</small>
+					</h3>
+				</div>
+				<div class="panel-body">
+
+					<!-- Control Panel -->
+					<div class="row">
+						<div class="col-lg-12 tableControlPanel">
+							<!-- Control Buttons -->
+							<!-- fa-fw  makes the icons 'fixed width' -->
+							<a href="./edit" class="btn btn-primary">
+								<i class="fa fa-fw fa-edit"></i> Edit User
+							</a>
+							<a href="/users/duplicate/{{profile.userId}}" class="btn btn-primary">
+								<i class="fa fa-fw fa-files-o"></i> Duplicate
+							</a>
+							{{#if glb_userIsSuperAdmin}}
+									<a href="#" class="btn btn-primary forcePasswordChange">
+									<i class="fa fa-fw fa-key"></i> Set Password
+								</a>
+							{{/if}}
+							{{#if glb_userIsSuperAdmin}}
+								<a href="#" class="btn btn-danger delete">
+									<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
+								</a>
+							{{/if}}
+							{{#if glb_userIsOrgAdmin}}
+								<a href="#" class="btn btn-label-default trash {{#if isTrashed}}disabled{{/if}}">
+									<i class="fa fa-fw fa-trash"></i> Trash
+								</a>
+							{{/if}}
+							<a href="/dashboard" class="btn btn-info">
+								<i class="fa fa-fw fa-dashboard"></i> Analytics
+							</a>
+							<a href="#userKitbagListPanel" class="btn btn-info">
+								<i class="fa fa-fw fa-medkit"></i> Kitbag List
+							</a>
+							<a href="#userItemsListPanel" class="btn btn-info">
+								<i class="fa fa-fw fa-users"></i> View Inventory
+							</a>
+						</div>
+					</div>
+
+					<!-- <h2>Bordered with Striped Rows</h2> -->
+					<!--{{#if itemDesc}}
+						<div class="well">
+							{{itemDesc}}
+						</div>
+					{{/if}} -->
+					<div class="table-responsive">
+						<table class="table table-hover table-condensed">
+
+							<tbody>
+
+								<tr>
+									<th colspan="2" class="table-divider">User Details</th>
+								</tr>
+
+								{{#if glb_userIsSuperAdmin}}
+									<tr>
+										<th>Organisation</th>
+										<td>
+											{{#if profile.userAssocOrg}}
+												<a href="/orgs/{{profile.userAssocOrg}}/view">
+													{{lookupFieldFromOrg profile.userAssocOrg 'orgTitle'}}
+												</a>
+											{{else}}
+												Organisation not found
+											{{/if}}
+										</td>
+									</tr>
+								{{/if}}
+
+								<tr>
+									<th class="col-xs-2">Name</th>
+									<td class="col-xs-10"><strong>{{getDisplayName}}</strong></td>
+								</tr>
+
+								<tr>
+									<th>Callsign</th>
+									<td>{{profile.userCallsign}}</td>
+								</tr>
+
+								<tr>
+									<th>Division</th>
+									<td>{{profile.userDivision}}</td>
+								</tr>
+
+								<tr>
+									<th>Team</th>
+									<td>{{profile.userTeam}}</td>
+								</tr>
+
+								<tr>
+									<th>Primary Store</th>
+									<td>{{profile.defaultStore}}</td>
+								</tr>
+
+
+								<tr>
+									<th colspan="2" class="table-divider">Contact Details</th>
+								</tr>
+
+								<tr>
+									<th>Phone Number</th>
+									<td>{{profile.phoneNumber}}</td>
+								</tr>
+
+								<tr>
+									<th>Email</th>
+									<td>{{getEmail}}</td>
+								</tr>
+
+
+								<tr>
+									<th colspan="2" class="table-divider">Account Details</th>
+								</tr>
+
+								<tr>
+									<th>Username</th>
+									<td><strong>{{username}}</strong></td>
+								</tr>
+
+								<tr>
+									<th>Status</th>
+									<td><span class="label {{getUserStatusTag.labelClass}}">{{getUserStatusTag.labelText}}</span></td>
+								</tr>
+
+								<tr>
+									<th>Level</th>
+									<td>
+										{{#unless getType.value}}
+											<span class="cursor-help" title="'userType' not found">-</span>
+										{{else}}
+											{{getType.label}}
+										{{/unless}}
+									</td>
+								</tr>
+
+								<tr>
+									<th>Profile Picture</th>
+									<td class="hover_img">
+										{{#unless profile.profilePicture}}
+											<span class="cursor-help" title="'profile.profilePicture' not found">-</span>
+										{{else}}
+											{{>urlImagePreviewRollover
+												imageUrl = profile.profilePicture
+												imagePreviewText = (joinTextInList "Profile picture for '<b>" profile.displayName "</b>'. Zoom 20%. Click to open in a new tab." )
+												imageAltText = (joinTextInList "Profile picture for '" profile.displayName "'. Click or mouseover to view." )
+												imagePreviewHeight = "20%"
+											}}
+										{{/unless}}
+									</td>
+								</tr>
+
+								<tr>
+									<th>User Notes</th>
+									<td>{{profile.userNotes}}</td>
+								</tr>
+
+
+								<tr>
+									<th colspan="2" class="table-divider">Inventory Details</th>
+								</tr>
+
+								<tr>
+									<th>User Kitbags</th>
+									<!-- <td>{{itemAssocKitbagCount}}</td> -->
+									<td>{{profile.userKitbagCount}}</td>
+								</tr>
+
+								<tr>
+									<th>List of Kitbags</th>
+									<td>{{assocKitbags}}</td>
+								</tr>
+
+							<!-- start -->
+							</tbody>
+						</table>
+					<!-- /table-responsive -->
+					</div>
+
+					<!-- /panel-body -->
+				</div>
+				<!-- /panel-default -->
+			</div>
+			<!-- /col-12 -->
+		</div>
+
+
+		<!-- KITBAG MINILIST (listing 'assocKitbags') -->
+		<div class="col-lg-12">
+			<div class="panel panel-default" id="userKitbagListPanel">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-fw fa-medkit"></i> Kitbags assigned to this user ({{get_resultsCount}})</h3>
+				</div>
+				<div class="panel-body">
+					<!-- <h2>Bordered with Striped Rows</h2> -->
+
+					<div class="table-responsive">
+						<table class="table table-bordered-XXX table-hover table-striped-XXX table-condensed">
+							<thead>
+								<tr>
+									<th class="hidden-xs">Kitbag</th>
+									{{#if glb_userIsSuperAdmin}}
+										<th class="hidden-xs adminOnly">Org</th>
+									{{/if}}
+									<th class="hidden-xs">Status</th>
+									<th class="hidden-xs text-center todo">Items</th>
+									<th class="hidden-xs text-center todo">Users</th>
+									<th class="hidden-xs hidden-sm">Bag ID</th>
+									<th class="visible-lg">Created</th>
+									<!-- <th class="hidden-xs hidden-sm hidden-md">Owner</th> -->
+									<th class="text-right">Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+
+								<!-- Show 'Loading...' if not ready -->
+								{{#if Template.subscriptionsReady}}
+									<!-- Show 'noListObjectsFound' template if none found -->
+									{{#if objectsFiltered "kitbagsContainingThisItem" noFilter minilistFilter}}
+										<!-- Select subset of kitbag docs based on user/template filters-->
+										{{#each objectsFiltered "kitbagsContainingThisItem" noFilter minilistFilter}}
+											{{ >kitbagLine thisKitbag=this listType="itemView" }}
+										{{/each}}
+									{{else}}
+										{{ >noListObjectsFound objectName="kitbags containing this item were" }}
+									{{/if}}
+								{{else}}
+									loading...
+								{{/if}}
+
+							</tbody>
+						</table>
+					</div>
+
+				<!-- /panel-body -->
+				</div>
+			<!-- /panel-default -->
+			</div>
+		<!-- /col-12 -->
+		</div>
+
+
+		<div class="col-lg-12">
+			<div class="panel panel-info" id="systemInfo">
+				<div class="panel-heading">
+					<h3 class="panel-title"><i class="fa fa-fw fa-database"></i> System Info</h3>
+				</div>
+				<div class="panel-body">
+					<!-- <h2>Bordered with Striped Rows</h2> -->
+					<div class="table-responsive">
+						<table class="table table-hover table-condensed">
+							<tbody>
+								<!-- end -->
+								<tr>
+									<th>External ID</th>
+									<td><code>{{getUserId}}</code></td>
+								</tr>
+								<tr>
+									<th>Internal ID</th>
+									<td>{{_id}}</td>
+								</tr>
+								<tr>
+									<th>Created</th>
+									<td>{{createdAt}} by {{#if profile.createdBy}}<code>{{profile.createdBy}}</code>{{else}}Unknown{{/if}}</td>
+								</tr>
+								<tr>
+									<th>Last Updated</th>
+									<td>{{profile.updatedAt}} by {{#if profile.updatedBy}}<code>{{profile.updatedBy}}</code>{{else}}Unknown{{/if}}</td>
+								</tr>
+								<tr>
+									<th>Created Via</th>
+									<td>{{#if profile.createdVia}}<code>{{profile.createdVia}}</code>{{else}}Unknown{{/if}}</td>
+								</tr>
+							</tbody>
+						</table>
+					<!-- /table-responsive -->
+					</div>
+				<!-- /panel-body -->
+				</div>
+			<!-- /panel-default -->
+			</div>
+		<!-- /col-12 -->
+		</div>
+	<!-- /row -->
+	</div>
+	{{/with}}
+
+</div>
+<!-- /screen-wrapper -->
+
+{{else}}
+	{{>loading}}
+{{/if}}
+
+</template>

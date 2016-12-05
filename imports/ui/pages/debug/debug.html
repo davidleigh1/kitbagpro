@@ -1,0 +1,48 @@
+<template name="debug">
+
+	<!-- Page Heading -->
+	{{> pageHeader
+		pageTitle = "Developer Tools"
+		pageSubtitle = ""
+		faIcon = "fa fa-terminal"
+		}}
+
+
+<div class="row">
+	<div class="col-sm-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">globalReactiveVars</h3>
+			</div>
+			<div class="panel-body debug-panel">
+				<p><code>int_orgsFound</code>: <span class="debug-results">{{get_orgsFound}}</span></p>
+				<p><code>int_orgBagsFound</code>: <span class="debug-results">{{get_orgBagsFound}}</span></p>
+				<p><code>int_itemBagsFound</code>: <span class="debug-results">{{get_itemBagsFound}}</span></p>
+				<p><code>int_itemsFound</code>: <span class="debug-results">{{get_itemsFound}}</span></p>
+				<p><code>int_usersFound</code>: <span class="debug-results">{{get_usersFound}}</span></p>
+				<p><code>int_orgUsersFound</code>: <span class="debug-results">{{get_orgUsersFound}}</span></p>
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">listFilterString</h3>
+			</div>
+			<div class="panel-body"><pre>{{filterVar}}</pre></div>
+		</div>
+	</div>
+	<div class="col-sm-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">obj_defineDataset</h3>
+			</div>
+			<div class="panel-body"><pre>{{get_defineDataset}}</pre></div>
+		</div>
+	</div>
+</div>
+
+
+
+
+</template>

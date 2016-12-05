@@ -1,0 +1,50 @@
+span.detailKey {
+	/* font-size: 0.7em; */
+	width: 20%;
+	display: inline-block;
+	padding: 5px 0 0 0;
+}
+
+span.detailVal {
+	/* font-size: 0.7em; */
+	width: 70%;
+	display: inline-block;
+}
+
+
+/* FAQ */
+
+.faqWrapper {
+	min-height: 20px;
+    padding: 5px 20px 15px 20px;
+    margin-bottom: 10px;
+    background-color: #f5f5f5;
+    border: 1px solid #e3e3e3;
+    border-radius: 6px;
+}
+
+.faqTag {
+	background-color: rgba(25,32,39,0.3);
+    color: #ffffff;
+    font-weight: bold;
+    font-weight: initial !important;
+    text-transform: uppercase !important;
+    font-size: 0.7em !important;
+    display: inline;
+    padding: .2em .6em .3em;
+    /*font-size: 75%;*/
+    /*font-weight: 700;*/
+    line-height: 1;
+    /*color: #fff;*/
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em
+}
+
+span.faq-quote {
+	font-family: monospace;
+	color: #c7254e;
+	font-style: italic;
+}
+

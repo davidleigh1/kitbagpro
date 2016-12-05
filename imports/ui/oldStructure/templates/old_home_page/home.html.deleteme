@@ -1,0 +1,40 @@
+<template name="old">
+
+	<!-- Original pre-router main wrapper -->
+	<!-- <div class="container"> -->
+
+		<!-- Initial Start Screen -->
+		{{> startScreen}}
+
+		<!-- User Header -->
+		<!-- TODO - Move User Login -->
+		{{> header}}
+
+		<!-- Main Menu  -->
+		{{> menu}}
+
+		<!-- Register/Edit an Organization -->
+		<!-- {{> orgAddEdit}} -->
+
+		<!-- Register/Edit a Kitbag -->
+		<!-- {{> kitbagAddEdit}} -->
+
+		<!-- List Organizations  -->
+		<!-- {{> orgList}} -->
+		<!-- {{> orgList}} -->
+
+		<!-- List Kitbags -->
+		<!-- {{> kitbagList}} -->
+
+		<!-- Settings -->
+		<!-- {{> settings}} -->
+
+		<!-- User Management -->
+		<!-- TODO: Template and Button should be limited to SuperAdmins -->
+<!--
+ 		{{#if currentUser}}
+			{{> userList}}
+		{{/if}}
+ -->
+</template>
+

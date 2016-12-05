@@ -1,0 +1,14 @@
+.orgAssocKitbagCountCol {
+    text-align: center;
+}
+
+.make-block {
+	display: block;
+}
+
+.orglistSubtitle {
+    text-decoration: inherit !important;
+    text-transform: uppercase;
+    color: gray;
+    font-size: 0.8em;
+}

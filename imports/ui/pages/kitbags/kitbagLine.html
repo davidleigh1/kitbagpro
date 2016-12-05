@@ -1,0 +1,223 @@
+<template name="kitbagLine">
+
+<!--
+<li class="{{#if checked}}checked{{/if}}">
+<input type="checkbox" checked="{{checked}}" class="toggle-checked" disabled="{{#unless isOwner}}disabled{{/unless}}">
+ -->
+
+<!-- <small>{{listType}}</small> -->
+
+<!-- We use #with to allow us to manually set the 'this' data context via the template.helper called 'thisKitbag' -->
+{{#with thisKitbag}}
+	<tr data-sorttitle="{{toLower kitbagTitle}}" data-sortcreated="{{createdAt}}" data-sortassocorgtitle="{{toLower kitbagAssocOrgTitle}}" data-sortupdated="{{createdAt}}" >
+		<!-- Small screens only! -->
+		<td class="visible-xs col-xs-3">
+			<!-- Top line -->
+			<div>
+				{{#unless kitbagTitle}}
+					<span class="resNote">'kitbagTitle' not found</span>
+				{{else}}
+					<strong>{{highlight kitbagTitle filterVar suppressHightlight}}</strong>
+				{{/unless}}
+			</div>
+			<!-- /Top line -->
+			<!-- Bottom line -->
+			<div>
+				{{#unless kitbagAssocOrgTitle}}
+					<a href="/orgs/{{kitbagAssocOrg}}/view">
+						<i>{{highlight kitbagAssocOrg filterVar suppressHightlight}}</i>
+					</a>
+				{{else}}
+					<a href="/orgs/{{kitbagAssocOrg}}/view">
+						{{highlight kitbagAssocOrgTitle filterVar suppressHightlight}}
+					</a>
+				{{/unless}}
+			</div>
+			<!-- /Bottom line -->
+		</td>
+		<!-- /Small screens only! -->
+		<td class="hidden-xs kbTitleCol">
+			{{#unless kitbagTitle}}
+				<span class="resNote">'kitbagTitle' not found</span>
+			{{else}}
+				{{highlight kitbagTitle filterVar suppressHightlight}}
+			{{/unless}}
+		</td>
+
+		<!-- Associated Organisation (refactored to avoid a cross-table-lookup into the Orgs collection every time a kitbag was rendered. We now use the new reactive kitbagAssocOrgTitle field on the Kitbag doc) -->
+		<!--
+		<td class="hidden-xs kbAssocOrgCol">
+			{{#unless kitbagAssocOrg}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{#if lookupOrgTitle kitbagAssocOrg 'orgTitle'}}
+					<a href="/orgs/{{kitbagAssocOrg}}/view">
+						<i>{{lookupOrgTitle kitbagAssocOrg 'orgTitle'}}</i>
+					</a>
+				{{else}}
+					<i>Not found (orgID: {{kitbagAssocOrg}})</i>
+				{{/if}}
+			{{/unless}}
+		</td>
+		 -->
+
+		<!-- Test of new kitbagAssocOrgTitle -->
+
+		{{#if glb_userIsSuperAdmin}}
+			{{#unless isOrgView}}
+				<td class="hidden-xs kbAssocOrgTitleCol adminOnly">
+					{{#unless kitbagAssocOrgTitle}}
+						<a href="/orgs/{{kitbagAssocOrg}}/view">
+							<i>{{highlight kitbagAssocOrg filterVar suppressHightlight}}</i>
+						</a>
+					{{else}}
+						<a href="/orgs/{{kitbagAssocOrg}}/view">
+							{{highlight kitbagAssocOrgTitle filterVar suppressHightlight}}
+						</a>
+					{{/unless}}
+				</td>
+			{{/unless}}
+		{{/if}}
+
+
+
+		<!-- Status -->
+
+		<td class="hidden-xs kbStatusCol">
+			<span class="label {{gKitbagStatusTag.labelClass}}">{{gKitbagStatusTag.labelText}}</span>
+		</td>
+
+
+		<!-- Item Count-->
+
+		<td class="hidden-xs kbItemCountCol text-center todo">
+			{{#if kitbagItemCount}}
+				<a href="/bags/{{kitbagId}}/view#kitbagItemListPanel">{{kitbagItemCount}}</a>
+			{{else}}
+				<a href="/bags/{{kitbagId}}/view#kitbagItemListPanel">View Items</a>
+			{{/if}}
+		</td>
+
+		<!-- Item Count-->
+
+		<td class="hidden-xs kbUsersCountCol text-center todo">
+			{{#if kitbagUserCount}}
+				<a href="/bags/{{kitbagId}}/view#kitbagUserListPanel">{{kitbagUserCount}}</a>
+			{{else}}
+				<a href="/bags/{{kitbagId}}/view#kitbagUserListPanel">View Users</a>
+			{{/if}}
+		</td>
+
+		<!-- Kitbag ID -->
+
+		<td class="hidden-xs hidden-sm kbSkuCol">
+			<!-- // System (Custom ID) -->
+			{{#unless kitbagId}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{highlight kitbagId filterVar suppressHightlight}}
+			{{/unless}}
+			{{#unless kitbagSku}}
+				<span class="resNote"></span>
+			{{else}}
+				<br><small>({{highlight kitbagSku filterVar suppressHightlight}})</small>
+			{{/unless}}
+		</td>
+
+		<!-- DB ID -->
+
+		{{#if glb_userIsSuperAdmin}}
+			<td class="visible-lg kbDbId adminOnly">
+				{{_id}}
+			</td>
+		{{/if}}
+
+		<!-- Created Date -->
+
+		<td class="visible-lg kbCreatedAtCol">
+			{{formatDate createdAt}}
+		</td>
+
+		<!-- Owner -->
+
+		<!-- <td class="hidden-xs hidden-sm hidden-md kbOwnerCol">
+			TODO: Look up user name rather than ID
+			TODO: Link to User page
+			<a href="/users/{{owner}}/view">{{owner}}</a>
+		</td> -->
+
+		<!-- Dropdown Menu -->
+
+		<td class="kbActionsCol col-sm-1 col-xs-9">
+			<!-- TODO: Change this to icons on narrow responsive views -->
+			<div class="pull-right">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+						Actions
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu pull-right" role="menu">
+						<!-- Small screens only! -->
+						<li class="visible-xs">
+							<a class="viewKbDetails" data-action="showKbDetails" data-bag="{{kitbagId}}" href="#"><i class='fa fa-fw fa-list'></i> View Details</a>
+						</li>
+						<li class="visible-xs divider"></li>
+						<!-- /Small screens only! -->
+						<li>
+							<a class="edit" data-action="editKbDetails" data-bag="{{kitbagId}}" href="#"><i class="fa fa-fw fa-pencil"></i> Edit</a>
+						</li>
+						{{#if glb_userIsSuperAdmin}}
+							<li>
+								<a class="toggleStatus" data-action="toggleStatus" data-bag="{{kitbagId}}" href="#"><i class='fa fa-fw fa-{{changeKitbagStatus.icon}}'></i>
+									{{changeKitbagStatus.html}}
+								<!--{{#if ({{kitbagStatus}} == "Active")}}
+										Make Hidden
+									{{else}}
+										Make Active
+									{{/if}} -->
+								</a>
+							</li>
+						{{/if}}
+						{{#if glb_userIsSuperAdmin}}
+							<li class="divider"></li>
+							<li>
+								<a class="trash" data-action="trashKb" data-bag="{{kitbagId}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
+							</li>
+						{{/if}}
+						{{#if glb_userIsSuperAdmin}}
+							<li class="divider"></li>
+							<li>
+								<a class="delete" data-action="deleteKb" data-bag="{{kitbagId}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
+							</li>
+						{{/if}}
+
+					</ul>
+					<!-- /dropdown menu -->
+				</div>
+				<!-- /button group which contains the dropdown -->
+
+				<!-- Show status below menu on small screens -->
+				<div class="visible-xs-block">
+					<span class="label {{gKitbagStatusTag.labelClass}}">{{gKitbagStatusTag.labelText}}</span>
+				</div>
+				<!-- /status label -->
+
+			</div>
+			<!-- <button class="edit" data-bag="{{kitbagId}}">Edit</button>
+			{{#if isOwner}}
+				<button class="toggle-private">
+					{{#if private}}
+						Prvt
+					{{else}}
+						Pub
+					{{/if}}
+				</button>
+			{{/if}}
+			{{#if isOwner}}
+				<button class="delete" data-bag="{{kitbagId}}">X</button>
+			{{/if}} -->
+		</td>
+	</tr>
+{{/with}}
+
+</template>

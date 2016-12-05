@@ -1,0 +1,70 @@
+<template name="settings">
+
+		<div class="screen-wrapper settings">
+			{{> pageHeader
+				pageTitle = "User/Account Details"
+				pageSubtitle = ""
+				faIcon = "fa-user-md"
+				}}
+
+
+			<form id="userDetails" class="userDetails">
+
+				<span class="detailKey">External (API) ID:</span>
+				<span class="detailVal"><code>{{thisUser 'userExternalId'}}</code></span>
+
+				<span class="detailKey">Internal (DB) ID:</span>
+				<span class="detailVal">{{thisUser 'userInternalId'}}</span>
+
+				<span class="detailKey">UserName:</span>
+				<span class="detailVal">{{thisUser 'profileName'}}</span>
+
+				<span class="detailKey">isSuperUser:</span>
+				<span class="detailVal"><input type="checkbox" checked="{{thisUser 'isSuperUser'}}"></span>
+			</form>
+
+
+
+
+<!--
+			{{> pageHeader
+				pageTitle = "Credits and Acknowlegements"
+				pageSubtitle = ""
+				faIcon = "fa-paper-plane"
+				}}
+
+			<ul>
+				<li>KitbagPro was developed on <a href="https://www.meteor.com" target="_blank">Meteor</a> using <a href="https://www.meteor.com/blaze" target="_blank">Blaze</a>, Meteor's frontend rendering system.</li>
+				<!- <li>Thanks to <b>saimeunt</b> on <a href="http://stackoverflow.com/questions/25804879/" target="_target">StackOverflow</a> for helping me reach my breakthough on real-time filtering in Meteor/Blaze.</li> -->
+				<!--
+				<li>The theme is based on <a href="http://startmeteorjs.com/themes/sb-admin-meteor/" target="_blank">SB Admin Meteor</a> (and <a href="http://startbootstrap.com/template-overviews/sb-admin-2/" target="_blank">Start Bootstrap SB Admin 2 template</a>) which was adapted for Meteor by <a href="https://github.com/lmaccherone" target="_blank">Larry Maccherone</a> and features <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a>, <a href="http://fortawesome.github.io/Font-Awesome/" target="_blank">Font-Awesome</a> a host of other great plugins.</li>
+				<li>Some Meteor Packages also deserving credit:</li>
+					<ul>
+						<li>
+							<a href="https://atmospherejs.com/aldeed/simple-schema" target="_blank"><code>aldeed:simple-schema</code></a> - super easy schemas and auto-validation for Mongo and autoforms
+						</li>
+						<li>
+							<a href="https://atmospherejs.com/aldeed/collection2" target="_blank"><code>aldeed:collection2</code></a> - plus excellent tutorials at: <a href="https://themeteorchef.com/snippets/using-the-collection2-package/#tmc-what-is-collection2" target="_blank">themeteorchef.com</a>
+						</li>
+						<!- <li>
+							<a href="https://github.com/kadirahq/meteor-debug" target="_blank"><strike><code>kadira:debug</code> or <code>meteorhacks:kadira</code></strike></a> - debugging and performance monitoring by <a href="https://kadira.io/platform/kadira-debug/overview" target="_blank">Kadira</a>
+						</li> -->
+						<!--
+						<li>
+							<a href="https://github.com/kadirahq/flow-router" target="_blank"><code>FlowRouter</code></a> with <a href="https://github.com/kadirahq/blaze-layout" target="_blank"><code>BlazeLayout</code></a> for template rendering and <a href="https://atmospherejs.com/zimme/active-route" target="_blank"><code>zimme:active-route</code></a> for tracking the currently active route.
+						</li>
+						<li><a href="https://github.com/msavin/Mongol"><code>msavin:mongol</code></a> - in-app development GUI/Editor for local MongoDB</li>
+						<li></li>
+						<li></li>
+						<li></li>
+					</ul>
+				<li>List of components at: https://github.com/rsercano/mongoclient/wiki</li>
+				<li>http://robertdickert.com/blog/2014/05/09/set-up-navigation-with-iron-router-and-bootstrap/</li>
+				<li></li>
+			</ul>
+
+			-->
+
+		</div>
+
+</template>

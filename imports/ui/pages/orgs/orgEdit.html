@@ -1,0 +1,26 @@
+<template name="orgEdit">
+
+	<h1>Edit Org</h1>
+
+	<div class="screen-wrapper">
+
+	{{#if Template.subscriptionsReady}}
+
+		{{ > quickForm
+			autosave     = autoSaveMode
+			collection   = Orgs
+			doc          = selectedOrgDoc
+			id           = "updateOrgForm"
+			meteormethod = "updateOrg"
+			omitFields   = "updatedAt,updatedBy"
+			type         = "method-update"
+		}}
+
+	{{else}}
+		Not Ready Yet...
+		{{>loading}}
+	{{/if}}
+
+	</div>
+
+</template>

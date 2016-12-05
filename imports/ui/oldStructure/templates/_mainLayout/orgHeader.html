@@ -1,0 +1,48 @@
+<template name="orgHeader">
+
+<!-- Page Heading -->
+<h2 class="page-header">
+	<i class="fa fa-building"></i> {{orgTitle}} <small>{{pageSubtitle}}</small>
+
+	<!-- Controls -->
+	<div class="pull-right">
+
+		<div class="btn-group">
+			<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+				Actions
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu pull-right" role="menu">
+				<li>
+					<a class="edit" data-action="editOrgDetails" data-org="{{orgId}}" href="#"><i class="fa fa-fw fa-pencil"></i> Edit (Admin Only)</a>
+				</li>
+				{{#if isOwner}}
+					<li>
+						<a class="toggleStatus" data-action="toggleStatus" data-org="{{orgId}}" href="#"><i class='fa fa-fw fa-{{changeOrgStatus.icon}}'></i>
+							{{changeOrgStatus.html}}
+						</a>
+					</li>
+				{{/if}}
+				{{#if isOwner}}
+					<li class="divider"></li>
+					<li>
+						<a class="trash" data-action="trashOrg" data-org="{{orgId}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
+					</li>
+				{{/if}}
+				{{#if glb_userIsSuperAdmin}}
+					<li class="divider"></li>
+					<li>
+						<a class="delete" data-action="deleteOrg" data-org="{{orgId}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
+					</li>
+				{{/if}}
+
+			</ul>
+			<!-- /dropdown menu -->
+		</div>
+		<!-- /button group which contains the dropdown -->
+
+	</div>
+	<!-- /pull-right -->
+</h2>
+
+</template>

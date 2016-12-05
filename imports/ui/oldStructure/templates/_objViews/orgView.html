@@ -1,0 +1,47 @@
+<template name="orgView">
+
+	<!-- <div class="screen-wrapper objView-{{orgId}} orgDetails"> -->
+
+	<div class="row">
+		{{> orgHeader }}
+	</div>
+
+	<!-- Org Data -->
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="table-responsive">
+				<table class="table table-bordered-XXX table-hover table-striped-XXX">
+					<thead>
+						<tr>
+							<th class="">Key</th>
+							<th class="">Value</th>
+							<th class="col-lg-1 text-right">&nbsp;</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each arrayFromObj this}}
+							<tr>
+								<td class="orgAttributeKey">
+									{{arrayObjName}}
+								</td>
+								<td class="orgAttributeValue">
+									{{lookup arrayObjValue arrayObjName}}
+								</td>
+								<td class="orgActionCol col-lg-1 text-right">
+									<i class="fa fa-pencil disabled inactive" aria-hidden="true"></i>
+								</td>
+							</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!-- /.row -->
+
+
+
+
+
+	<!-- </div> -->
+</template>

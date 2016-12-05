@@ -1,0 +1,14 @@
+.itemAssocKitbagCountCol {
+    text-align: center;
+}
+
+.make-block {
+	display: block;
+}
+
+.itemlistSubtitle {
+    text-decoration: inherit !important;
+    text-transform: uppercase;
+    color: gray;
+    font-size: 0.8em;
+}

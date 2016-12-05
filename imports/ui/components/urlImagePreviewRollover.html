@@ -1,0 +1,20 @@
+<template name="urlImagePreviewRollover">
+
+	<!-- IMPORTANT - The parent element (containing this template must have class="img_hover") -->
+	<!--
+		imageUrl
+		imagePreviewText
+		imageAltText
+		imagePreviewHeight
+	-->
+
+	<a href="{{imageUrl}}" target="_blank">
+		<span class="hover_img_holder">
+			<span class="hover_img_text">{{#if imagePreviewText}}{{imagePreviewText}}{{else}}Click to Fully Expand Image{{/if}}</span>
+			<img src="{{imageUrl}}" alt="{{#if imageAltText}}{{imageAltText}}{{else}}Image Preview{{/if}}" height={{#if imagePreviewHeight}}{{imagePreviewHeight}}{{else}}50%{{/if}} />
+		</span>
+		{{imageUrl}}
+	</a>
+
+
+</template>

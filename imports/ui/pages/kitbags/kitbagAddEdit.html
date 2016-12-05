@@ -1,0 +1,87 @@
+<template name="kitbagAddEdit">
+
+	<div class="screen-wrapper objAddEdit kitbagAddEdit">
+		<!-- Page Heading -->
+		{{> pageHeader
+			pageTitle = "Register/Edit a Kitbag"
+			pageSubtitle = ""
+			faIcon = "fa-medkit"
+			}}
+
+		<form id="add-edit-kitbag" class="add-edit-kitbag">
+			<div class="addEditFormline">
+				<label for="kitbagId">Kitbag ID:</label>
+				<input type="text" id="kitbagId" name="kitbagId" data-submit="true" placeholder="ID is assigned on registration" disabled="disabled">
+			</div>
+			<div class="addEditFormline">
+				<label for="orgStatus">Status:</label>
+				<select class="statusSelectList" name="kitbagStatus" data-submit="true">
+					{{#each listKitbagStatuses}}
+						<option value="{{this}}">{{this}}</option>
+					{{/each}}
+				</select>
+			</div>
+			<div class="addEditFormline">
+				<label for="kitbagAssocOrg">Organisation:</label>
+
+				<select class="orgSelectList" name="kitbagAssocOrg" data-submit="true">
+					{{#each orgs}}
+						<option value="{{orgId}}">
+						{{#if orgTitle}}
+							{{orgTitle}}
+						{{else}}
+							<i>Organisation name not found (OrgID: {{orgId}})</i>
+						{{/if}}
+						</option>
+					{{/each}}
+				</select>
+
+			</div>
+			<div class="addEditFormline">
+				<label for="kitbagTitle">Bag Name:</label>
+				<input type="text" name="kitbagTitle" data-submit="true" placeholder="Create a new kitbag">
+			</div>
+			<div class="addEditFormline">
+				<label for="kitbagDesc">Description:</label>
+				<input type="text" name="kitbagDesc" data-submit="true" placeholder="Briefly summarize the role of this kitbag">
+			</div>
+			<div class="addEditFormline">
+				<label for="kitbagSku">Custom Bag ID:</label>
+				<input type="text" name="kitbagSku" data-submit="true" placeholder="Your own organizational reference code">
+			</div>
+
+			<div class="addEditFormline">
+				<label for="kitbagImgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
+				<input type="url" name="kitbagImgLarge" data-submit="true" placeholder="URL for larger organization logo (max 512x512 / *.jpg or *.png)">
+			</div>
+			<div class="addEditFormline">
+				<label for="kitbagImgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
+				<input type="url" name="kitbagImgSmall" data-submit="true" placeholder="URL for smaller organization logo icon (max 32x32 / *.jpg or *.png)">
+			</div>
+			<div class="addEditFormline">
+				<label for="createdAt">Created:</label>
+				<input type="text" id="createdAt" name="createdAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<div class="addEditFormline">
+				<label for="updatedAt">Last Updated:</label>
+				<input type="text" id="updatedAt" name="updatedAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
+			</div>
+			<!-- <div class="addEditFormline">
+				<label for="owner">Owner:</label>
+				<input type="text" id="owner" name="owner" data-submit="true" placeholder="Your User ID will be recorded on submission" disabled="disabled" value="{{nameFromOwner}}">
+			</div> -->
+			<div class="addEditFormline">
+				<label for="account_data">Account Data:</label>
+				<textarea>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</textarea>
+			</div>
+
+			<!-- <input type="submit" value="Submit" data-submit="false"> -->
+
+			<button class="submit">Submit</button>
+			<button class="cancel">Cancel</button>
+
+		</form>
+
+	</div>
+
+</template>

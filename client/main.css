@@ -1,0 +1,385 @@
+/* CLASSES TO BE CONSIDERED FOR DELETION FROM HTML:
+
+.screen-wrapper
+.screentitle
+.kitbagline
+.header
+.kitbagTitle
+.kitbagSku
+.kitbagAssocOrg
+.kitbagCreatedAt
+.kitbagOwner
+.kitbagActions
+.userentry
+.addPaddingForDropdown
+.orgDetails
+span.detailKey
+span.detailVal
+
+*/
+
+/*body {
+	font-family: sans-serif;
+	font-size: 16px;
+}*/
+
+.hide {
+	display: none !important;
+}
+
+.fa.disabled {
+    color: #aaa;
+}
+
+/* ADMIN ONLY */
+
+.adminOnly {
+	/* background-color: rgba(154, 205, 50, 0.1) !important; */
+    /* border-color: rgba(154, 205, 50, 0.1) !important; */
+    /* border-width: 2px !important; */
+    /* border-style: dotted !important; */
+    /* margin: 5px 0 !important; */
+    /* padding: 5px 10px; */
+    /* border-radius: 4px; */
+    color: #5cb85c;
+    background-color: rgba(0,128,0,0.05);
+}
+
+.todo {
+	background-color: rgba(255, 255, 0, 0.1) !important;
+	color: #c7254e !important;
+}
+
+
+
+/*
+.screen-wrapper {
+	margin: 5px;
+	padding: 5px 20px 20px;
+	border-radius: 5px;
+}*/
+
+/*.screentitle {
+	color: brown;
+	text-transform: uppercase;
+	font-weight: normal;
+	font-stretch: extra-condensed;
+}*/
+
+/* Page Templates */
+
+/*
+.screen-wrapper {
+	border: 1px dotted gray;
+}
+
+.objList {
+	border: 1px solid blue;
+}
+
+.objAddEdit {
+	border: 1px solid green;
+}
+
+.orgDetails {
+	border: 1px solid brown;
+}
+*/
+
+
+/* CSS declarations go here
+
+
+html {
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+
+
+
+.container {
+	max-width: 900px;
+	margin: 0 auto;
+	min-height: 100%;
+	background: white;
+	box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.16), 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+}
+
+header {
+	padding: 20px 15px 15px 15px;
+	position: relative;
+}
+
+h1 {
+	font-size: 2em;
+	margin: 0;
+	margin-bottom: 10px;
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.new-resolution input[type="text"] {
+	padding: 10px 0;
+	background: transparent;
+	border: none;
+	width: 50%;
+	padding-right: 80px;
+	font-size: 1em;
+	border-bottom: 1px solid rgba(0,0,0,0.3);
+}
+
+.new-resolution input:focus{
+	outline: 0;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+	background: white;
+}
+
+.delete {
+	float: right;
+	font-weight: bold;
+	background: #DE4F4F;
+	color: #FFF;
+	font-size: 1em;
+	padding: 5px 10px;
+	border: none;
+	border-radius: 4px;;
+}
+
+li {
+	position: relative;
+	list-style: none;
+	padding: 20px 15px;
+	border-bottom: #eee solid 1px;
+}
+
+li .text {
+	margin-left: 10px;
+}
+
+li.checked {
+	color: #888;
+}
+
+li.checked .text {
+	text-decoration: line-through;
+}
+
+
+*/
+
+.time-date {
+	cursor: help;
+}
+
+.cursor-help {
+	cursor: help;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.resNote {
+	/* font-size: x-small; */
+	color: grey;
+}
+
+.strike {
+	text-decoration: line-through;
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+span.label {
+    font-weight: initial !important;
+    text-transform: uppercase !important;
+    font-size: 0.7em !important;
+}
+
+/* New Org */
+
+/*form label {
+		width: 20%;
+		display: inline-block;
+}*/
+.addEditFormline {
+		margin: 15px 10px;
+}
+
+.addEditFormline input[type="text"], .addEditFormline input[type="email"], .addEditFormline input[type="url"] {
+		display: inline-block;
+		width: 70%;
+		padding: 10px;
+		font-size: 1em;
+}
+
+.addEditFormline select {
+		display: inline-block;
+		width: 70%;
+		padding: 10px;
+		font-size: 1em;
+		box-sizing: content-box;
+}
+
+.addEditFormline textarea {
+		width: 70%;
+		padding: 10px;
+		font-size: 1em;
+		height: 100px;
+}
+
+.addEditFormline .subtitle {
+		color: gray;
+		display: block;
+		font-size: 0.8em;
+}
+
+/* MENU */
+
+.menu-option {
+	cursor: pointer;
+	display: inline-block;
+	border: 1px solid gray;
+	border-radius: 5px;
+	padding: 6px 3px 3px 3px;
+	margin: 1px;
+	width: 180px;
+	height: 20px;
+	font-size: 0.8em;
+	font-variant: small-caps;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.active {
+	background-color: rgba(255, 85, 51, 0.3);
+}
+
+
+/* START SCREEN */
+
+.startScreenIntro li {
+    font-size: 1.4em !important;
+    margin: 0.7em 0 !important;
+}
+
+#startScreenIntro {
+    /* background-color: rgba(255, 255, 255, 0); */
+    padding: 5px;
+    margin: 5px;
+}
+
+h1 .subtitle {
+	display: block;
+	font-size: 55%;
+	font-weight: 400;
+    line-height: 1;
+    color: #777;
+    margin-bottom: 30px;
+}
+
+.jumbotron ul {
+    margin-bottom: 15px !important;
+    font-size: 21px !important;
+    font-weight: 200 !important;
+}
+
+
+/* INITIAL VIEW */
+
+/*.startScreen,
+.kitbagList,
+.orgList,
+.orgAddEdit,
+.kitbagAddEdit,
+.orgDetails,
+.users,
+.settings {
+	display: none;
+}*/
+
+
+
+
+/* ORG LIST */
+
+/*
+.orgDetails {
+	background-color: rgba(211, 211, 211, 0.5);
+	display: block;
+	margin: 10px;
+	padding: 10px;
+}
+
+*/
+
+
+.controlWrapper {
+	/*zoom: 0.8;*/
+/* 	float: right; */
+/* 	margin-right: 15px */
+}
+
+
+/* KITBAG LIST */
+
+.kitbagline.header {
+	font-weight: bold;
+	border-bottom: 2px solid gray;
+}
+
+.kitbagline {
+	min-height: 12px;
+	font-size: 0.8em;
+	border-bottom: 1px dotted gray;
+}
+
+.kitbagline > span {
+		display: inline-block;
+		padding: 4px;
+		margin: 1px;
+		vertical-align: top;
+}
+
+.kitbagTitle {
+	width: 20%;
+	border-right: 1px dotted gray;
+}
+.kitbagSku {
+	width: 15%;
+	border-right: 1px dotted gray;
+}
+.kitbagAssocOrg {
+	width: 20%;
+	border-right: 1px dotted gray;
+}
+.kitbagCreatedAt {
+	width: 15%;
+	border-right: 1px dotted gray;
+}
+.kitbagOwner {
+	width: 10%;
+	border-right: 1px dotted gray;
+}
+.kitbagActions {
+	width: 10%;
+}
+
+
+/* TABLES */
+
+.addPaddingForDropdown tbody:after {
+	/* TODO: Find a better solution for this! */
+	/* Makes space below tables using a dropdown menu otherwise the menu for the last line is cut off by the bottom of the page */
+	padding-bottom: 150px !important;
+	line-height: 140px !important;
+	content: "\00a0 " !important;
+}

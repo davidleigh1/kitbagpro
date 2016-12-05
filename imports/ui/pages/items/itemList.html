@@ -1,0 +1,105 @@
+<template name="itemList">
+
+	<!-- Page Heading -->
+	{{> pageHeader
+		pageTitle = "Kitbag Items"
+		pageSubtitle = ""
+		faIcon = "fa-stethoscope"
+		}}
+
+	<!-- TODO: Make this into a reusable template with only the JS changing each time? -->
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="panel panel-default">
+				<div class="panel-heading itemFilter">
+					<h3 class="panel-title">
+						{{>itemLogo}}
+						Items
+					</h3>
+				</div>
+				<div class="panel-body">
+					<!-- Filtered list of itemanizations -->
+					{{> listFilter
+						obj="item"
+						Obj="Item"
+						full="item"
+						Full="Item"
+						}}
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /.row -->
+
+
+{{#if Template.subscriptionsReady}}
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="table-responsive">
+				<table class="table table-bordered-XXX table-hover table-striped-XXX">
+					<thead>
+						<tr>
+							<th class="text-left">Item</th>
+							<th class="hidden-xs">Status</th>
+							<th class="hidden-xs">Detail</th>
+							<th class="hidden-xs">AgeGroup</th>
+							<th class="hidden-xs">Size</th>
+							<th class="hidden-xs">Brand</th>
+							<th class="hidden-xs">Model</th>
+							<th class="hidden-xs itemAssocKitbagCountCol todo">Kitbags</th>
+							{{#if glb_userIsSuperAdmin}}
+								<th class="hidden-xs adminOnly">Org</th>
+							{{/if}}
+							{{#if glb_userIsSuperAdmin}}
+								<th class="hidden-xs adminOnly">AssocOrg</th>
+							{{/if}}
+							<th class="hidden-xs hidden-sm hidden-md">Item ID</th>
+							{{#if glb_userIsSuperAdmin}}
+								<th class="hidden-xs hidden-sm hidden-md adminOnly">DB ID</th>
+							{{/if}}
+							<!-- <th class="hidden-xs hidden-sm hidden-md">Owner</th> -->
+							<th class="hidden-xs">Mandatory</th>
+							<th class="hidden-xs">Qmin/Qrec/Qmax</th>
+							<th class="visible-lg">Created</th>
+							<th class="visible-lg">Updated</th>
+							<th class="hidden-xs">MfrPart#</th>
+							<th class="hidden-xs">EAN/UPC</th>
+							<th class="hidden-xs">SKU</th>
+							<!-- <th class="hidden-xs">URL</th> -->
+							<th class="hidden-xs hidden-sm hidden-md">Controls</th>
+							<th class="hidden-xs text-right">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!--
+						{{#each objectsFiltered "Items" filterVar}}
+							{{> itemLine}}
+						{{/each}}
+						-->
+						{{#if Template.subscriptionsReady}}
+							{{#if objectsFiltered "Items" filterVar}}
+								{{#each objectsFiltered "Items" filterVar}}
+									{{ >itemLine thisItem=this listType="itemList" }}
+								{{/each}}
+							{{else}}
+								{{ >noListObjectsFound objectName="Items" customMessage="No Items found.  Please review any search keywords or filters." }}
+							{{/if}}
+						{{else}}
+							loading...
+						{{/if}}
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+{{else}}
+	{{>loading}}
+{{/if}}
+
+	<!-- /.row -->
+<!-- </div> -->
+</template>

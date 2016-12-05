@@ -1,0 +1,122 @@
+/* FILTER / SORT  -  from main.css */
+
+.listFilter {
+		float: left;
+		display: inline-block;
+}
+
+.listSorter {
+		float: right;
+		display: inline-block;
+}
+
+.filterField {
+	display: inline-block;
+    min-width: 99%;
+    padding: 10px;
+    font-size: 1em;
+    margin: 15px -10px 15px 0px;
+}
+
+/* HIGHLIGHT */
+
+.filterHighlight {
+    font-weight: bold;
+    border: 1px dotted #5A5A5A;
+    border-radius: 3px;
+    text-decoration: none;
+    background-color: aliceblue;
+}
+
+.panel-heading.orgFilter, .panel-heading.kbFilter, .panel-heading.itemFilter, .panel-heading.userFilter {
+	display: none;
+}
+
+/* CLEAR BUTTON FOR FILTER INPUT FIELD */
+
+.close-button,.filterInput {
+	position: relative;
+}
+.close-button {
+	visibility: hidden;		/* Parent is set to hidden */
+    border: transparent;
+    background: transparent;
+    width: 1px;
+    left: -10px;
+}
+.close-button:hover:after {
+	color: #333;
+}
+.close-button:after {
+	/* border: 1px solid rgb(204, 204, 204); */
+	/* font-size: 150%; */
+	/* padding: 2px 5px; */
+	/* top: -8px; */
+	/*content: "CLEAR";*/
+	border-radius: 50%;
+	bottom: -5px;
+	color: #999;
+	content: '\f057';
+	cursor: pointer;
+	display: block;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-weight: normal;
+	margin: auto;
+	position: absolute;
+	right: 5px;
+	text-align: center;
+	visibility: visible;
+	z-index: 1;
+	zoom: 2;
+}
+.close-button2:after {
+	visibility: visible;	/* :after is set to visible */
+	content: "CLEAR";
+    border-radius: 3px;
+    border: 1px solid rgb(204, 204, 204);
+    bottom: 0;
+    cursor: pointer;
+    display: block;
+    font-size: 12px;
+    font-weight: normal;
+    margin: auto;
+    padding: 2px 5px;
+    position: absolute;
+    right: 10px;
+    text-align: center;
+    top: 0;
+    z-index: 1;
+}
+
+
+/* .close-button:after {
+	content: "X";
+	display: block;
+	width: 40px;
+	height: 15px;
+	position: absolute;
+	background-color: #FA9595;
+	z-index:1;
+	right: 35px;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	padding: 2px;
+	border-radius: 50%;
+	text-align: center;
+	color: white;
+	font-weight: normal;
+	font-size: 12px;
+	box-shadow: 0 0 2px #E50F0F;
+	cursor: pointer;
+} */
+.filterInput:not(:valid) ~ .close-button {
+	display: none;
+}
+
+/*.btn-default:hover {
+    color: #333;
+    background-color: #e6e6e6;
+    border-color: #adadad;
+}*/

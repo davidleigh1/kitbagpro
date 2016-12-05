@@ -1,0 +1,25 @@
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.subtitle {
+	display: block;
+	font-size: 0.8em;
+}
+
+.tableControlPanel {
+	padding-bottom: 10px;
+}
+
+.tableControlPanel a.btn {
+	margin: 2px 0;
+}
+
+.dropdown, .dropup {
+    display: inline-block;
+}
+
+span.label.disabled, span.checkmark.disabled {
+    opacity: 0.5;
+}

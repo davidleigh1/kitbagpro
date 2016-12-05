@@ -1,0 +1,30 @@
+<template name="orgDuplicate">
+
+	<h1>Duplicate Org</h1>
+
+	<div class="screen-wrapper">
+
+	{{#if Template.subscriptionsReady}}
+
+		{{> quickForm
+			collection           = "Orgs"
+			id                   = "duplicateOrgForm"
+			input-col-class 	 = "col-sm-10"
+			label-class     	 = "col-sm-2"
+			meteormethod         = "addOrg"
+			template        	 = "bootstrap3-horizontal"
+			omitFields           = "updatedAt,updatedBy"
+			singleMethodArgument = true
+			type                 = "method"
+			doc                  = selectedOrgDoc
+			autosave             = autoSaveMode
+		}}
+
+	{{else}}
+		Not Ready Yet...
+		{{>loading}}
+	{{/if}}
+
+	</div>
+
+</template>
