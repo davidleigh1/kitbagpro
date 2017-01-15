@@ -13,7 +13,7 @@ import './orgView.css';
 
 /* IMPORT SHARED TEMPLATES + COMPONENTS */
 
-import '/imports/ui/pages/kitbags/kitbagLine.js';
+import '/imports/ui/pages/kitbags/line.js';
 import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
 

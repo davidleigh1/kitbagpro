@@ -1,0 +1,634 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"give",
+				"giveBonuses"
+			],
+			[
+				"clea",
+				"clearInterval"
+			],
+			[
+				"gameO",
+				"gameOver"
+			],
+			[
+				"ava",
+				"availableCells"
+			],
+			[
+				"curr",
+				"currentGame"
+			],
+			[
+				"end",
+				"endTime"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"togg",
+				"toggleClass\t.toggleClass()"
+			],
+			[
+				"cel",
+				"cellName"
+			],
+			[
+				"av",
+				"availableCells"
+			],
+			[
+				"cell",
+				"celltype"
+			],
+			[
+				"pla",
+				"playSound"
+			],
+			[
+				"cat",
+				"catchKeys"
+			],
+			[
+				"_ini",
+				"_initControlPanel"
+			],
+			[
+				"gl",
+				"globalSettings"
+			],
+			[
+				"remove",
+				"removeClass\t.removeClass()"
+			],
+			[
+				"pars",
+				"parseInt"
+			],
+			[
+				"cu",
+				"currentGame"
+			],
+			[
+				"add",
+				"addClass\t.addClass()"
+			],
+			[
+				"e",
+				"each\t.each()"
+			],
+			[
+				"x-",
+				"xx-small"
+			],
+			[
+				"font-s",
+				"font-size"
+			],
+			[
+				"for",
+				"for\tfor (…) {…}"
+			],
+			[
+				"this",
+				"thisGameObj"
+			],
+			[
+				"game",
+				"gameFound"
+			],
+			[
+				"bacgk",
+				"background-color"
+			],
+			[
+				"bac",
+				"background-color"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "_notes/meteor_notes.txt",
+			"settings":
+			{
+				"buffer_size": 9491,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "_notes/tasks.txt",
+			"settings":
+			{
+				"buffer_size": 22203,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 104.0,
+		"last_filter": "Package Control: insta",
+		"selected_items":
+		[
+			[
+				"Package Control: insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: in",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: install",
+				"Package Control: Install Package"
+			],
+			[
+				"toggle",
+				"SublimeLinter: Toggle Linter"
+			]
+		],
+		"width": 528.0
+	},
+	"console":
+	{
+		"height": 268.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = 'df21e130d211cfc94d9b0905775a7c0f' + '1e3d39e33b79698005270310898eea76'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/localhost/meteor/kitbagpro",
+		"/C/localhost/meteor/kitbagpro/_notes"
+	],
+	"file_history":
+	[
+		"/C/Users/DAVIDL~1/AppData/Local/Temp/Rar$DRa0.421/iphonecontact.vcf",
+		"/C/Users/David Leigh/Documents/UH/wiki server/LocalSettings.php",
+		"/C/localhost/misterbit/Sokoban/js/main.js",
+		"/C/localhost/meteor/kitbagpro/_notes/GitHub @ MisterBit.txt",
+		"/C/localhost/misterbit/Sokoban/index.html",
+		"/C/localhost/misterbit/Sokoban/css/main.css",
+		"/R/chango.site/in/littlecousine/Password.txt",
+		"/C/Users/David Leigh/Documents/UH/wiki server/.htaccess",
+		"/C/Users/David Leigh/Documents/UH/wiki server/.htaccess INITIAL DEFAULT.js",
+		"/C/Users/David Leigh/Documents/UH/wiki server/MobileFrontend (11Dec)/MobileFrontend/version",
+		"/C/Users/David Leigh/Documents/UH/wiki server/MobileFrontend (dev master)/mediawiki-extensions-MobileFrontend-master/README.md",
+		"/C/Users/David Leigh/AppData/Local/Temp/Rar$DIa0.246/version",
+		"/C/Users/David Leigh/Documents/UH/wiki server/MobileFrontend/version",
+		"/C/Users/David Leigh/Documents/UH/wiki server/MobileFrontendSkin/MobileFrontend/version",
+		"/C/Users/David Leigh/Downloads/PopcornTime/Hell.or.High.Water.2016.1080p.WEB-DL.DD5.1.H264-FGT/English.srt",
+		"/C/Users/David Leigh/Documents/UH/wiki server/kampyle/LocalSettings.php",
+		"/C/Users/David Leigh/Documents/UH/server/README",
+		"/C/localhost/meteor/kitbagpro/_notes/Best Practise Snippets.txt",
+		"/C/localhost/meteor/kitbagpro/_notes/ES2015+BestPractice Notes.txt",
+		"/C/localhost/misterbit/Sokoban Boilerplate/css/main.css",
+		"/C/localhost/misterbit/Sokoban Boilerplate/js/main.js",
+		"/C/localhost/misterbit/Sokoban Boilerplate/index.html",
+		"/C/Users/David Leigh/AppData/Roaming/Sublime Text 3/Packages/Alignment/Base File.sublime-settings",
+		"/C/Users/David Leigh/AppData/Roaming/Sublime Text 3/Packages/User/JSON.sublime-settings",
+		"/C/Users/David Leigh/AppData/Roaming/Sublime Text 3/Packages/User/Base File.sublime-settings",
+		"/C/Users/David Leigh/AppData/Roaming/Sublime Text 3/Packages/User/JavaScript.sublime-settings",
+		"/C/localhost/misterbit/Sokoban Boilerplate/css/sokoban.css",
+		"/C/localhost/misterbit/Sokoban Boilerplate/js/plugins.js",
+		"/C/localhost/misterbit/Sokoban Boilerplate/css/normalize.css",
+		"/C/localhost/misterbit/Sokoban/css/index.html",
+		"/C/localhost/meteor/kitbagpro/.gitignore",
+		"/C/localhost/meteor/kitbagpro/package.json",
+		"/C/localhost/tests/proto(2).js"
+	],
+	"find":
+	{
+		"height": 36.0
+	},
+	"find_in_files":
+	{
+		"height": 96.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"-",
+			"===",
+			" ===",
+			"=== ",
+			"mailto:",
+			"@",
+			"|-",
+			" ",
+			"@",
+			"| BM",
+			"'''EMS",
+			"'''",
+			" ''",
+			"| 16",
+			"זה",
+			"{{TBC}}",
+			"~",
+			"״",
+			"===",
+			"!",
+			"150px",
+			"200px",
+			"|-",
+			"avis",
+			"wgGenerateThumbnailOnParse",
+			"wgEnableUploads",
+			"wgUsePathInfo",
+			"wgArticlePath",
+			"wgScriptExtension",
+			"dh",
+			"skin",
+			"memory",
+			"memory_limit",
+			"limit",
+			"|-",
+			"-",
+			"gold",
+			"gold.",
+			".mp3",
+			"R6C3",
+			"blankCellsArray",
+			"mybonus",
+			"debugging",
+			"bonus",
+			"_userWinner",
+			"clock",
+			"tryToMoveRobot",
+			"modalNoti",
+			"clock",
+			"winner",
+			"Stopping 'myBonusTimer'",
+			"stepsCount",
+			"freeSteps",
+			");\n",
+			"claim",
+			"moveRobot",
+			"celltype",
+			"data",
+			"availableCells",
+			"Math",
+			"_initBonuses",
+			"\t",
+			"C",
+			"R2C10",
+			"\t",
+			"C",
+			"\t",
+			"C",
+			"initialGame",
+			"gameStack",
+			"ready",
+			"alert",
+			"timer",
+			"stuck_in_glue",
+			"glue",
+			"sound",
+			"tryToMoveRobot",
+			"boxes",
+			"_userWinner",
+			"winner",
+			"_updateControlPanel",
+			"initPage",
+			"winner",
+			"_initKeyHandlers",
+			"hiddenId",
+			"show_",
+			"show_ids",
+			"start",
+			"boardContainer",
+			"tryToMoveRobot",
+			"listAvailableCells",
+			"click(",
+			"click",
+			"click\"",
+			"click",
+			"box_on_station",
+			"station",
+			"initEve",
+			"initKey",
+			"gameOver",
+			"winner",
+			"catchKeys",
+			"_moveRobot",
+			"console.log",
+			"_initEventHandlers",
+			"hover",
+			"catchKeys",
+			"play_",
+			"//console.log",
+			"console.log",
+			"_moveBox(",
+			"_moveRobot(",
+			"catchKeys",
+			"_initEventHandlers",
+			"catchKeys",
+			"currentMove",
+			"_update",
+			"currentMove",
+			"update",
+			"success",
+			"moveToCell",
+			"moveToCol",
+			"moveToRow",
+			"checkIfBoxCanMoveCell",
+			"checkIfBoxCanMoveCol",
+			"checkIfBoxCanMoveRow",
+			"mute_sound",
+			"parse"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"",
+			" '''",
+			"=",
+			"{{missing}}",
+			"\"",
+			"==",
+			"200px",
+			"150px",
+			"",
+			"blankBonusCellsArray",
+			"",
+			"show_debug",
+			"listAdjacentCells",
+			"keyHandlersActive",
+			"robotDestCell",
+			"robotDestCol",
+			"robotDestRow",
+			"boxDestCell",
+			"boxDestCol",
+			"boxDestRow",
+			"play_sound",
+			"jQuery",
+			"",
+			"\", \"",
+			"{{TBC}}",
+			"{{{",
+			"}}}",
+			"{{{"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "_notes/meteor_notes.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9491,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content"
+							],
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "_notes/tasks.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22203,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"bracket_highlighter.busy": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 35.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "kitbag_project.sublime-project",
+	"replace":
+	{
+		"height": 66.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 192.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

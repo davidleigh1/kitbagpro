@@ -1,25 +1,27 @@
 // import { Session } from 'meteor/session'
 
-import './itemView.html';
-import './itemView.css';
+import './view.html';
+import './view.css';
 
-import '/imports/ui/pages/kitbags/line.js';
+import '/imports/ui/pages/items/itemLine.js';
 import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
-import { Items } from '/imports/startup/both/item-schema.js';
-// import { Items } from '/imports/api/items/items.js';
-// import { Items } from '/both/newItems.js';
+// import { Orgs } 		from '/imports/startup/both/org-schema.js';
+import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
+import { Items } 		from '/imports/startup/both/item-schema.js';
+// import { UserList } 	from '/imports/startup/both/user-schema.js';
+// import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
+
 import { listItemStatuses } from '/imports/api/items/items.js';
 
 import '/imports/ui/components/urlImagePreviewRollover.html';
 
 
-Template.itemView.onCreated(function() {
+Template.kitbagView.onCreated(function() {
 });
 
 
-Template.itemView.onRendered(function(){
+Template.kitbagView.onRendered(function(){
 
 	// TODO: THIS IS UGLY! Need to find a way to check against a route name not template name
 	// http://stackoverflow.com/questions/31006474/meteor-onrendered-doesnt-get-fired-again-after-second-render-iron-route
@@ -35,11 +37,11 @@ Template.itemView.onRendered(function(){
 */
 
 	/* Check to see if the number of assigned Kitbags 'itemKbCount' (as maintained on the item document) is equal to the number of kitbags returned from the DB for this user. For non-SuperAdmin users, there would be no way to see an issue where an item was assigned to another organisation (to which they have no visibility) but the discrepency in the two counts would indicate an issue requiring attention  */
-	if (int_itemBagsFound.get() != itemKbCount) {
-		var message = "Error:\n\nA discrepency was found between the count on the item document ('itemAssocKitbagCount' = "+itemKbCount+") and the number of kitbags returned from the DB ('int_itemBagsFound' = "+int_itemBagsFound.get()+"). This could indicate kitbags or items are incorrectly associated to other orgs or objects. Please report this issue referencing Item ID: '"+FlowRouter.getParam('_itemId')+"'.";
-		console.log(message);
-		sAlert.error(message,{timeout: 'none'});
-	}
+	// if (int_itemBagsFound.get() != itemKbCount) {
+	// 	var message = "Error:\n\nA discrepency was found between the count on the item document ('itemAssocKitbagCount' = "+itemKbCount+") and the number of kitbags returned from the DB ('int_itemBagsFound' = "+int_itemBagsFound.get()+"). This could indicate kitbags or items are incorrectly associated to other orgs or objects. Please report this issue referencing Item ID: '"+FlowRouter.getParam('_itemId')+"'.";
+	// 	console.log(message);
+	// 	sAlert.error(message,{timeout: 'none'});
+	// }
 
 
 });
@@ -47,9 +49,9 @@ Template.itemView.onRendered(function(){
 
 
 // Template.myTemplateName.helpers
-Template.itemView.helpers({
-	isTrashed: function (itemId) {
-		if (this.itemStatus.toLowerCase() == "trashed"){
+Template.kitbagView.helpers({
+	isTrashed: function (kitbagId) {
+		if (this.kitbagStatus.toLowerCase() == "trashed"){
 			return true;
 		} else {
 			return false;
@@ -87,12 +89,12 @@ Template.itemView.helpers({
 			return newArray;
 		}
 	},
-	thisItem: function (thisItemId) {
-		var myItem = Items.findOne({itemId: FlowRouter.getParam('_itemId') });
-		//console.log("itemProfile",myItem);
-		/* TODO - Find a better way to store/pass this value for checking once the int_itemBagsFound value is loaded */
-		itemKbCount = myItem.itemAssocKitbagCount;
-		return myItem;
+	thisKitbag: function (thisKitbagId) {
+		var myKitbag = Kitbags.findOne({kitbagId: FlowRouter.getParam('_kitbagId') });
+		//console.log("kitbagProfile",myKitbag);
+		/* TODO - Find a better way to store/pass this value for checking once the int_kitbagBagsFound value is loaded */
+		kitbagKbCount = myKitbag.kitbagAssocKitbagCount;
+		return myKitbag;
 	},
 	thisKitbag: function (kitbagId) {
 		// return Template.currentData().thisKitbag;
@@ -106,9 +108,9 @@ Template.itemView.helpers({
 		return Spacebars.SafeString(newText);
 	},
 	// TODO - Is this used???
-	// itemAssocKitbagIds: function () {
-	// 	/* Tidies up the itemAssocKitbagIds array */
-	// 	var arr = this.itemAssocKitbagIds;
+	// kitbagAssocKitbagIds: function () {
+	// 	/* Tidies up the kitbagAssocKitbagIds array */
+	// 	var arr = this.kitbagAssocKitbagIds;
 	// 	var prefix = "<code>";
 	// 	var joiner = "</code><br><code>";
 	// 	var suffix = "</code>";
@@ -125,7 +127,7 @@ Template.itemView.helpers({
     },
 	userNameLookup: function (userId, paramRequired) {
 		var myUser = Meteor.users.findOne({_id: userId });
-		// Items.findOne({itemId: FlowRouter.getParam('_itemId') });
+		// Kitbags.findOne({kitbagId: FlowRouter.getParam('_kitbagId') });
 		// console.log("myUser",myUser.profile.displayName);
 
 		var data = {};
@@ -160,7 +162,7 @@ Template.itemView.helpers({
 
 
 // Template.myTemplateName.events
-Template.itemView.events({
+Template.kitbagView.events({
 	'click button.submit': function(event) {
 		event.preventDefault();
 		alert('submit button!');
@@ -169,21 +171,21 @@ Template.itemView.events({
 		event.preventDefault();
 		alert('cancel button!');
 	},
-	'click li.setItemStatus': function(event,a,b) {
+	'click li.setKitbagStatus': function(event,a,b) {
 		event.preventDefault();
 		// var newStatus = event.target.categ.dataset.getAttribute('data-id')
-		var field = "itemStatus";
+		var field = "kitbagStatus";
 		// newEvent = event;
 		var parent = event.target.parentElement;
 		var newValue = event.target.parentElement.getAttribute("data-status");
-		console.log("EVENT updateItemField",this._id,field,newValue,parent);
-		// Meteor.call("updateItemField",this._id,field,newValue);
+		console.log("EVENT updateKitbagField",this._id,field,newValue,parent);
+		// Meteor.call("updateKitbagField",this._id,field,newValue);
 	},
 	'click .btn.trash': function(event) {
 		event.preventDefault();
-		var areYouSure = "Are you sure you want to trash item '"+this.itemTitle+"'?\n(ItemId: "+this.itemId+")";
+		var areYouSure = "Are you sure you want to trash kitbag '"+this.kitbagTitle+"'?\n(KitbagId: "+this.kitbagId+")";
 		if ( confirm(areYouSure) ) {
-			Meteor.call("setItemStatus",this._id, "Trashed");
+			Meteor.call("setKitbagStatus",this._id, "Trashed");
 		} else {
 			return false;
 		}
@@ -192,11 +194,11 @@ Template.itemView.events({
 		event.preventDefault();
 		// console.log(this,a,b);
 
-		var areYouSure = "Are you sure you want to permanently delete item '"+this.itemTitle+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
+		var areYouSure = "Are you sure you want to permanently delete kitbag '"+this.kitbagTitle+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
 		if ( confirm(areYouSure) ) {
-			Meteor.call("deleteItem",this._id);
+			Meteor.call("deleteKitbag",this._id);
 			// history.go(-1);
-			FlowRouter.go("/items/list");
+			FlowRouter.go("/kitbags/list");
 		} else {
 			return false;
 		}

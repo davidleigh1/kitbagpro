@@ -4,6 +4,11 @@
 
 console.log("RUNNING /imports/startup/both/sharedConstants.js");
 
+export const kb = {
+	collections: {
+		something: "here"
+	}
+};
 
 /* Prefixes used by the unique keys generators e.g. GlobalHelper.idGenerator() */
 /* These Prefixes used for validating user-exposed content, routing etc  */

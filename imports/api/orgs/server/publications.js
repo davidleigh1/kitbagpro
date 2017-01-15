@@ -1,11 +1,14 @@
 // # definition of this collection
 
 import { Admin } from '/imports/api/admin/admin.js';
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
+// import { Orgs } from '/imports/startup/both/org-schema.js';
+import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
+
+console.log("-----------",kb.collections.Orgs,"-----------");
+
+/* PUBLISH */
 
 Meteor.publish("orgs",function() {
 	// console.log('Publishing "orgs" from apis > orgs > server > publications.js!');
@@ -40,17 +43,17 @@ Meteor.publish("orgs",function() {
 		return null;
 	}
 	// updateOrgCountsObj("onOrgsPublished");
-	return Orgs.find(searchObj);
+	return kb.collections.Orgs.find(searchObj);
 });
 
 /* For Meteor Collection Hooks (https://atmospherejs.com/matb33/collection-hooks) */
 
 updateOrgCountsObj = function (requestor,userId, doc, fieldNames, modifier){
 	/* Combined function replacing ALL+ACTIVE+HIDDEN */
-	var countAll     = Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInAllCount } 	}).count();
-	var countActive  = Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInActiveCount } 	}).count();
-	var countHidden  = Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInHiddenCount } 	}).count();
-	var countTrashed = Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInTrashedCount }	}).count();
+	var countAll     = kb.collections.Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInAllCount } 	}).count();
+	var countActive  = kb.collections.Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInActiveCount } 	}).count();
+	var countHidden  = kb.collections.Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInHiddenCount } 	}).count();
+	var countTrashed = kb.collections.Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInTrashedCount }	}).count();
 
 	Admin.update( {'id':'counts'}, { '$set':{ 'counts.allOrgs': countAll } }, { upsert: true } );
 	Admin.update( {'id':'counts'}, { '$set':{ 'counts.activeOrgs': countActive } }, { upsert: true } );
@@ -58,17 +61,9 @@ updateOrgCountsObj = function (requestor,userId, doc, fieldNames, modifier){
 	Admin.update( {'id':'counts'}, { '$set':{ 'counts.trashedOrgs': countTrashed } }, { upsert: true } );
 
 	console.log("Updated Org Counts ("+requestor+") > "+ "all: "+ countAll + " | active: "+ countActive + "| hidden: "+ countHidden + "| trashed: "+ countTrashed);
-
 };
 
-
-
-
-
-
-
-
-Orgs.after.insert(function (userId, doc, fieldNames, modifier) {
+kb.collections.Orgs.after.insert(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ORGS.INSERT");
 	/* Recalculate when new Org is added */
 	// updateAllOrgsCount("onOrgInserted",doc.orgTitle);
@@ -76,7 +71,7 @@ Orgs.after.insert(function (userId, doc, fieldNames, modifier) {
 	// updateHiddenOrgsCount("onOrgInserted",doc.orgTitle);
 	updateOrgCountsObj("onOrgInserted",doc.orgTitle);
 });
-Orgs.after.remove(function (userId, doc, fieldNames, modifier) {
+kb.collections.Orgs.after.remove(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ORGS.REMOVE", "\n", userId, "\n", doc, "\n", fieldNames, "\n", modifier);
 	serverlog("User X deleted Org Y");
 	/* Recalculate when existing Org is deleted */
@@ -85,7 +80,7 @@ Orgs.after.remove(function (userId, doc, fieldNames, modifier) {
 	// updateHiddenOrgsCount("onOrgRemoved",doc.orgTitle);
 	updateOrgCountsObj("onOrgRemoved",doc.orgTitle);
 });
-Orgs.after.update(function (userId, doc, fieldNames, modifier) {
+kb.collections.Orgs.after.update(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ORGS.UPDATE");
 	/* Recalculate when new existing Org changes orgStatus - which could well render it outside of the count criteria */
 	// updateAllOrgsCount("onOrgUpdate",doc.orgTitle);
@@ -122,7 +117,7 @@ Orgs.after.update(function (userId, doc, fieldNames, modifier) {
 	}
 });
 
-Orgs.before.insert(function (userId, doc, fieldNames, modifier, options) {
+kb.collections.Orgs.before.insert(function (userId, doc, fieldNames, modifier, options) {
 	console.log("BEFORE ORGS.INSERT");
 	/* Override _id parameter */
 	/* Count kitbags and set the associated Kitbag Count  */
@@ -132,9 +127,7 @@ Orgs.before.insert(function (userId, doc, fieldNames, modifier, options) {
 		console.log("\n\n=== ERROR ===\n\n"+err+"\n\n=============\n\n");
 	}
 });
-
-
-Orgs.before.update(function (userId, doc, fieldNames, modifier, options) {
+kb.collections.Orgs.before.update(function (userId, doc, fieldNames, modifier, options) {
 	console.log("BEFORE ORGS.UPDATE");
 	/* Override _id parameter */
 	/* Count kitbags and set the associated Kitbag Count  */

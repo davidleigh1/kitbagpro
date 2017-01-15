@@ -1,13 +1,14 @@
 console.log(" >>>> LOADING 'org-schema.js' (FROM /IMPORTS/STARTUP/BOTH) <<<< ");
 
-import { Mongo } from 'meteor/mongo';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+import { Mongo } from "meteor/mongo";
+import { SimpleSchema } from "meteor/aldeed:simple-schema";
+import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
 
 
 console.log(">>>>> 'Orgs' collection is defined here!");
-export const Orgs = new Mongo.Collection("orgs");
+// export const Orgs = new Mongo.Collection("orgs");
+const Orgs = new Mongo.Collection("orgs");
 
 // https://atmospherejs.com/aldeed/simple-schema
 
@@ -154,3 +155,8 @@ let OrgSchema = new SimpleSchema({
 
 // console.log(OrgSchema);
 Orgs.attachSchema( OrgSchema );
+
+// Assign to Global namespace
+console.log(typeof appSettings);
+console.log(typeof kb);
+kb.collections.Orgs = Orgs;

@@ -41,15 +41,15 @@
 					</div>
 				</div>
 			</div>
-			<a href="/bags/list?kitbagstatus=active">
+			<a href="/kitbags/list?kitbagstatus=active">
 				<div class="panel-footer">
 					<span class="pull-left">
-						<span class="panel-line"><a href="/bags/list?kitbagstatus=active">Active</a></span>
+						<span class="panel-line"><a href="/kitbags/list?kitbagstatus=active">Active</a></span>
 						{{#if getCount 'hiddenKitbags'}}
-							<span class="transparent panel-line"><a href="/bags/list?kitbagstatus=hidden">(Hidden)</a></span>
+							<span class="transparent panel-line"><a href="/kitbags/list?kitbagstatus=hidden">(Hidden)</a></span>
 						{{/if}}
 						{{#if getCount 'trashedKitbags'}}
-							<span class="transparent panel-line"><a href="/bags/list?kitbagstatus=trashed">[Trashed]</a></span>
+							<span class="transparent panel-line"><a href="/kitbags/list?kitbagstatus=trashed">[Trashed]</a></span>
 						{{/if}}
 
 						<span class="transparent panel-line">
@@ -59,23 +59,23 @@
 					<span class="pull-right">
 						<span class="panel-line">
 							{{#if getCount 'activeKitbags'}}
-								<a href="/bags/list?kitbagstatus=active">{{getCount 'activeKitbags'}}</a>
+								<a href="/kitbags/list?kitbagstatus=active">{{getCount 'activeKitbags'}}</a>
 							{{else}}
-								<a href="/bags/list?kitbagstatus=active"><span class="noDataReturned"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></a>
+								<a href="/kitbags/list?kitbagstatus=active"><span class="noDataReturned"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></a>
 							{{/if}}
 						</span>
 
 						<span class="panel-line">
 							{{#if getCount 'hiddenKitbags'}}
-								<span class="transparent"><a href="/bags/list?kitbagstatus=hidden"> ({{getCount 'hiddenKitbags'}})</a></span>
+								<span class="transparent"><a href="/kitbags/list?kitbagstatus=hidden"> ({{getCount 'hiddenKitbags'}})</a></span>
 							{{/if}}
 						</span>
 
 						<span class="panel-line">
 							{{#if getCount 'trashedKitbags'}}
-								<span class="transparent"><a href="/bags/list?kitbagstatus=trashed"> [{{getCount 'trashedKitbags'}}]</a></span>
+								<span class="transparent"><a href="/kitbags/list?kitbagstatus=trashed"> [{{getCount 'trashedKitbags'}}]</a></span>
 							{{else}}
-								<span class="transparent"><a href="/bags/list?kitbagstatus=trashed"><span class="noDataReturned"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></a></span>
+								<span class="transparent"><a href="/kitbags/list?kitbagstatus=trashed"><span class="noDataReturned"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></a></span>
 							{{/if}}
 						</span>
 
@@ -89,7 +89,7 @@
 			<!-- ADMIN LINE -->
 			<div class="panel-footer">
 
-					<a href="/bags/list">
+					<a href="/kitbags/list">
 						<div class="adminOnly">
 							Find All <small>(no filter)</small>
 							<span class="pull-right">
@@ -103,7 +103,7 @@
 					</a>
 
 					{{#if discrepancy (totalSum (getCount 'activeKitbags') (getCount 'hiddenKitbags') (getCount 'trashedKitbags'))  (selectAllCount 'Kitbags') }}
-						<a href="/bags/list?kitbagstatus=^(?!.*active|hidden|trashed).*$">
+						<a href="/kitbags/list?kitbagstatus=^(?!.*active|hidden|trashed).*$">
 							<div class="alert alert-danger">
 								Discrepancy
 								<span class="pull-right">
@@ -115,7 +115,7 @@
 
 					<div class="clearfix"></div>
 			</div>
-			<a href="/bags/list">
+			<a href="/kitbags/list">
 				<div class="panel-footer panel-bottom-line">
 					<span class="pull-left">View Details</span>
 					<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

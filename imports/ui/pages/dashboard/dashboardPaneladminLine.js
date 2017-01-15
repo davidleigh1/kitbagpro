@@ -56,7 +56,7 @@ Template.dashboardPaneladminLine.onRendered(function(){
 
 Template.dashboardPaneladminLine.helpers({
 //	objectName = "Kitbags";
-//	baseUrl = "/bags/list";
+//	baseUrl = "/kitbags/list";
 //	queryStr = "?kitbagstatus=^(?!.*active|hidden|trashed).*$";
 });
 

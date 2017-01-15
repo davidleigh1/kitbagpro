@@ -15,20 +15,18 @@ import './thisTemplate.css';
 
 /* IMPORT SHARED TEMPLATES + COMPONENTS */
 
-import '/imports/ui/pages/kitbags/kitbagLine.js';
+import '/imports/ui/pages/kitbags/line.js';
 
 
 
 
 /* IMPORT PROJECT OBJECTS */
 
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
-// import { Items } from '/imports/api/items/items.js';
-import { Items } from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/user-schema.js';
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+import { Orgs } 		from '/imports/startup/both/org-schema.js';
+import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
+import { Items } 		from '/imports/startup/both/item-schema.js';
+import { UserList } 	from '/imports/startup/both/user-schema.js';
+import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 
 
 

@@ -8,7 +8,7 @@ console.log("RUNNING server.index.js");
 // This defines a starting set of data to be loaded if the app is loaded with an empty db.
 // import '../imports/startup/server/fixtures.js';
 import './fixtures.js';
-import '/imports/startup/both/schema-kitbags.js';
+// import '/imports/startup/both/schema-kitbags.js';
 // import './schema-kitbags.js';
 import { Orgs } from '/imports/startup/both/org-schema.js';
 // import '/imports/startup/both/schema-orgs.js';
@@ -40,14 +40,26 @@ globalIsThisObjectUnique = function (objId, objectType) {
 	switch ( objectType.toLowerCase() ) {
 		case "org":
 		case "orgs":
- 			isFound = Orgs.findOne({ _id:objId });
- 			console.log("isFound:\n",isFound);
- 			if (isFound) {
- 				return false;
- 			} else {
- 				/* No duplicate found - we're good to go! */
- 				return true;
- 			}
+			isFound = Orgs.findOne({ _id:objId });
+			console.log("isFound:\n",isFound);
+			if (isFound) {
+				return false;
+			} else {
+				/* No duplicate found - we're good to go! */
+				return true;
+			}
+			break;
+		case "kitbag":
+		case "kitbags":
+			isFound = Kitbags.findOne({ _id:objId });
+			console.log("isFound:\n",isFound);
+			if (isFound) {
+				return false;
+			} else {
+				/* No duplicate found - we're good to go! */
+				return true;
+			}
+			break;
 		default:
 			/* If not found assume object is indeed unique */
 			return true;

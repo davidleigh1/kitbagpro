@@ -10,13 +10,13 @@
   },
   "devDependencies": {
     "babel-eslint": "^7.1.1",
-    "eslint": "^3.11.1",
+    "eslint": "^3.13.0",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-import-resolver-meteor": "^0.3.4",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^3.0.1",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-meteor": "^4.0.1",
-    "eslint-plugin-react": "^6.7.1"
+    "eslint-plugin-react": "^6.9.0"
   },
   "version": "1.0.0",
   "main": ".eslintrc.js",
@@ -31,5 +31,5 @@
     "url": "https://github.com/davidleigh1/kitbagpro/issues"
   },
   "homepage": "https://github.com/davidleigh1/kitbagpro#readme",
-  "description": ""
+  "description": "Whether you're a volunteer or community first aider, a member of an on-call emergency response team, KitbagPro keeps you prepared and ready to go!"
 }

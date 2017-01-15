@@ -6,20 +6,17 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 /* import './main.html'; */
 
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
+// import { Orgs } from '/imports/startup/both/org-schema.js';
+import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 import { Items } from '/imports/startup/both/item-schema.js';
 import { UserList } from '/imports/startup/both/user-schema.js';
-// import { Items } from '/imports/api/items/items.js';
-// import { Items } from '/both/newItems.js';
-// import { listOrgStatuses } from '/imports/api/orgs/orgs.js';
 
 import { Admin } from '/imports/api/admin/admin.js';
 
-import '/imports/startup/both/schema-kitbags.js';
-// import '/imports/startup/both/schema-orgs.js';
-// import '/imports/startup/both/schema-items.js';
+
+
 
 import './routes.js';
 import './globalHelpers.js';
@@ -122,6 +119,8 @@ Accounts.onLogin(function() {
 
 Template.body.onRendered(function() {
 
+	/* TODO - DEBUGGING ONLY -- REMOVE THIS FOR PRODUCTION!!! */
+	window.kb_reference_only = kb;
 
 	/* REDIRECT USER WHEN PASSWORD IS CHANGED BY ADMIN */
 	// https://forums.meteor.com/t/how-to-redirect-a-user-after-server-side-logout-with-accounts-setpassword/30976
@@ -186,8 +185,8 @@ Template.body.onRendered(function() {
 		var status =  isReady ? 'ready' : 'not ready';
 		console.log("**** Handle for orgs is " + status + "");
 		if (status == "ready") {
-			console.log("Setting window.Orgs : ",window.Orgs);
-			window.Orgs = Orgs;
+			// console.log("Setting window.Orgs : ",window.Orgs);
+			// window.Orgs = kb.collections.Orgs;
 			// allSubscriptionsReady("kbHandle");
 		}
 	});
@@ -196,10 +195,11 @@ Template.body.onRendered(function() {
 	Tracker.autorun(() => {
 		const isReady = kbHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		//console.log("**** Handle for kitbags is " + status + "");
-		// if (status == "ready") {
-		// 	allSubscriptionsReady("kbHandle");
-		// }
+		console.log("**** Handle for kitbags is " + status + "");
+		if (status == "ready") {
+			window.Kitbags = Kitbags;
+			// allSubscriptionsReady("kbHandle");
+		}
 	});
 
 	const itemHandle = Meteor.subscribe('items');

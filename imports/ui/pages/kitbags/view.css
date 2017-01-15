@@ -1,0 +1,62 @@
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.subtitle {
+	display: block;
+	font-size: 0.8em;
+}
+
+.tableControlPanel a.btn {
+	margin: 2px 0;
+}
+
+.dropdown, .dropup {
+    display: inline-block;
+}
+
+span.label.disabled, span.checkmark.disabled {
+    opacity: 0.5;
+}
+
+.table-divider {
+	background-color: #ddd;
+	font-size: 1.1em;
+}
+
+/* Image Rollover Preview Effect */
+.hover_img {
+	cursor: zoom-in;
+}
+.hover_img a {
+	/*position:relative;*/
+}
+.hover_img a span {
+	position: absolute;
+	display: none;
+	z-index: 99;
+}
+.hover_img a:hover span.hover_img_holder {
+    display: block;
+    border: 1px solid #bbb;
+    /*border-radius: 5px 5px 5px 5px;*/
+    /*-moz-border-radius: 5px 5px 5px 5px;*/
+    /*-webkit-border-radius: 5px 5px 5px 5px;*/
+    -webkit-box-shadow: 3px 3px 5px 6px #ccc;
+    -moz-box-shadow: 3px 3px 5px 6px #ccc;
+    box-shadow: 7px 7px 10px 0px #aaa;
+}
+.hover_img_text {
+	font-size: 0.8em;
+    opacity: 0.8;
+    display: block !important;
+    padding: 5px;
+    text-transform: uppercase;
+    background-color: white;
+}
+
+.kitbagIdCol {
+    position: absolute;
+    left: 600px;
+}

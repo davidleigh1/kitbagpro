@@ -3,7 +3,7 @@
 import './userView.html';
 // import './userView.css';
 
-import '/imports/ui/pages/kitbags/kitbagLine.js';
+import '/imports/ui/pages/kitbags/line.js';
 import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
 import { Kitbags } from '/imports/api/kitbags/kitbags.js';

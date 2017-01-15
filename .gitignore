@@ -6,3 +6,4 @@ _notes/
 settings-development.json
 settings-production.json
 desktop.ini
+*.sublime-project

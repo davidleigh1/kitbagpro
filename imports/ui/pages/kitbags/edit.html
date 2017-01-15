@@ -1,0 +1,46 @@
+<template name="kitbagEdit">
+
+	<h1>Edit Kitbag</h1>
+
+	<div class="screen-wrapper">
+
+	{{#if Template.subscriptionsReady}}
+
+		{{ > quickForm
+			autosave     = autoSaveMode
+			collection   = Kitbags
+			doc          = selectedKitbagDoc
+			id           = "updateKitbagForm"
+			meteormethod = "updateKitbag"
+			omitFields   = "kitbagAssocKitbagCount,updatedAt,updatedBy"
+			type         = "method-update"
+		}}
+
+
+			<!-- type         = formType -->
+
+<!-- 			{{> afQuickField name="_id" label="dbId"}}
+			{{> afQuickField name="kitbagId"}}
+			{{> afQuickField name="kitbagTitle"}}
+			{{> afQuickField name="kitbagDetail"}}
+			{{> afQuickField name="kitbagSize"}} -->
+
+<!-- 			{{#unless autoSaveMode}}
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary" disabled="{{disableButtons}}">Submit</button>
+					<button type="reset" class="btn btn-default" disabled="{{disableButtons}}">Reset Form</button>
+				</div>
+			{{/unless}} -->
+
+		<!-- {{/autoForm}} -->
+
+
+
+	{{else}}
+		Not Ready Yet...
+		{{>loading}}
+	{{/if}}
+
+	</div>
+
+</template>

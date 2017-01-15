@@ -1,12 +1,15 @@
 /* IMPORT PROJECT OBJECTS */
 
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } 	from '/imports/api/kitbags/kitbags.js';
-// import { Items } 	from '/imports/api/items/items.js';
+// import { Orgs } from '/imports/startup/both/org-schema.js';
+import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 import { Items } 	from '/imports/startup/both/item-schema.js';
 import { UserList } from '/imports/startup/both/user-schema.js';
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+
+
+import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
+// import { appSettings } from '/imports/startup/both/sharedConstants.js';
+
+
 
 Template.registerHelper('totalSum', function(num1, num2, num3) {
 	//console.log("totalSum: \n",num1, typeof num1, "\n",num2, typeof num2,"\n", num3, typeof num3);
@@ -104,7 +107,7 @@ Template.registerHelper('lookupFieldFromKb',function(kitbagId,requiredField){
 Template.registerHelper('lookupFieldFromOrg',function(orgId,requiredField){
 	// Takes an OrgID and responds with the value of the requested field for that Org e.g. {{lookupFieldFromOrg profile.userAssocOrg 'orgTitle'}}
 
-	var localOrg = Orgs.findOne({orgId: ""+orgId});
+	var localOrg = kb.collections.Orgs.findOne({orgId: ""+orgId});
 	if (typeof localOrg == "object"){
 		return localOrg[requiredField];
 	} else {
@@ -592,7 +595,7 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 	if (str_CollectionName == "Orgs"){
 		//console.log("Orgs",listSelect,userFilter);
 
-		var orgsFound = Orgs.find(
+		var orgsFound = kb.collections.Orgs.find(
 			{
 				$and: [
 					/* Match listSelect */
@@ -946,7 +949,7 @@ GlobalHelpers = {
 		// var fieldObj = {};
 		// fieldObj[requiredField] = 1;
 		// var localOrg = MyCollections["Orgs"].findOne({orgId: ""+orgId});
-		var localOrg = Orgs.findOne({orgId: ""+orgId});
+		var localOrg = kb.collections.Orgs.findOne({orgId: ""+orgId});
 		// console.log("returned org: ",localOrg);
 		try {
 			return localOrg[requiredField];
@@ -1018,7 +1021,7 @@ GlobalHelpers = {
 
 		var queryObj = { "orgStatus": { $nin: notGetStatuses } };
 
-		var listOfOrgsFetch = Orgs.find( queryObj , {fields: { orgId: 1, orgTitle: 1, orgStatus: 1 }}).fetch();
+		var listOfOrgsFetch = kb.collections.Orgs.find( queryObj , {fields: { orgId: 1, orgTitle: 1, orgStatus: 1 }}).fetch();
 
 		// TODO - Can we make this bagArray a global counter (in adminCollection?) so that we dont need to find each time?
 		// TODO - Exclude "Trashed"

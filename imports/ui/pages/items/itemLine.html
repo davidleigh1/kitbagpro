@@ -18,7 +18,7 @@
 			<!-- Bottom line -->
 			<div>
 				{{#if itemAssocKitbagCount }}
-						<!-- <a href="/bags/list?o={{itemId}}" class="itemlistSubtitle make-block">{{plural itemAssocKitbagCount "kitbag" "kitbags"}}</a> -->
+						<!-- <a href="/kitbags/list?o={{itemId}}" class="itemlistSubtitle make-block">{{plural itemAssocKitbagCount "kitbag" "kitbags"}}</a> -->
 						<span class="itemlistSubtitle">{{plural itemAssocKitbagCount "kitbag" "kitbags"}}</span>
 				<!-- {{else}} -->
 				{{/if}}
@@ -40,7 +40,7 @@
 		<td class="hidden-xs itemModelCol">{{itemModel}}</td>
 
 		<!-- Item Kitbag Count -->
-		<td class="hidden-xs itemAssocKitbagCountCol todo">{{#if itemAssocKitbagCount }}<a href="/bags/list?kitbagassocitem={{itemId}}" class="make-block">{{itemAssocKitbagCount}}</a>{{else}}0{{/if}}</td>
+		<td class="hidden-xs itemAssocKitbagCountCol todo">{{#if itemAssocKitbagCount }}<a href="/kitbags/list?kitbagassocitem={{itemId}}" class="make-block">{{itemAssocKitbagCount}}</a>{{else}}0{{/if}}</td>
 
 		<!-- Associated Org (Calculated) -->
 		{{#if glb_userIsSuperAdmin}}
