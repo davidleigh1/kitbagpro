@@ -1,20 +1,14 @@
 // # import server startup through a single index entry point
 
-console.log("RUNNING server.index.js");
-
+console.log("RUN: server.index.js");
 
 // import { Meteor } from 'meteor/meteor';
 
 // This defines a starting set of data to be loaded if the app is loaded with an empty db.
 // import '../imports/startup/server/fixtures.js';
 import './fixtures.js';
-// import '/imports/startup/both/schema-kitbags.js';
-// import './schema-kitbags.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-// import '/imports/startup/both/schema-orgs.js';
-// import './schema-orgs.js';
-// import '/imports/startup/both/schema-items.js';
-// import './schema-items.js';
+import { kb } from "/imports/startup/both/sharedConstants.js";
+// import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 
 /*
 	// Not loaded...
@@ -22,48 +16,59 @@ import { Orgs } from '/imports/startup/both/org-schema.js';
 */
 
 
-// This file configures the Accounts package to define the UI of the reset password email.
-	// import '../imports/startup/server/reset-password-email.js';
+// This file configures the Accounts package to define the UI of the reset
+// password email.
+// import '../imports/startup/server/reset-password-email.js';
 
 // Set up some rate limiting and other important security settings.
-	// import '../imports/startup/server/security.js';
+// import '../imports/startup/server/security.js';
 
-// This defines all the collections, publications and methods that the application provides
-// as an API to the client.
-//console.log('SKIPPING api.js');
+// This defines all the collections, publications and methods that the
+// application provides as an API to the client.
+
+
 console.log("IMPORT register-api.js");
 import './register-api.js';
 
 globalIsThisObjectUnique = function (objId, objectType) {
-	console.log("globalIsThisObjectUnique()",objId, objectType);
-	var isFound;
-	switch ( objectType.toLowerCase() ) {
-		case "org":
-		case "orgs":
-			isFound = Orgs.findOne({ _id:objId });
-			console.log("isFound:\n",isFound);
-			if (isFound) {
-				return false;
-			} else {
-				/* No duplicate found - we're good to go! */
-				return true;
-			}
-			break;
-		case "kitbag":
-		case "kitbags":
-			isFound = Kitbags.findOne({ _id:objId });
-			console.log("isFound:\n",isFound);
-			if (isFound) {
-				return false;
-			} else {
-				/* No duplicate found - we're good to go! */
-				return true;
-			}
-			break;
-		default:
-			/* If not found assume object is indeed unique */
-			return true;
-	}
+	console.log("globalIsThisObjectUnique()", objId, objectType);
+	/*
+	TODO: Previously the following switch used 'objectType.toLowerCase'
+	Please confirm calling functions use the correct obj name + case!
+	*/
+
+	var isFound = kb.collections[objectType].findOne({ _id:objId }) || false;
+	console.log("isFound:\n", isFound, "\nreturning: ",!isFound);
+	/* Invert as the function returns true if unique */
+	return !isFound;
+
+	// Making this generic now!
+	// switch ( objectType ) {
+	// 	case "Orgs":
+	// 		isFound = kb.collections[objectType].findOne({ _id:objId });
+	// 		console.log("isFound:\n", isFound);
+	// 		if (isFound) {
+	// 			return false;
+	// 		} else {
+	// 			/* No duplicate found - we're good to go! */
+	// 			return true;
+	// 		}
+	// 		break;
+	// 	case "kitbag":
+	// 	case "kitbags":
+	// 		isFound = Kitbags.findOne({ _id:objId });
+	// 		console.log("isFound:\n",isFound);
+	// 		if (isFound) {
+	// 			return false;
+	// 		} else {
+	// 			/* No duplicate found - we're good to go! */
+	// 			return true;
+	// 		}
+	// 		break;
+	// 	default:
+	// 		/* If not found assume object is indeed unique */
+	// 		return true;
+	// }
 };
 globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier, options) {
 	console.log("\n globalBeforeInsertHook() in startup/server/index.js\n\nrequestor\n",requestor, "\n\nuserId\n",userId, "\n\ndoc\n",doc, "\n\nfieldNames\n",fieldNames, "\n\nmodifier\n",modifier, "\n\noptions\n",options, "\n\n");
@@ -100,24 +105,24 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 	}
 
 	if (requestor == "beforeOrgInsert" && typeof doc == "object") {
-		doc._id = doc.orgId;
 		doc.createdAt = doc.createdAt || new Date();
 		doc.createdBy = userId || Meteor.userId() || "Unknown User";
-		// doc.orgAssocKitbagCount = (typeof doc.assocKitbags == "object") ? doc.assocKitbags.length : 0;
+		// doc.assocKitbagCount = (typeof doc.assocKitbags == "object") ? doc.assocKitbags.length : 0;
 	}
 };
 globalBeforeUpdateHook = function (requestor, userId, doc, fieldNames, modifier, options) {
 	console.log("\n globalBeforeUpdateHook() in /startup/server/index.js\n\nrequestor\n",requestor, "\n\nuserId\n",userId, "\n\ndoc\n",doc, "\n\nfieldNames\n",fieldNames, "\n\nmodifier\n",modifier, "\n\noptions\n",options, "\n\n");
 
-	if (doc.orgId) {
-		console.log("Is Org!");
-		if (modifier.$set.orgId && modifier.$set.orgId != doc._id) {
-			console.log("OrgId has changed!");
-			doc._id = modifier.$set.orgId;
-		}else{
-			console.log("OrgId no change!");
-		}
-	}
+	// TODO --- WHAT WAS THE INTENTION OF THIS CHECK?? TO DETECT A CHANGE IN ORGID ON UPDATE??
+	// if (doc.orgId) {
+	// 	console.log("Is Org!");
+	// 	if (modifier.$set.orgId && modifier.$set.orgId != doc._id) {
+	// 		console.log("OrgId has changed!");
+	// 		doc._id = modifier.$set.orgId;
+	// 	}else{
+	// 		console.log("OrgId no change!");
+	// 	}
+	// }
 
 
 	if (modifier) {

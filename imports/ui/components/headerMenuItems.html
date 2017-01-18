@@ -90,7 +90,7 @@
 				{{#if glb_userIsAnAdmin}}
 					<span class="adminUserString">{{userType}}</span>
 				{{else}}
-					<span class="userOrgString">{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'orgTitle'}}</span>
+					<span class="userOrgString">{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'title'}}</span>
 				{{/if}}
 			</div>
 			<i class="fa fa-user-md"></i><b class="caret"></b>
@@ -113,7 +113,7 @@
 						DS: <strong>{{currentUser.getDisplayName}}</strong><br>
 						UN: <strong>{{currentUser.username}}</strong><br>
 						EM: <strong>{{currentUser.getEmail}}</strong><br>
-						OR: <strong>{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'orgTitle'}}</strong><br>
+						OR: <strong>{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'title'}}</strong><br>
 						TY: <strong>{{currentUser.getType.label}}</strong> ({{currentUser.getType.value}})<br>
 						ID: <strong>{{currentUser.getUserId}}</strong> ({{currentUser._id}})
 					</span>

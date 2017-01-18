@@ -20,7 +20,7 @@
 						<div class="panel-heading">
 							<h3 class="">
 								<i class="fa fa-hospital-o fa-fw"></i>
-								{{orgTitle}}
+								{{title}}
 								<small>{{pageSubtitle}}</small>
 							</h3>
 						</div>
@@ -38,10 +38,10 @@
 									<a href="./duplicate" class="btn btn-primary">
 										<i class="fa fa-fw fa-files-o"></i> Duplicate
 									</a>
-									<a href="/kitbags/create/{{orgId}}" class="btn btn-primary">
+									<a href="/kitbags/create/{{_id}}" class="btn btn-primary">
 										<i class="fa fa-fw fa-medkit"></i> Add Kitbag
 									</a>
-									<a href="/users/create/{{orgId}}" class="btn btn-primary">
+									<a href="/users/create/{{_id}}" class="btn btn-primary">
 										<i class="fa fa-fw fa-user-plus"></i> Add User
 									</a>
 									{{#if glb_userIsSuperAdmin}}
@@ -65,9 +65,9 @@
 
 
 							<!-- <h2>Bordered with Striped Rows</h2> -->
-							{{#if orgDesc}}
+							{{#if desc}}
 								<div class="well">
-									{{orgDesc}}
+									{{desc}}
 								</div>
 							{{/if}}
 							<div class="table-responsive">
@@ -83,48 +83,48 @@
 									<tbody>
 										<tr>
 											<th class="col-xs-2">Name</th>
-											<td class="col-xs-10">{{orgTitle}}</td>
+											<td class="col-xs-10">{{title}}</td>
 										</tr>
 										<tr>
 											<th>Status</th>
 											<td><span class="label {{getOrgStatusTag.labelClass}}">{{getOrgStatusTag.labelText}}</span></td>
 										</tr>
 										<tr>
-											<th>orgAssocKitbagCount</th>
-											<td>{{#if orgAssocKitbagCount}}{{orgAssocKitbagCount}}{{else}}0{{/if}}</td>
+											<th>assocKitbagCount</th>
+											<td>{{#if assocKitbagCount}}{{assocKitbagCount}}{{else}}0{{/if}}</td>
 										</tr>
 										<tr>
-											<th>orgAssocKitbagIds</th>
-											<td>{{#if orgAssocKitbagIds}}{{orgAssocKitbagIds}}{{else}}None found{{/if}}</td>
+											<th>assocKitbagIds</th>
+											<td>{{#if assocKitbagIds}}{{assocKitbagIds}}{{else}}None found{{/if}}</td>
 										</tr>
 										<tr>
 											<th>Website</th>
-											<td><a href="http://{{orgUrl}}">{{orgUrl}}</a></td>
+											<td><a href="http://{{url}}">{{url}}</a></td>
 										</tr>
 										<tr>
 											<th>Contact Person</th>
-											<td>{{orgContactPerson}}</td>
+											<td>{{contactPerson}}</td>
 										</tr>
 										<tr>
 											<th>Contact Phone</th>
-											<td>{{orgContactPhone}}</td>
+											<td>{{contactPhone}}</td>
 										</tr>
 										<tr>
 											<th>Contact Email</th>
-											<td><a href="mailto:{{orgContactEmail}}">{{orgContactEmail}}</a></td>
+											<td><a href="mailto:{{contactEmail}}">{{contactEmail}}</a></td>
 										</tr>
 										<tr>
 											<th>Profile Photo</th>
-											<td>{{orgImgLarge}}</td>
+											<td>{{imgLarge}}</td>
 										</tr>
 										<tr>
 											<th>Official Org Account</th>
-											<td>{{#if orgIsOfficial}}<span class="label label-official">Official</span>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td>
-											<!-- <td>{{#if orgIsOfficial}}<i class="fa fa-check text-muted" aria-hidden="true"></i>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td> -->
+											<td>{{#if isOfficial}}<span class="label label-official">Official</span>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td>
+											<!-- <td>{{#if isOfficial}}<i class="fa fa-check text-muted" aria-hidden="true"></i>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td> -->
 										</tr>
 										<tr>
 											<th>Profile Icon</th>
-											<td>{{orgImgSmall}}</td>
+											<td>{{imgSmall}}</td>
 										</tr>
 									<!-- start -->
 									</tbody>
@@ -276,13 +276,8 @@
 										</tr>
 									</thead> -->
 									<tbody>
-										<!-- end -->
 										<tr>
-											<th>External ID</th>
-											<td><code>{{orgId}}</code></td>
-										</tr>
-										<tr>
-											<th>Internal ID</th>
+											<th>DB ID</th>
 											<td><code>{{_id}}</code></td>
 										</tr>
 										<tr>
@@ -297,19 +292,9 @@
 											<th>Created Via</th>
 											<td><code>{{createdVia}}</code> by <code>{{createdBy}}</code></td>
 										</tr>
-										<!--	<tr>
-											<th>Owner</th>
-											<td>
-											{{#if userNameLookup owner "html"}}
-												{{userNameLookup owner "html"}} (API: <code>{{userNameLookup owner "apiId"}}</code> / DB: {{owner}})
-											{{else}}
-												{{owner}}<span class="subtitle">(User details not found)</span>
-											{{/if}}
-											</td>
-										</tr> -->
 										<tr>
 											<th>Account Data</th>
-											<td>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</td>
+											<td>&nbsp;</td>
 										</tr>
 									</tbody>
 								</table>

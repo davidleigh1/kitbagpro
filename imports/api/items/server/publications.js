@@ -1,25 +1,17 @@
 // # definition of this collection
 
+import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
+
 import { Admin } from '/imports/api/admin/admin.js';
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
+// import { Orgs } from '/imports/startup/both/schema-org.js';
+// import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 
 import { Items } from '/imports/startup/both/item-schema.js';
 
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
-
-// Meteor.publish("items",function() {
-// 		// console.log('Publishing "items" from apis > items > server > publications.js!');
-// 		updateItemCountsObj("onItemsPublished");
-// 		return Items.find({});
-// });
-
 
 Meteor.publish("items",function() {
-	// console.log('Publishing "orgs" from apis > orgs > server > publications.js!');
 
-	console.log("---==----> Meteor.publish('items')");
+	console.log("PUBLISH: Meteor.publish('items')");
 	if (this.userId) {
 
 		var searchObj;
@@ -53,12 +45,6 @@ Meteor.publish("items",function() {
 	return Items.find(searchObj);
 });
 
-
-
-
-// Meteor.publish("users", function(){
-//   return Meteor.users.find({},{fields:{profile:1}})
-// })
 
 /*
 
@@ -104,66 +90,21 @@ updateItemCountsObj = function (requestor,userId, doc, fieldNames, modifier){
 
 };
 
-// updateItem = function (requestor, userId, doc, fieldNames, modifier, options) {
-// 	console.log("\nupdateItem() in /publications\n\nrequestor\n",requestor, "\n\nuserId\n",userId, "\n\ndoc\n",doc, "\n\nfieldNames\n",fieldNames, "\n\nmodifier\n",modifier, "\n\noptions\n",options, "\n\n");
-// 	if (modifier) {
-
-// 		modifier.$set = modifier.$set || {};
-
-// 		/* Set New */
-// 		modifier.$set["updatedAt"] = new Date();
-// 		/* Delete Old */
-// 		if (modifier.$unset) {
-// 			delete modifier.$unset["updatedAt"];
-// 		}
-
-// 		/* Set New */
-// 		modifier.$set["updatedBy"] = Meteor.userId() || "Unknown User";
-// 		/* Delete Old */
-// 		if (modifier.$unset) {
-// 			delete modifier.$unset["updatedBy"];
-// 		}
-
-// 		modifier.$set.itemAssocKitbagCount = (typeof modifier.$set.assocKitbags == "object") ? modifier.$set.assocKitbags.length : 0;
-// 		// modifier.$set.itemAssocKitbagCount = (typeof modifier.$set.assocKitbags == "object") ? modifier.$set.assocKitbags.count() : 0;
-// 		console.log(typeof modifier.$set.assocKitbags, modifier.$set.assocKitbags, modifier.$set.assocKitbags.length );
-// 	} else {
-// 		console.log("updateItem() in /publications - No modifier found.")
-// 	}
-
-// 	if (requestor == "beforeItemInsert" && typeof doc == "object") {
-// 		doc._id = doc.itemAssocOrg + "-" + doc.itemId;
-// 		doc.createdAt = doc.createdAt || new Date();
-// 		doc.createdBy = userId || Meteor.userId() || "Unknown User";
-// 		doc.itemAssocKitbagCount = (typeof doc.assocKitbags == "object") ? doc.assocKitbags.length : 0;
-// 	}
-
-
-// };
 
 updateAssocKitbagCountOnAddEdit = function (requestor, userId, doc, fieldNames, modifier, options) {
 	/* Update associated Kitbag Count */
 	console.log("=== updateAssocKitbagCountOnAddEdit ("+requestor+") =========================================");
-	// console.log("\n\nrequestor\n",requestor, "\n\nuserId\n",userId, "\n\ndoc\n",doc, "\n\nfieldNames\n",fieldNames, "\n\nmodifier\n",modifier, "\n\noptions\n",options);
-	// console.log( Orgs.findOne( {orgId: doc.kitbagAssocOrg}) );
+
 	/* Then add our kitbagId to the orgAssocKitbagids array - and add a new array if one doesnt already exist */
 	/* TODO - Shouldnt need to add a new array if SimpleSchema is handling that for us...  */
 	try{
-		// console.log("UPSERT {orgId: "+doc.kitbagAssocOrg+" (doc.kitbagAssocOrg)} , { $push: { orgAssocKitbagids: "+doc.kitbagId+" (doc.kitbagId) }}");
-		// Orgs.direct.update( {orgId: doc.kitbagAssocOrg} , { $push: { orgAssocKitbagIds: doc.kitbagId }} );
 
 		var kitbagCount = (typeof doc == "object" && typeof doc.assocKitbags == "object") ? assocKitbags.length : 0;
 
-		// doc._id
-
-		// console.log("modifier: ",requestor, doc, fieldNames, modifier, options);
-
-		// Orgs.direct.update( {orgId: doc.kitbagAssocOrg} , { $push: { orgAssocKitbagCount: orgAssocKitbagCount.count() }} );
 	} catch (err) {
 		console.log("\n\nERROR: "+err+"\n\n");
 		return false;
 	}
-	// console.log( Orgs.findOne( {orgId: doc.kitbagAssocOrg}) );
 	console.log("=== /updateAssocKitbagCountOnAddEdit ========================================================");
 };
 

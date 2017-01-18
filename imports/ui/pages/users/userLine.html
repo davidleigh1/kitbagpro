@@ -1,7 +1,7 @@
 <template name="userLine">
 
 {{#with thisUser}}
-	<tr data-sortusername="{{toLower username}}" data-sortcallsign="{{toLower profile.userCallsign}}" data-sortdisplayname="{{toLower profile.displayName}}" data-sortcreated="{{createdAt}}" data-sortupdated="{{createdAt}}" data-sortorg="{{toLower (lookupFieldFromOrg profile.userAssocOrg 'orgTitle') }}"	class="{{#if isCurrentUser}}currentUser{{/if}}" id="{{profile.userId}}">
+	<tr data-sortusername="{{toLower username}}" data-sortcallsign="{{toLower profile.userCallsign}}" data-sortdisplayname="{{toLower profile.displayName}}" data-sortcreated="{{createdAt}}" data-sortupdated="{{createdAt}}" data-sortorg="{{toLower (lookupFieldFromOrg profile.userAssocOrg 'title') }}"	class="{{#if isCurrentUser}}currentUser{{/if}}" id="{{profile.userId}}">
 
 		<!-- Small screens only! -->
 		<td class="visible-xs col-xs-3">
@@ -97,7 +97,7 @@
 					<span class="cursor-help" title="'userAssocOrg' not found">-</span>
 				{{else}}
 					<a href="/orgs/{{profile.userAssocOrg}}/view">
-					{{highlight (lookupFieldFromOrg profile.userAssocOrg 'orgTitle') filterVar suppressHightlight}}</a><br><small>({{highlight profile.userAssocOrg filterVar suppressHightlight}})</small>
+					{{highlight (lookupFieldFromOrg profile.userAssocOrg 'title') filterVar suppressHightlight}}</a><br><small>({{highlight profile.userAssocOrg filterVar suppressHightlight}})</small>
 				{{/unless}}
 			</td>
 		{{/if}}

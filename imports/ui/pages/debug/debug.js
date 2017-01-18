@@ -31,7 +31,7 @@ import './debug.css';
 // import { Orgs } from '/imports/api/orgs/orgs.js';
 // import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 // import { Items } from '/imports/startup/both/item-schema.js';
-// import { UserList } from '/imports/startup/both/user-schema.js';
+// import { UserList } from '/imports/startup/both/schema-user.js';
 import { appSettings } from '/imports/startup/both/sharedConstants.js';
 
 

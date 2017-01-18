@@ -1,9 +1,9 @@
 /* IMPORT PROJECT OBJECTS */
 
-// import { Orgs } 		from '/imports/startup/both/org-schema.js';
+// import { Orgs } 		from '/imports/startup/both/schema-org.js';
 // import { Kitbags } 	from '/imports/api/kitbags/kitbags.js';
 // import { Items } 	from '/imports/startup/both/item-schema.js';
-// import { UserList } 	from '/imports/startup/both/user-schema.js';
+// import { UserList } 	from '/imports/startup/both/schema-user.js';
 import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 
 
@@ -187,19 +187,19 @@ forceUserPasswordChange = function (db_id,newpassword) {
 
 globalfn_deleteOrg = function (orgObj, userId, goUrl) {
 	// event.preventDefault();
-	var areYouSure = "_Are you sure you want to permanently delete org '"+orgObj.orgTitle+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
+	var areYouSure = "_Are you sure you want to permanently delete org '"+orgObj.title+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
 	if ( confirm(areYouSure) ) {
 		Meteor.call("deleteOrg", orgObj._id, userId, function(error, result) {
 			console.log("error: " + error + "\n" + "result: " + result);
 			var alertMsgPrefix = "<i class='fa fa-building fa-lg'></i>&nbsp;&nbsp;";
 			if (!error && true === result){
-				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>Org: <i>'"+orgObj.orgTitle+"'</i> was successfully deleted.",
+				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>Org: <i>'"+orgObj.title+"'</i> was successfully deleted.",
 					{
 						html: true
 					}
 				);
 			} else {
-				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete org: '<strong>"+orgObj.orgTitle+"</strong>' with error: <code>"+error+"</code>",
+				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete org: '<strong>"+orgObj.title+"</strong>' with error: <code>"+error+"</code>",
 					{
 						html: true,
 						timeout: appSettings.sAlert.longTimeout

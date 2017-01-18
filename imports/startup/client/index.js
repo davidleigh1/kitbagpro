@@ -1,4 +1,4 @@
-console.log("RUNNING /imports/startup/client/index.js");
+console.log("RUN: /imports/startup/client/index.js");
 /* Imports are included in all new Meteor Projects... since 1.3? */
 
 import { Template } from 'meteor/templating';
@@ -8,10 +8,10 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 import { kb } from "/imports/startup/both/sharedConstants.js";
 
-// import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
+// import { Orgs } from '/imports/startup/both/schema-org.js';
+// import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 import { Items } from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/user-schema.js';
+import { UserList } from '/imports/startup/both/schema-user.js';
 
 import { Admin } from '/imports/api/admin/admin.js';
 
@@ -23,7 +23,6 @@ import './globalHelpers.js';
 import './globalFunctions.js';
 import './globalReactiveVars.js';
 
-// window.myItems = Items;
 
 Meteor.startup(function() {
 	//console.log("Loading Google fonts");
@@ -52,7 +51,7 @@ Meteor.startup(function() {
 	sAlert.config({
 		effect: 'stackslide',
 		position: 'top',
-		timeout: 5000,
+		timeout: 500,
 		html: true,
 		onRouteClose: true,
 		stack: true,
@@ -81,7 +80,7 @@ Meteor.startup(function() {
 
 Accounts.onLogin(function() {
   // sAlert.success('Login complete 1!');
-  console.log('$ ********** Login complete 1! (client)');
+  console.log('USER: Login complete 1! (client)');
 });
 
 // Accounts.onLogout(function() {
@@ -120,7 +119,15 @@ Accounts.onLogin(function() {
 Template.body.onRendered(function() {
 
 	/* TODO - DEBUGGING ONLY -- REMOVE THIS FOR PRODUCTION!!! */
+	/* Reference - autoform requires collection in windows scope - https://github.com/aldeed/meteor-autoform/issues/1449 */
+	/* More isolated solution will be to make collection available via the template helper in the relevant template */
 	window.kb_reference_only = kb;
+	var kb_docs = {
+		Orgs: kb.collections.Orgs._collection._docs._map
+		Kitbags: kb.collections.Kitbags._collection._docs._map
+	};
+	window.kb_reference_only.docs = kb_docs;
+
 
 	/* REDIRECT USER WHEN PASSWORD IS CHANGED BY ADMIN */
 	// https://forums.meteor.com/t/how-to-redirect-a-user-after-server-side-logout-with-accounts-setpassword/30976
@@ -129,15 +136,15 @@ Template.body.onRendered(function() {
 	Tracker.autorun(() => {
 		/* Probably overkill to check for all of these but it works... */
 		if ( !Meteor.loggingIn() && (!Meteor || !Meteor.user() || Meteor.user() == null || !Meteor.userId()) ) {
-			console.log("$ === TRIGGERED DURING LOG OUT PROCESS ===");
+			console.log("USER: LOGIN/LOGOUT TRIGGERED DURING LOG OUT PROCESS ===");
 		} else if ( Meteor.loggingIn() ) {
-			console.log("$ === TRIGGERED DURING LOGGING IN PROCESS ===");
+			console.log("USER: LOGIN/LOGOUT TRIGGERED DURING LOGGING IN PROCESS ===");
 		} else {
-			console.log("$ === TRIGGERED DURING STANDARD USAGE ===");
+			console.log("USER: LOGIN/LOGOUT TRIGGERED DURING STANDARD USAGE ===");
 				// console.log('$ User id 3', Meteor.userId() ); // will return the user id
 				var sResponse;
 				Meteor.call("checkUserIsLoggedIn", Meteor.userId(), function(result1,result2){
-					// console.log("$ checkUserIsLoggedIn() Callback", result2, typeof result2 );
+					console.log("USER: checkUserIsLoggedIn() Callback", result1, result2, typeof result2 );
 					sResponse = result2;
 				});
 				setTimeout(() => {
@@ -167,7 +174,7 @@ Template.body.onRendered(function() {
 	Accounts.onLogout(() => {
 		// console.log('$ ONLOGOUT ', Meteor.userId()); // will return the user id
 		setTimeout(() => {
-			console.log('$ ONLOGOUT ', Meteor.userId()); // will return undefined
+			console.log('USER: ONLOGOUT ', Meteor.userId()); // will return undefined
 		}, 0);
 	});
 
@@ -183,7 +190,7 @@ Template.body.onRendered(function() {
 	Tracker.autorun(() => {
 		const isReady = orgHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		console.log("**** Handle for orgs is " + status + "");
+		console.log("SUB: Handle for orgs is " + status + "");
 		if (status == "ready") {
 			// console.log("Setting window.Orgs : ",window.Orgs);
 			// window.Orgs = kb.collections.Orgs;
@@ -195,9 +202,9 @@ Template.body.onRendered(function() {
 	Tracker.autorun(() => {
 		const isReady = kbHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		console.log("**** Handle for kitbags is " + status + "");
+		console.log("SUB: Handle for kitbags is " + status + "");
 		if (status == "ready") {
-			window.Kitbags = Kitbags;
+			// window.Kitbags = Kitbags;
 			// allSubscriptionsReady("kbHandle");
 		}
 	});
@@ -206,7 +213,7 @@ Template.body.onRendered(function() {
 	Tracker.autorun(() => {
 		const isReady = itemHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		console.log("**** Handle for items is " + status + "");
+		console.log("SUB: Handle for items is " + status + "");
 		if (status == "ready") {
 			console.log("Setting window.Items : ",window.Items);
 			window.Items = Items;
@@ -218,7 +225,7 @@ Template.body.onRendered(function() {
 	Tracker.autorun(() => {
 		const isReady = adminHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		console.log("**** Handle for kitbags is " + status + "");
+		console.log("SUB: Handle for kitbags is " + status + "");
 		// if (status == "ready") {
 		// 	allSubscriptionsReady("adminHandle");
 		// }
@@ -228,7 +235,7 @@ Template.body.onRendered(function() {
 	Tracker.autorun(() => {
 		const isReady = userlistHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		console.log("**** Handle for userlist is " + status + "");
+		console.log("SUB: Handle for userlist is " + status + "");
 		// if (status == "ready") {
 		// 	allSubscriptionsReady("adminHandle");
 		// }

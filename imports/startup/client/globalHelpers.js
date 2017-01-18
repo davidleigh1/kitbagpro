@@ -1,13 +1,11 @@
 /* IMPORT PROJECT OBJECTS */
 
-// import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
-import { Items } 	from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/user-schema.js';
-
-
 import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
-// import { appSettings } from '/imports/startup/both/sharedConstants.js';
+
+// import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
+import { Items } 	from '/imports/startup/both/item-schema.js';
+import { UserList } from '/imports/startup/both/schema-user.js';
+
 
 
 
@@ -91,23 +89,25 @@ Template.registerHelper('formatDate', function(timestamp, defaultText) {
 
 
 
-Template.registerHelper('lookupFieldFromKb',function(kitbagId,requiredField){
-	// Takes a kitbag ID and responds with the value of the requested field for that kitbag e.g. {{lookupFieldFromKb orgAssocKitbags 'kitbagTitle'}}
+Template.registerHelper('lookupFieldFromKb',function(kitbag_id,requiredField){
+	// Takes a kitbag ID and responds with the value of the requested field for that kitbag e.g. {{lookupFieldFromKb orgAssocKitbags 'title'}}
 
-	//console.log(kitbagId,requiredField);
-	var localKb = Kitbags.findOne({kitbagId: ""+kitbagId});
+	console.log("TODO: DEPRECATE THIS FUNCTION!");
+
+	var localKb = kb.collections.Kitbags.findOne( kitbag_id );
 	if (typeof localKb == "object"){
 		return localKb[requiredField];
 	} else {
-		return "Unknown Kitbag ("+kitbagId+")";
+		return "Unknown Kitbag ("+kitbag_id+")";
 	}
 
 });
 
 Template.registerHelper('lookupFieldFromOrg',function(orgId,requiredField){
-	// Takes an OrgID and responds with the value of the requested field for that Org e.g. {{lookupFieldFromOrg profile.userAssocOrg 'orgTitle'}}
+	// Takes an OrgID and responds with the value of the requested field for that Org e.g. {{lookupFieldFromOrg profile.userAssocOrg 'title'}}
 
-	var localOrg = kb.collections.Orgs.findOne({orgId: ""+orgId});
+	// var localOrg = kb.collections.Orgs.findOne(orgId);
+	var localOrg = kb.collections.Orgs.findOne( orgId );
 	if (typeof localOrg == "object"){
 		return localOrg[requiredField];
 	} else {
@@ -136,13 +136,14 @@ Template.registerHelper('lookupNameFromUserId',function(userId,requiredField){
 /* ITEM HELPERS */
 
 Template.registerHelper('getOrgDataForThisItem',function(itemId,orgFieldRequired){
-		orgFieldRequired = orgFieldRequired || "kitbagAssocOrgTitle";
+		orgFieldRequired = orgFieldRequired || "assocOrgTitle";
 		var myItem = localItems.findOne({"itemId":itemId});
 		if (typeof myItem.assocKitbags != "object" || typeof myItem.assocKitbags[0] != "string"){
 			return "No Org";
 		}
 		var itemKitbag = myItem.assocKitbags[0];
-		var myKitbag = localKitbags.findOne({"kitbagId":itemKitbag});
+		console.log("TODO: DEPRECATE THIS FUNCTION! (getOrgDataForThisItem)");
+		var myKitbag = localKitbags.findOne({_id:itemKitbag});
 		if (typeof myKitbag != "object"){
 			return "Org ("+itemKitbag+") not found!";
 		}
@@ -150,27 +151,6 @@ Template.registerHelper('getOrgDataForThisItem',function(itemId,orgFieldRequired
 		return kitbagOrgData;
 });
 
-// Takes a User ID and responds with the value of the requested field for that user e.g. {{lookupNameFromUser GGDL7mCzXeaqFkroQ 'username'}}
-	// lookupNameFromUser: function(userId,requiredField){
-	// 	console.log("lookupNameFromUser",userId,requiredField);
-	// 	if (!userId || userId == "") {
-	// 		// console.log("lookupNameFromUser() - userId not provided");
-	// 		return false;
-	// 	}
-	// 	if (requiredField == "name" || !requiredField) {
-	// 		var userObj = Meteor.users.find().collection._docs._map[userId];
-	// 		//console.log(userId,userObj);
-	// 		// User not found!
-	// 		if ( jQuery.isEmptyObject(userObj) ){
-	// 			var message = "Error: User '" + userId + "' not found";
-	// 			console.log(message);
-	// 			return message;
-	// 		}
-	// 		var uname = jQuery.isEmptyObject(userObj.profile) ? (typeof userObj.username == "string" ? userObj.username : "Unknown") : (typeof userObj.profile.name == "string" ? userObj.profile.name : "Unknown");
-	// 		return uname;
-	// 	}
-	// 	// TODO - RETURN SERVICE TOO!
-	// },
 
 
 
@@ -180,15 +160,13 @@ Template.registerHelper('arrayFromObj',function(obj){
 	//console.log(obj);
 	for (var key in obj){
 		// Map kitbag IDs to names
-		if (typeof obj[key] == "object" && key == "orgAssocKitbagIds"){
+		if (typeof obj[key] == "object" && key == "assocKitbagIds"){
 			var newkey = [];
 			$.each( obj[key] , function( key, value ) {
 				//console.log( key + ": " + value );
-				var kbt = GlobalHelpers.lookupFieldFromKb( value ,"kitbagTitle");
+				var kbt = GlobalHelpers.lookupFieldFromKb( value ,"title");
 				newkey.push(kbt);
 			});
-			// var newKey = GlobalHelpers.lookupFieldFromKb(obj[key],"kitbagTitle");
-			//console.log("newKey: "+newkey);
 			result.push({
 				arrayObjName: key,
 				arrayObjValue: newkey
@@ -281,34 +259,6 @@ Template.registerHelper('get_orgUsersFound',function(){
 
 
 
-// Template.registerHelper('get_resultsCountObj',function(childAttribute){
-// 	console.log("get_resultsCountObj()", childAttribute, typeof childAttribute);
-// 	var o = obj_resultsCount.get();
-// 	if(!childAttribute) {
-// 		console.log("get_resultsCountObj() - Returning object: ",o);
-// 		return o;
-// 	} else {
-// 		var result = o[childAttribute];
-// 		console.log("get_resultsCountObj() - with childAttribute: '"+childAttribute+"' - returning: ", result);
-// 		return result;
-// 	}
-// });
-
-// Template.registerHelper('countResults',function(results){
-// 	console.log("countResults()",results);
-// 	return results.count();
-// });
-
-
-
-
-// appendToResultsObj = function (key, value) {
-// 	console.log("appendToResultsObj()", key, value);
-// 	var newobj = obj_resultsCount.get();
-// 	newobj[key] = value;
-// 	console.log( JSON.stringify(newobj,null,2) );
-// }
-
 
 /* USER HELPERS */
 
@@ -399,7 +349,7 @@ Template.registerHelper('gOrgStatusTag',function(){
 
 	var labelClass, labelText;
 
-	switch(this.orgStatus.toLowerCase()) {
+	switch(this.status.toLowerCase()) {
 		case "active":
 			labelClass = "label-success";
 			labelText = "Active";
@@ -422,7 +372,7 @@ Template.registerHelper('gOrgStatusTag',function(){
 });
 
 Template.registerHelper('gKitbagStatusTag',function(textStatus){
-	var kbstatus = (typeof textStatus != "undefined" && textStatus != "") ? textStatus : this.kitbagStatus;
+	var kbstatus = (typeof textStatus != "undefined" && textStatus != "") ? textStatus : this.status;
 	if (!kbstatus) return;
 	var labelClass, labelText;
 	// console.log("kbstatus: ",textStatus,kbstatus);
@@ -514,9 +464,8 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	/* List all parameters we are willing to accept.  These will be checked against the keys in listSelect shortly. */
 	var validList = [
-		"orgstatus",
-		"orgtitle",
-		"orgid",
+		"status",
+		"title",
 		"kitbagtitle",
 		"kitbagid",
 		"kitbagstatus",
@@ -599,15 +548,15 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 			{
 				$and: [
 					/* Match listSelect */
-					{orgTitle: 	{ $regex: new RegExp(listSelect.orgtitle, "i") }},
-					{orgId: 	{ $regex: new RegExp(listSelect.orgid, "i") }},
-					{orgStatus:	{ $regex: new RegExp(listSelect.orgstatus, "i") }},
+					{title: 	{ $regex: new RegExp(listSelect.orgtitle, "i") }},
+					{_id: 	{ $regex: new RegExp(listSelect._id, "i") }},
+					{status:	{ $regex: new RegExp(listSelect.orgstatus, "i") }},
 					/*{owner: 	{ $regex: new RegExp(listSelect.owner, "i") }},*/
 					/* AND match the User's Filter String */
 					{
 						$or: [
-								{orgTitle: 	{ $regex: new RegExp(userFilter, "i") }},
-								{orgId: 	{ $regex: new RegExp(userFilter, "i") }}
+								{title: 	{ $regex: new RegExp(userFilter, "i") }},
+								{_id: 	{ $regex: new RegExp(userFilter, "i") }}
 						]
 					}
 				]
@@ -630,26 +579,26 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 		var queryObject = {
 			$and: [
 				/* Match listSelect */
-				{kitbagTitle: 			{ $regex: new RegExp(listSelect.kitbagtitle, "i") }},
-				{kitbagId: 				{ $regex: new RegExp(listSelect.kitbagid, "i") }},
-				{kitbagStatus:			{ $regex: new RegExp(listSelect.kitbagstatus, "i") }},
-				{kitbagAssocOrg: 		{ $regex: new RegExp(listSelect.kitbagassocorg, "i") }},
-				{kitbagAssocOrgTitle: 	{ $regex: new RegExp(listSelect.kitbagassocorgtitle, "i") }},
+				{title: 			{ $regex: new RegExp(listSelect.kitbagtitle, "i") }},
+				{_id: 				{ $regex: new RegExp(listSelect.kitbagid, "i") }},
+				{status:			{ $regex: new RegExp(listSelect.kitbagstatus, "i") }},
+				{assocOrgId: 		{ $regex: new RegExp(listSelect.kitbagassocorg, "i") }},
+				{assocOrgTitle: 	{ $regex: new RegExp(listSelect.kitbagassocorgtitle, "i") }},
 				// {owner: 				{ $regex: new RegExp(listSelect.owner, "i") }},
 				/* AND match the User's Filter String */
 				{
 					$or: [
-							{kitbagTitle: 			{ $regex: new RegExp(userFilter, "i") }},
-							{kitbagId: 				{ $regex: new RegExp(userFilter, "i") }},
-							{kitbagSku: 			{ $regex: new RegExp(userFilter, "i") }},
-							{kitbagAssocOrg: 		{ $regex: new RegExp(userFilter, "i") }},
-							{kitbagAssocOrgTitle: 	{ $regex: new RegExp(userFilter, "i") }}
+							{title: 			{ $regex: new RegExp(userFilter, "i") }},
+							{_id: 				{ $regex: new RegExp(userFilter, "i") }},
+							{kitbagSku: 		{ $regex: new RegExp(userFilter, "i") }},
+							{assocOrgId: 		{ $regex: new RegExp(userFilter, "i") }},
+							{assocOrgTitle: 	{ $regex: new RegExp(userFilter, "i") }}
 					]
 				}
 			]
 		};
 
-		var bagsFound = Kitbags.find( queryObject ).fetch();
+		var bagsFound = kb.collections.Kitbags.find( queryObject ).fetch();
 
 		// console.log("queryObject: ",queryObject);
 		// console.log("bagsFound: ",bagsFound.length);
@@ -666,9 +615,9 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 		//console.log("AssocKitbagsFromArray",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
 
-		var queryObject = {kitbagId: listSelect.kitbagid};
+		var queryObject = {_id: listSelect.kitbagid};
 
-		var bagsFound = Kitbags.find( queryObject ).fetch();
+		var bagsFound = kb.collections.Kitbags.find( queryObject ).fetch();
 
 		//console.log("queryObject: ",queryObject);
 		//console.log("bagsFound: ",bagsFound.length,bagsFound);
@@ -743,14 +692,6 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 			]
 		};
 
-		// var bagsFound = Kitbags.find( queryObject ).fetch();
-
-		// console.log("queryObject: ",queryObject);
-		// console.log("bagsFound: ",bagsFound.length,bagsFound);
-		// if( typeof int_resultsCount != "undefined" ){
-		// 	int_resultsCount.set(bagsFound.length);
-
-
 		var usersFound = Meteor.users.find( queryObject ).fetch();
 
 		console.log("queryObject: ",queryObject);
@@ -787,97 +728,6 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 
 });
-
-// Template.registerHelper('V2_OLD_objectsFiltered',function(CollectionName,filterDataset,defineDatasetByObject){
-// 	// reactively return objects that meet the filter requirements
-// 	//console.log("objectsFiltered()", typeof filterVar );
-
-// 	var filterVar = filterKey = filterValue = docsFound = undefined;
-
-// 	if (typeof filterDataset == "object") {
-// 		/* An object will originate from a field value filter */
-// 		filterKey = Object.keys(filterDataset)[0]
-// 		filterValue = filterDataset[filterKey];
-// 	} else if (typeof filterDataset == "string") {
-// 		/* A string will originate from a user-entered search/filter string */
-// 		filterVar = filterDataset;
-// 	} else if (typeof filterVar == "undefined"){
-// 		/* Default is to show it all ! */
-// 		filterVar = ".*";
-// 	};
-
-// 	//console.log("filter:",CollectionName,filterVar);
-
-// 	if (CollectionName == "Orgs"){
-// 		var docsFound = Orgs.find({
-// 			$or: [
-// 				{orgTitle: 	{ $regex: new RegExp(filterVar, "i") }},
-// 				{orgId: 	{ $regex: new RegExp(filterVar, "i") }}
-// 			]
-// 		});
-// 		return docsFound;
-// 	};
-
-// 	if (CollectionName == "Kitbags"){
-// 		if (filterKey && filterValue) {
-// 			// docsFound = Kitbags.find({
-// 			// 	{filterKey: { $regex: new RegExp(filterValue, "i") }},
-// 			// });
-// 			// return docsFound;
-// 		} else {
-// 			docsFound = Kitbags.find({
-// 				$or: [
-// 					// {expires: {$gte: new Date()}},
-// 					// {expires: null}
-// 					{kitbagTitle: 	{ $regex: new RegExp(filterVar, "i") }},
-// 					{kitbagId: 		{ $regex: new RegExp(filterVar, "i") }},
-// 					{kitbagSku: 	{ $regex: new RegExp(filterVar, "i") }},
-// 					{kitbagAssocOrgTitle: 	{ $regex: new RegExp(filterVar, "i") }}
-// 				]
-// 			});
-// 			return docsFound;
-// 		}
-// 	};
-// });
-
-// Template.registerHelper('OLD_objectsFiltered',function(CollectionName,filterVar){
-// 	// reactively return the objects who are older than the input value
-// 	//console.log("objectsFiltered()", typeof filterVar );
-// 	// filterVar = Template.instance().filter.get();
-// 	//console.log("filter:",CollectionName,filterVar);
-// 	// TODO: Make a better validation than this!
-// 	// See: http://stackoverflow.com/questions/30314447 in place of .isNaN!
-// 	if (typeof filterVar == "undefined"){
-// 	// Return all!
-// 		filterVar = ".*";
-// 	// return Persons.find({sort: {"name": "asc"}});
-// 	};
-
-// 	if (CollectionName == "Orgs"){
-// 		var docsFound = Orgs.find({
-// 			$or: [
-// 				{orgTitle: 	{ $regex: new RegExp(filterVar, "i") }},
-// 				{orgId: 	{ $regex: new RegExp(filterVar, "i") }}
-// 			]
-// 		});
-// 		return docsFound;
-// 	};
-
-// 	if (CollectionName == "Kitbags"){
-// 		var docsFound = Kitbags.find({
-// 			$or: [
-// 				// {expires: {$gte: new Date()}},
-// 				// {expires: null}
-// 				{kitbagTitle: 	{ $regex: new RegExp(filterVar, "i") }},
-// 				{kitbagId: 		{ $regex: new RegExp(filterVar, "i") }},
-// 				{kitbagSku: 	{ $regex: new RegExp(filterVar, "i") }},
-// 				{kitbagAssocOrgTitle: 	{ $regex: new RegExp(filterVar, "i") }}
-// 			]
-// 		});
-// 		return docsFound;
-// 	};
-// });
-
 
 /* ============================================================================================*/
 
@@ -942,14 +792,15 @@ GlobalHelpers = {
 		return true;
 
 	},
-	// Takes an Organisation ID and responds with the value of the requested field for that organisation e.g. {{lookupOrg kitbagAssocOrg 'orgTitle'}}
+	// Takes an Organisation ID and responds with the value of the requested field for that organisation e.g. {{lookupOrg kitbagAssocOrg 'title'}}
 	lookupFieldFromOrg: function(orgId,requiredField){
 		//console.log(">>> lookupFieldFromOrg("+orgId+","+requiredField+")");
 		//console.log(orgId,requiredField);
 		// var fieldObj = {};
 		// fieldObj[requiredField] = 1;
 		// var localOrg = MyCollections["Orgs"].findOne({orgId: ""+orgId});
-		var localOrg = kb.collections.Orgs.findOne({orgId: ""+orgId});
+		// var localOrg = kb.collections.Orgs.findOne(orgId);
+		var localOrg = kb.collections.Orgs.find({_id: orgId}).limit(1);
 		// console.log("returned org: ",localOrg);
 		try {
 			return localOrg[requiredField];
@@ -978,16 +829,14 @@ GlobalHelpers = {
 		}
 		// TODO - RETURN SERVICE TOO!
 	},
-	// Takes a kitbag ID and responds with the value of the requested field for that kitbag e.g. {{lookupKb orgAssocKitbags 'kitbagTitle'}}
-	lookupFieldFromKb: function(kitbagId,requiredField){
-		//console.log(kitbagId,requiredField);
-		// var localKb = MyCollections["Kitbags"].findOne({kitbagId: ""+kitbagId});
-		var localKb = Kitbags.findOne({kitbagId: ""+kitbagId});
+	// Takes a kitbag ID and responds with the value of the requested field for that kitbag e.g. {{lookupKb orgAssocKitbags 'title'}}
+	lookupFieldFromKb: function(kitbag_id,requiredField){
+		var localKb = kb.collections.Kitbags.findOne( kitbag_id );
 		//console.log("returned kitbag: ",localKb);
 		if (typeof localKb == "object"){
 			return localKb[requiredField];
 		} else {
-			return "Unknown Kitbag ("+kitbagId+")";
+			return "Unknown Kitbag ("+kitbag_id+")";
 		}
 	},
 	get_urlParam: function(paramName){
@@ -1019,9 +868,9 @@ GlobalHelpers = {
 			notGetStatuses = notGetStatuses.concat(appSettings.orgs.statusesIncludedInTrashedCount);
 		}
 
-		var queryObj = { "orgStatus": { $nin: notGetStatuses } };
+		var queryObj = { "status": { $nin: notGetStatuses } };
 
-		var listOfOrgsFetch = kb.collections.Orgs.find( queryObj , {fields: { orgId: 1, orgTitle: 1, orgStatus: 1 }}).fetch();
+		var listOfOrgsFetch = kb.collections.Orgs.find( queryObj , {fields: { title: 1, status: 1 }}).fetch();
 
 		// TODO - Can we make this bagArray a global counter (in adminCollection?) so that we dont need to find each time?
 		// TODO - Exclude "Trashed"
@@ -1029,18 +878,18 @@ GlobalHelpers = {
 		var orgObj = {}, orgArray = [], generatedTitle = "", suffix = "";
 		$.each(listOfOrgsFetch, function( index, obj ) {
 
-			if (showStatus && obj.orgStatus !== "Active"){
-				prefix = "[" +obj.orgStatus+ "] ";
+			if (showStatus && obj.status !== "Active"){
+				prefix = "[" +obj.status+ "] ";
 				suffix = "";
 			} else {
 				prefix = "";
 				suffix = "";
 			}
-			generatedTitle = prefix + obj.orgTitle + suffix;
+			generatedTitle = prefix + obj.title + suffix;
 
 			orgObj = {
 				label: generatedTitle,
-				value: obj.orgId
+				value: obj._id
 			};
 			orgArray.push(orgObj);
 		});
@@ -1057,19 +906,19 @@ GlobalHelpers = {
 	},
 	getFilteredListKitbags: function (contxt) {
 		// console.log("filterKitbags() ", contxt);
-		var listOfBagsFetch = Kitbags.find({}, {fields: {kitbagId: 1, kitbagTitle: 1, kitbagAssocOrgTitle: 1 }}).fetch();
+		var listOfBagsFetch = kb.collections.Kitbags.find({}, {fields: { _id: 1, title: 1, assocOrgTitle: 1 }}).fetch();
 
 		// TODO - Can we make this bagArray a global counter (in adminCollection?) so that we dont need to find each time?
 		bagObj = {}, bagArray = [];
 		$.each(listOfBagsFetch, function( index, obj ) {
 
 			/* SuperAdmins see orgs too as they see lists with all kitbags from all orgs! */
-			var orgLabel = ((obj.kitbagAssocOrgTitle)?obj.kitbagAssocOrgTitle:" <unknown org>") + ": " + obj.kitbagTitle;
-			var bagLabel = obj.kitbagTitle;
+			var orgLabel = ((obj.assocOrgTitle)?obj.assocOrgTitle:" <unknown org>") + ": " + obj.title;
+			var bagLabel = obj.title;
 
 			bagObj = {
 				label: ( fn_userIsSuperAdmin() ) ? orgLabel : bagLabel,
-				value: obj.kitbagId
+				value: obj._id
 			};
 			bagArray.push(bagObj);
 

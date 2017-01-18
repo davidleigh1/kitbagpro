@@ -6,10 +6,12 @@ import './view.css';
 import '/imports/ui/pages/items/itemLine.js';
 import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
-// import { Orgs } 		from '/imports/startup/both/org-schema.js';
-import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
+// import { Orgs } 		from '/imports/startup/both/schema-org.js';
+// import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
 import { Items } 		from '/imports/startup/both/item-schema.js';
-// import { UserList } 	from '/imports/startup/both/user-schema.js';
+// import { UserList } 	from '/imports/startup/both/schema-user.js';
 // import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 
 import { listItemStatuses } from '/imports/api/items/items.js';
@@ -50,8 +52,8 @@ Template.kitbagView.onRendered(function(){
 
 // Template.myTemplateName.helpers
 Template.kitbagView.helpers({
-	isTrashed: function (kitbagId) {
-		if (this.kitbagStatus.toLowerCase() == "trashed"){
+	isTrashed: function (kitbag_id) {
+		if (this.status.toLowerCase() == "trashed"){
 			return true;
 		} else {
 			return false;
@@ -70,36 +72,15 @@ Template.kitbagView.helpers({
 			return Spacebars.SafeString( prefix + arr.join(joiner) + suffix );
 		}
 	},
-	assocKitbags_BAK: function () {
-		/* Tidies up the assocKitbags array */
-		/* TODO - Remove this if no longer required */
-		var newArray = [];
-		if (typeof this.assocKitbags != "object" || this.assocKitbags.length <= 0) {
-			return false;
-		} else {
-			$.each( this.assocKitbags , function( key, assignedBag ) {
-				newArray.push({
-					assignedBag:	assignedBag,
-					kitbag_id: 		assignedBag.split("_")[0],
-					kitbagId: 		assignedBag.split("_")[1],
-					kitbagTitle: 	assignedBag.split("_")[2]
-				})
-			});
-			console.log("assocKitbags()",newArray);
-			return newArray;
-		}
-	},
 	thisKitbag: function (thisKitbagId) {
-		var myKitbag = Kitbags.findOne({kitbagId: FlowRouter.getParam('_kitbagId') });
+		var myKitbag = kb.collections.Kitbags.findOne( FlowRouter.getParam('_kitbagId') );
 		//console.log("kitbagProfile",myKitbag);
 		/* TODO - Find a better way to store/pass this value for checking once the int_kitbagBagsFound value is loaded */
 		kitbagKbCount = myKitbag.kitbagAssocKitbagCount;
 		return myKitbag;
 	},
-	thisKitbag: function (kitbagId) {
-		// return Template.currentData().thisKitbag;
-		// var myKitbag = Kitbags.findOne({_id: kitbag_id});
-		var myKitbag = Kitbags.findOne({kitbagId: ""+kitbagId});
+	thisKitbag: function (kitbag_id) {
+		var myKitbag = kb.collections.Kitbags.findOne( kitbag_id );
 		return myKitbag;
 	},
 	joinTextInList: function (t1="",t2="",t3="",t4="",t5="") {
@@ -107,19 +88,6 @@ Template.kitbagView.helpers({
 		var newText = ((typeof t1=="string" && t1!="")?t1:"") + ((typeof t2=="string" && t2!="")?t2:"") + ((typeof t3=="string" && t3!="")?t3:"") + ((typeof t4=="string" && t4!="")?t4:"") + ((typeof t5=="string" && t5!="")?t5:"");
 		return Spacebars.SafeString(newText);
 	},
-	// TODO - Is this used???
-	// kitbagAssocKitbagIds: function () {
-	// 	/* Tidies up the kitbagAssocKitbagIds array */
-	// 	var arr = this.kitbagAssocKitbagIds;
-	// 	var prefix = "<code>";
-	// 	var joiner = "</code><br><code>";
-	// 	var suffix = "</code>";
-	// 	if (typeof arr != "object" || arr.length <= 0) {
-	// 		return false;
-	// 	} else {
-	// 		return Spacebars.SafeString( prefix + arr.join(joiner) + suffix );
-	// 	}
-	// },
     toLower: function (str) {
       // console.log(str,str.toLowerCase());
       if (!str) { return str }
@@ -127,8 +95,6 @@ Template.kitbagView.helpers({
     },
 	userNameLookup: function (userId, paramRequired) {
 		var myUser = Meteor.users.findOne({_id: userId });
-		// Kitbags.findOne({kitbagId: FlowRouter.getParam('_kitbagId') });
-		// console.log("myUser",myUser.profile.displayName);
 
 		var data = {};
 		data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Profile Name not found";
@@ -152,10 +118,10 @@ Template.kitbagView.helpers({
 			$.each( this.assocKitbags , function( key, assignedBag ) {
 				newArray.push( assignedBag );
 			});
-			// console.log("minilistFilter()",newArray);
 		}
 
-		return { "kitbagId": { $in: newArray } }
+		// return { "kitbagId": { $in: newArray } }
+		return { "_id": { $in: newArray } }
 
 	}
 });
@@ -183,7 +149,7 @@ Template.kitbagView.events({
 	},
 	'click .btn.trash': function(event) {
 		event.preventDefault();
-		var areYouSure = "Are you sure you want to trash kitbag '"+this.kitbagTitle+"'?\n(KitbagId: "+this.kitbagId+")";
+		var areYouSure = "Are you sure you want to trash kitbag '"+this.title+"'?\n(KitbagId: "+this._id+")";
 		if ( confirm(areYouSure) ) {
 			Meteor.call("setKitbagStatus",this._id, "Trashed");
 		} else {

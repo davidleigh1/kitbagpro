@@ -3,6 +3,7 @@ notes/
 _notes/
 .notes/
 *.txt
+*.BAK
 settings-development.json
 settings-production.json
 desktop.ini

@@ -1,12 +1,11 @@
-console.log(" >>>> LOADING 'item-schema.js' (FROM /IMPORTS/STARTUP/BOTH) <<<< ");
+console.log("RUN: 'item-schema.js' at '/imports/startup/both'");
 
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
-
-console.log(">>>>> 'Items' collection is defined here!");
+console.log("NEW: 'Items' Collection");
 export const Items = new Mongo.Collection("items");
 
 // https://atmospherejs.com/aldeed/simple-schema
@@ -213,7 +212,7 @@ let ItemSchema = new SimpleSchema({
 	// "itemAssocOrg": {
 	// 	type: String,
 	// 	optional: true,
-	// 	label: "Associated Org ID + Name" /* ONE ONLY - Format: orgId_orgTitle e.g. "12210deb6402efb6_New Test Org 23" */
+	// 	label: "Associated Org ID + Name" /* ONE ONLY - Format: orgId_title e.g. "12210deb6402efb6_New Test Org 23" */
 	// },
 
 	"itemAssocOrg": {

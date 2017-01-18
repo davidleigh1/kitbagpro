@@ -1,4 +1,4 @@
-console.log("RUNNING /imports/startup/both/at_config.js");
+console.log("RUN: /imports/startup/both/at_config.js");
 
 // # configure login templates
 

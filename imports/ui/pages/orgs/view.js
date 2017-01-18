@@ -1,14 +1,12 @@
 /* IMPORT METEOR PACKAGES */
 
-// import { Session } from 'meteor/session'
-
-
+	// import { Session } from 'meteor/session'
 
 
 /* IMPORT PAGE COMPONENTS */
 
-import './orgView.html';
-import './orgView.css';
+import './view.html';
+import './view.css';
 
 
 /* IMPORT SHARED TEMPLATES + COMPONENTS */
@@ -21,12 +19,13 @@ import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
 /* IMPORT PROJECT OBJECTS */
 
+import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
 import { Kitbags } from '/imports/api/kitbags/kitbags.js';
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-// import { listOrgStatuses } from '/imports/api/orgs/orgs.js';
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
 
+
+/* PARAMETERS */
+
+var thisObj = "Orgs";
 
 /* ONCREATED */
 
@@ -53,13 +52,30 @@ Template.orgView.onRendered(function(){
 });
 
 
+displayName = function (user) {
+	console.log("displayName");
+  if (user.profile && user.profile.name)
+    return user.profile.name;
+  return user.emails[0].address;
+};
+
 
 // Template.myTemplateName.helpers
 Template.orgView.helpers({
 	thisOrg: function (thisOrgId) {
-		var myOrg = Orgs.findOne({orgId: FlowRouter.getParam('_orgId') });
-		//console.log("orgProfile",myOrg);
-		return myOrg;
+		return myOrg = kb.collections[thisObj].findOne( FlowRouter.getParam('_orgId') ) || {};
+	},
+	createdBy: function() {
+		try{
+			var creator = Meteor.users.findOne(this.createdBy);
+			if (creator._id === Meteor.userId()){
+				return "me";
+			}else{
+				return displayName(creator);
+			}
+		} catch (e) {
+			console.log("Error on 'orgView.createdBy()' ",e);
+		}
 	},
 	noFilter: function () {
 		// There is no user filter in minilists - so we just return a null value for objectsFiltered()
@@ -71,9 +87,9 @@ Template.orgView.helpers({
 	minilistFilter_users: function () {
 		return {"profile.userAssocOrg": FlowRouter.getParam('_orgId') }
 	},
-	orgAssocKitbagIds: function () {
-		/* Tidies up the orgAssocKitbagIds array */
-		var arr = this.orgAssocKitbagIds;
+	assocKitbagIds: function () {
+		/* Tidies up the assocKitbagIds array */
+		var arr = this.assocKitbagIds;
 		var prefix = "<code>";
 		var joiner = "</code><br><code>";
 		var suffix = "</code>";
@@ -91,7 +107,7 @@ Template.orgView.helpers({
 	getOrgStatusTag: function () {
 		var labelClass, labelText;
 
-		switch(this.orgStatus.toLowerCase()) {
+		switch(this.status.toLowerCase()) {
 			case "active":
 				labelClass = "label-success";
 				labelText = "Active";
@@ -115,8 +131,6 @@ Template.orgView.helpers({
 	},
 	userNameLookup: function (userId, paramRequired) {
 		var myUser = Meteor.users.findOne({_id: userId });
-		// Orgs.findOne({orgId: FlowRouter.getParam('_orgId') });
-		// console.log("myUser",myUser.profile.displayName);
 
 		var data = {};
 		data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Profile Name not found";
@@ -143,7 +157,7 @@ Template.orgView.events({
 	'click li.setOrgStatus': function(event,a,b) {
 		event.preventDefault();
 		// var newStatus = event.target.categ.dataset.getAttribute('data-id')
-		var field = "orgStatus";
+		var field = "status";
 		// newEvent = event;
 		var parent = event.target.parentElement;
 		var newValue = event.target.parentElement.getAttribute("data-status");
@@ -156,7 +170,7 @@ Template.orgView.events({
 
 		globalfn_deleteOrg( this, Meteor.userId(), "/orgs/list" );
 
-		// var areYouSure = "Are you sure you want to permanently delete org '"+this.orgTitle+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
+		// var areYouSure = "Are you sure you want to permanently delete org '"+this.title+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
 		// if ( confirm(areYouSure) ) {
 		// 	Meteor.call("deleteOrg",this._id);
 		// 	// history.go(-1);

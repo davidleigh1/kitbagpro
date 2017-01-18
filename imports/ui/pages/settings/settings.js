@@ -67,19 +67,3 @@ Template.settings.helpers({
 		}
 	}
 });
-
-
-// orgCountSettings = function (argument) {
-// 	/* Count Organisations and return number  */
-// 	// console.log(">>> ORGS > SERVER > PUBLICATIONS.JS - config:",config)
-// 	var newCount = Orgs.find( { orgStatus: { $in: appSettings.orgs.statusesIncludedInAllCount } });
-// 	Admin.update( {'id':'counts'}, { '$set':{ 'counts.allOrgs': newCount } }, { upsert: true } );
-// 	console.log("----->  new orgCount = " + newCount  );
-// };
-
-// Template.settings.events({
-//  	'click #countOrgsNow': function (event, instance) {
-//  		console.log("orgCount!",appSettings);
-// 		orgCountSettings();
-//  	}
-//  });

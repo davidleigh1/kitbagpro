@@ -50,9 +50,9 @@
 			{{#unless kitbagAssocOrg}}
 				<span class="resNote">N/A</span>
 			{{else}}
-				{{#if lookupOrgTitle kitbagAssocOrg 'orgTitle'}}
+				{{#if lookupOrgTitle kitbagAssocOrg 'title'}}
 					<a href="/orgs/{{kitbagAssocOrg}}/view">
-						<i>{{lookupOrgTitle kitbagAssocOrg 'orgTitle'}}</i>
+						<i>{{lookupOrgTitle kitbagAssocOrg 'title'}}</i>
 					</a>
 				{{else}}
 					<i>Not found (orgID: {{kitbagAssocOrg}})</i>

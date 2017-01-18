@@ -1,10 +1,12 @@
-import './orgLine.html';
-import './orgLine.css';
-import './changeOrgStatus.html';
+import './line.html';
+import './line.css';
+import './changeStatus.html';
 
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
 
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
+/* PARAMETERS */
+var thisObj = "Orgs";
 
 
 trashOrg = function (clickObj) {
@@ -25,8 +27,6 @@ Template.orgLine.helpers({
 	},
 	userNameLookup: function (userId, paramRequired) {
 		var myUser = Meteor.users.findOne({_id: userId });
-		// Orgs.findOne({orgId: FlowRouter.getParam('_orgId') });
-		// console.log("myUser",myUser.profile.displayName);
 
 		var data = {};
 		data.uname = (myUser && myUser.getDisplayName)?myUser.getDisplayName:(myUser && myUser.username)?myUser.username:"("+userId+")";
@@ -68,7 +68,7 @@ Template.orgLine.events({
 		event.preventDefault();
 		globalfn_deleteOrg( this, Meteor.userId(), "/orgs/list" );
 
-		// var areYouSure = "Are you sure you want to permanently delete org '"+this.orgTitle+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
+		// var areYouSure = "Are you sure you want to permanently delete org '"+this.title+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
 		// if ( confirm(areYouSure) ) {
 		// 	Meteor.call("deleteOrg",this._id);
 		// 	// history.go(-1);

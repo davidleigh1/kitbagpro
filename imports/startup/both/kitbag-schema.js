@@ -1,18 +1,17 @@
-console.log(" >>>> LOADING 'kitbag-schema.js' (FROM /IMPORTS/STARTUP/BOTH) <<<< ");
+console.log("RUN: 'kitbag-schema.js' at '/imports/startup/both'");
 
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
-
-console.log(">>>>> 'Kitbags' collection is defined here!");
-export const Kitbags = new Mongo.Collection("kitbags");
+console.log("DEF: 'kb.Kitbags' Collection");
+const Kitbags = new Mongo.Collection("kitbags");
 
 // https://atmospherejs.com/aldeed/simple-schema
 
 let KitbagSchema = new SimpleSchema({
-	"id": {
+	"_id": {
 		type: String,
 		optional: false,
 		max: 20,
@@ -121,3 +120,6 @@ let KitbagSchema = new SimpleSchema({
 
 // console.log(KitbagSchema);
 Kitbags.attachSchema( KitbagSchema );
+
+// Assign to Global namespace
+kb.collections.Kitbags = Kitbags;

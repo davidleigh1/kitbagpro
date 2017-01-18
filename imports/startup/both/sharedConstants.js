@@ -2,7 +2,7 @@
 
 // IN MOST CASES - NOT ACTUALLY CONSTANTS!!!!!!!
 
-console.log("RUNNING /imports/startup/both/sharedConstants.js");
+console.log("RUN: 'sharedConstants.js' at '/imports/startup/both/sharedConstants.js'");
 
 export const kb = {
 	collections: {
@@ -26,10 +26,11 @@ export const appSettings = {
 	global: {
 		createdVia	 					: ["Unknown","ManualFormEntry","ManualDataImport","ManualDuplicate","AdminDataImport"],
 		createdViaDefault				: "ManualFormEntry",
+		duplicatedPrefix				: "Duplicate of "
 	},
 	sAlert: {
 		defaultTimeout					: 5000,
-		longTimeout						: 10000,
+		longTimeout						: 10000
 	},
 	userInventory: {
 		itemInventoryStatus 			: ["Available","Deficient/Unavailable","On Loan","In Repair"]
@@ -124,6 +125,6 @@ export const appSettings = {
 	]
 };
 
-console.log(">>> SHAREDCONSTANTS.JS - appSettings:\n",appSettings);
+console.log("DEF: 'kb' and 'appSettings'");
 
 

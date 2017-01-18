@@ -1,8 +1,8 @@
-console.log("RUNNING /imports/startup/both/index.js");
+console.log("RUN: /imports/startup/both/index.js");
 
 import './at_config.js';
 import './item-schema.js';
-import './user-schema.js';
+import './schema-user.js';
 import './sharedConstants.js';
 
 Accounts.onLogin(function() {

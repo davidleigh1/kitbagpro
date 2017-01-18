@@ -1,5 +1,5 @@
 // # methods related to this collection
-console.log("RUNNING users > methods.js");
+console.log("RUN: users > methods.js");
 
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
@@ -11,7 +11,7 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 // import { Users } from '/imports/startup/both/item-schema.js';
 // import { Items } from './items.js';
 // import { Orgs } from '/imports/api/orgs/orgs.js';
-import { UserList } from '/imports/startup/both/user-schema.js';
+import { UserList } from '/imports/startup/both/schema-user.js';
 
 import { check } from 'meteor/check';
 
@@ -45,7 +45,7 @@ Meteor.methods({
 		return { "userId": userObj.profile.userId, "dbId": newUser, "userObj": userObj, "addEmailStatus": addEmailStatus };
 	},
 	updateUserMethod: function(updatedObj,documentId){
-		console.log(">>> fn updateUser()",updatedObj, documentId);
+		console.log("fn updateUser()",updatedObj, documentId);
 
 		var editId,dbObj;
 		if( updatedObj._id ){
@@ -115,22 +115,12 @@ Meteor.methods({
 
 
 
-// closeAllUserSessions: function(userId) {
-
-//     var sessions = _.filter(Meteor.default_server.sessions, function (session) {
-//         return session.userId == userId;
-//     });
-
-//     _.each(sessions, function (session) {
-//         session.connectionHandle.close();
-//     });
-// },
 
 
 /* http://stackoverflow.com/questions/17923290/picking-up-meteor-js-user-logout */
 // Meteor.methods({
     checkUserIsLoggedIn:function(userId){
-        console.log("________ checkUserIsLoggedIn",userId,typeof userId);
+        console.log("____>>____ checkUserIsLoggedIn",userId,typeof userId);
 
         try {
 
@@ -139,10 +129,10 @@ Meteor.methods({
 	        var user = Meteor.users.findOne(userId);
 
 			if (typeof user == "object"){
-				console.log("________ "+userId+" is connected!");
+				console.log("___>>_____ "+userId+" is connected!");
 				return "userFound";
 			} else if (typeof user == "undefined"){
-				console.log("________ "+userId+" was not found in Meteor.users");
+				console.log("__>>______ "+userId+" was not found in Meteor.users");
 				return "userNotFound";
 			} else {
        			return "noResponse";

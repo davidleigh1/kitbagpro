@@ -2,10 +2,10 @@
 
 import { Admin } from '/imports/api/admin/admin.js';
 // import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
+import { Orgs } from '/imports/startup/both/schema-org.js';
 import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 // import { Items } from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/user-schema.js';
+import { UserList } from '/imports/startup/both/schema-user.js';
 import { appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
@@ -64,14 +64,15 @@ userUpdateHook = function (requestor, userId, doc, fieldNames, modifier, options
 		}
 	}
 
-	// console.log(modifier);
-	// console.log(typeof modifier.$set);
-	// //console.log(typeof modifier.$set["profile.userKitbags"]);
-	// // console.log(typeof modifier.$set.["profile.userKitbags"]);
-	// console.log("=======================================");
-	// console.log(typeof modifier.$set["profile.userKitbags"]);
-	// console.log(modifier.$set["profile.userKitbags"].length);
 };
+
+
+
+/***************************************************************************/
+/* COLLECTION HOOKS using https://atmospherejs.com/matb33/collection-hooks */
+/***************************************************************************/
+
+/* BEFORE */
 
 
 Meteor.users.before.insert(function (userId, doc, fieldNames, modifier, options) {

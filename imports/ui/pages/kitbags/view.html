@@ -87,7 +87,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 										<th>Organisation</th>
 										<td>
 											{{#if kitbagAssocOrg}}
-												<span title="{{kitbagAssocOrg}}">{{lookupFieldFromOrg kitbagAssocOrg 'orgTitle'}} ({{kitbagAssocOrg}})</span>
+												<span title="{{kitbagAssocOrg}}">{{lookupFieldFromOrg kitbagAssocOrg 'title'}} ({{kitbagAssocOrg}})</span>
 											{{else}}
 												Organisation not found
 											{{/if}}
@@ -349,7 +349,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 								</tr> -->
 								<tr>
 									<th>Account Data</th>
-									<td>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</td>
+									<td>&nbsp;</td>
 								</tr>
 							</tbody>
 						</table>
@@ -364,87 +364,6 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 	<!-- /row -->
 	</div>
 	{{/with}}
-
-<!--
-	<div class="row">
-		<form id="add-edit-kitbag" class="add-edit-kitbag">
-			<div class="formline">
-				<label for="kitbagId">Kitbag ID:</label>
-				<input type="text" id="kitbagId" name="kitbagId" data-submit="true" placeholder="ID is generated on submission" disabled="disabled">
-			</div>
-			<div class="formline">
-				<label for="kitbagStatus">Status:</label>
-				<select class="statusSelectList" name="kitbagStatus" data-submit="true">
-					{{#each listKitbagStatuses}}
-						<option value="{{this}}">{{this}}</option>
-					{{/each}}
-				</select>
-			</div>
-
-
-
-
-			<div class="formline">
-				<label for="kitbagTitle">Name:</label>
-				<input type="text" name="kitbagTitle" data-submit="true" placeholder="Kitbag Name">
-			</div>
-			<div class="formline">
-				<label for="kitbagDesc">Description:<span class="subtitle">(max 400 chars)</span></label>
-				<input type="text" name="kitbagDesc" data-submit="true" placeholder="Brief summary of Kitbag and its goals">
-			</div>
-			<div class="formline">
-				<label for="kitbagUrl">Website:</label>
-				<input type="url" name="kitbagUrl" data-submit="true" placeholder="Website/homepage URL" value="">
-			</div>
-			<div class="formline">
-				<label for="kitbagContactPerson">Contact Person:</label>
-				<input type="text" name="kitbagContactPerson" data-submit="true" placeholder="Name of contact person">
-			</div>
-			<div class="formline">
-				<label for="kitbagContactPhone">Contact Phone:</label>
-				<input type="text" name="kitbagContactPhone" data-submit="true" placeholder="Contact phone number">
-			</div>
-			<div class="formline">
-				<label for="kitbagContactEmail">Contact Email:</label>
-				<input type="email" name="kitbagContactEmail" data-submit="true" placeholder="Contact email address">
-			</div>
-			<div class="formline">
-				<label for="kitbagImgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
-				<input type="url" name="kitbagImgLarge" data-submit="true" placeholder="URL for larger kitbaganization logo (max 512x512 / *.jpg or *.png)">
-			</div>
-			<div class="formline">
-				<label for="kitbagImgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
-				<input type="url" name="kitbagImgSmall" data-submit="true" placeholder="URL for smaller kitbaganization logo icon (max 32x32 / *.jpg or *.png)">
-			</div>
-			<div class="formline">
-				<label for="createdAt">Created:</label>
-				<input type="text" id="createdAt" name="createdAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
-			</div>
-			<div class="formline">
-				<label for="updatedAt">Last Updated:</label>
-				<input type="text" id="updatedAt" name="updatedAt" data-submit="true" placeholder="Timestamp will be generated on submission" disabled="disabled">
-			</div>
-			<div class="formline">
-				<label for="owner">Owner:</label>
-				<input type="text" id="owner" name="owner" data-submit="true" placeholder="Your User ID will be recorded on submission" disabled="disabled" value="{{nameFromOwner}}">
-			</div>
-			<div class="formline">
-				<label for="account_data">Account Data:</label>
-				<textarea>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</textarea>
-			</div>
-
-			<input type="hidden" name="kitbagAssocKitbags" data-type="array" data-submit="true">
-
-			<button class="submit">Submit</button>
-			<button class="cancel">Cancel</button>
-		</form>
-	</div>
--->
-
-
-
-	<!-- Initialize -->
-	<!-- {{initialize}} -->
 
 </div>
 <!-- /screen-wrapper -->

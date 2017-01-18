@@ -7,17 +7,17 @@
 	{{#if Template.subscriptionsReady}}
 
 		{{> quickForm
-			collection           = "Orgs"
+			autosave             = autoSaveMode
+			collection           = Orgs
+			doc                  = selectedOrgDoc
 			id                   = "duplicateOrgForm"
 			input-col-class 	 = "col-sm-10"
 			label-class     	 = "col-sm-2"
 			meteormethod         = "addOrg"
-			template        	 = "bootstrap3-horizontal"
 			omitFields           = "updatedAt,updatedBy"
 			singleMethodArgument = true
+			template        	 = "bootstrap3-horizontal"
 			type                 = "method"
-			doc                  = selectedOrgDoc
-			autosave             = autoSaveMode
 		}}
 
 	{{else}}

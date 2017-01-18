@@ -1,11 +1,11 @@
 import { ReactiveVar } from 'meteor/reactive-var';
 
-import './orgList.html';
-import './orgLine.js';
+import './list.html';
+import './line.js';
 
 import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 // import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
+import { Orgs } from '/imports/startup/both/schema-org.js';
 
 import '/imports/ui/components/lists/listFilter.js';
 

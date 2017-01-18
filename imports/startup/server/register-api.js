@@ -1,7 +1,7 @@
-console.log("RUNNING register-api.js");
+console.log("RUN: register-api.js");
 
 // import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
+import { Orgs } from '/imports/startup/both/schema-org.js';
 import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 import { Items } from '/imports/startup/both/item-schema.js';
 // import { UserList } from '/imports/api/users/users.js';

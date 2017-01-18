@@ -1,9 +1,10 @@
 // # definition of this collection
 
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
 import { Admin } from '/imports/api/admin/admin.js';
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
+
+
 
 Meteor.publish("admin",function() {
 	console.log('Publishing "Admin" from apis > admin > server > publications.js!');
@@ -32,17 +33,17 @@ Meteor.methods({
 	assignAllKBs: function (requestor) {
 		console.log("reassignAllKBs() requested by: " + requestor);
 
-		var allKbs = Kitbags.find().fetch();
+		var allKbs = kb.collections.Kitbags.find().fetch();
 
 		if (!allKbs){
 			console.log("No 'allKbs' found!");
 			return false;
 		}
 
-		/* Clear all orgAssocKitbagIds fields and orgAssocKitbagCount fields */
-		Orgs.direct.update(
+		/* Clear all assocKitbagIds fields and assocKitbagCount fields */
+		kb.collections.Orgs.direct.update(
 			{ },
-			{ $unset: { orgAssocKitbagIds: "", orgAssocKitbagCount: "" } },
+			{ $unset: { assocKitbagIds: "", assocKitbagCount: "" } },
 			{ multi: true }
 		);
 

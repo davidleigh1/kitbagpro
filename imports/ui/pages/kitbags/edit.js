@@ -24,21 +24,21 @@ import './edit.css';
 
 /* IMPORT PROJECT OBJECTS */
 
-// import { Orgs } 		from '/imports/startup/both/org-schema.js';
-import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
+// import { Orgs } 		from '/imports/startup/both/schema-org.js';
+// import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
 // import { Items } 		from '/imports/startup/both/item-schema.js';
-// import { UserList } 	from '/imports/startup/both/user-schema.js';
+// import { UserList } 	from '/imports/startup/both/schema-user.js';
 // import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 
 
 /* ONCREATED */
-
 Template.kitbagEdit.onCreated(function() {
 
 	Meteor.subscribe("kitbags", {
 		onReady: function () {
 			console.log(">>> onReady and the 'kitbags' actually arrive");
-			// window.myKitbags = Kitbags.find().fetch();
 		},
 		onError: function () {
 			console.log(">>> onError");
@@ -51,7 +51,6 @@ Template.kitbagEdit.onCreated(function() {
 
 
 /* ONRENDERED */
-
 Template.kitbagEdit.onRendered(function(){
 	/*
 		console.log("--- onRendered ------------------------------------------");
@@ -86,31 +85,21 @@ Template.kitbagEdit.onRendered(function(){
 
 
 /* HELPERS */
-
-// Template.kitbagEdit.helpers({
-// });
 Template.kitbagEdit.helpers({
 	Kitbags: function () {
-		return Kitbags;
+		return kb.collections.Kitbags;
 	},
 	autoSaveMode: function () {
 		return Session.get("autoSaveMode") ? true : false;
 	},
 	selectedKitbagDoc: function () {
-		return Kitbags.findOne({kitbagId:GlobalHelpers.get_urlParam("_kitbagId")});
-		// return Kitbags.findOne(Session.get("selectedKitbagId"));
+		return kb.collections.Kitbags.findOne( GlobalHelpers.get_urlParam("_kitbagId") );
+		// return kb.collections.Kitbags.findOne(Session.get("selectedKitbagId"));
 	},
 	isSelectedKitbag: function () {
 		return GlobalHelpers.get_urlParam("_kitbagId");
 		// return Session.equals("selectedKitbagId", this._id);
 	},
-	// formType: function () {
-	// 	if ( FlowRouter.getRouteName() == "kitbagEdit" ) {
-	// 		return "update";
-	// 	} else {
-	// 		return "disabled";
-	// 	}
-	// },
 	disableButtons: function () {
 		return (FlowRouter.getRouteName() !== "kitbagEdit");
 	}

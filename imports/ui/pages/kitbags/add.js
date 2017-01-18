@@ -24,10 +24,12 @@ import './add.html';
 
 /* IMPORT PROJECT OBJECTS */
 
-// import { Orgs } 		from '/imports/startup/both/org-schema.js';
-import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
+// import { Orgs } 		from '/imports/startup/both/schema-org.js';
+// import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
 // import { Items } 		from '/imports/startup/both/item-schema.js';
-// import { UserList } 	from '/imports/startup/both/user-schema.js';
+// import { UserList } 	from '/imports/startup/both/schema-user.js';
 // import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 
 
@@ -41,7 +43,6 @@ Template.kitbagAdd.onCreated(function() {
 	Meteor.subscribe("kitbags", {
 		onReady: function () {
 			console.log(">>> onReady and the 'kitbags' actually arrive");
-			// window.myKitbags = Kitbags.find().fetch();
 		},
 		onError: function () {
 			console.log(">>> onError");
@@ -73,7 +74,7 @@ Template.kitbagAdd.onRendered(function(){
 
 Template.kitbagAdd.helpers({
 	Kitbags: function () {
-		return Kitbags;
+		return kb.collections.Kitbags;
 	}
 });
 

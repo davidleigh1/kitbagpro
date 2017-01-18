@@ -116,7 +116,7 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 		}]
 	});
 
-		import '/imports/ui/pages/orgs/orgAdd.js';
+		import '/imports/ui/pages/orgs/add.js';
 		/* ORGS ADD */
 		FlowRouter.route("/orgs/create/", {
 			name: "orgAdd",
@@ -129,7 +129,7 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 			}
 		});
 
-		import '/imports/ui/pages/orgs/orgList.js';
+		import '/imports/ui/pages/orgs/list.js';
 		/* ORGS LIST */
 		orgsRoutes.route("/list", {
 			name:"orgList",
@@ -176,7 +176,7 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 
 
 		/* ORGS VIEW */
-		import '/imports/ui/pages/orgs/orgView.js';
+		import '/imports/ui/pages/orgs/view.js';
 		orgsWithId.route("/view", {
 			name:"orgView",
 			action: function(params, queryParams) {
@@ -189,7 +189,7 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 			}
 		});
 
-		import '/imports/ui/pages/orgs/orgEdit.js';
+		import '/imports/ui/pages/orgs/edit.js';
 		FlowRouter.route("/orgs/:_orgId/edit", {
 			name: "orgEdit",
 			action: function(params, queryParams) {
@@ -201,7 +201,7 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 				});
 			}
 		});
-		import '/imports/ui/pages/orgs/orgDuplicate.js';
+		import '/imports/ui/pages/orgs/duplicate.js';
 		FlowRouter.route("/orgs/:_orgId/duplicate", {
 			name: "orgDuplicate",
 			action: function(params, queryParams) {
@@ -265,38 +265,6 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 			});
 		}
 	});
-
-
-
-
-/* PHASE ONE */
-// import '/imports/ui/pages/kitbags/kitbagList.js';
-// FlowRouter.route("/bags/list", {
-// 	name:"kitbagList",
-// 	action: function(params, queryParams) {
-// 		// console.log("Route: Kitbags > Kitbag List (Kitbag List)", params, queryParams);
-// 		BlazeLayout.render("mainLayout", {
-// 			main: "kitbagList",
-// 			nav: "navigation",
-// 			footer: "globalFooter"
-// 		});
-// 	}
-// });
-// import '/imports/ui/pages/kitbags/kitbagAddEdit.js';
-// FlowRouter.route("/bags/create/:_orgId", {
-// 	name:"kitbagAdd",
-// 	action: function(params, queryParams) {
-// 		// console.log("Route: Kitbags > Create New Kitbag (Create New Kitbag )", params, queryParams);
-// 		BlazeLayout.render("mainLayout", {
-// 			main: "kitbagAddEdit",
-// 			nav: "navigation",
-// 			footer: "globalFooter"
-// 		});
-// 	}
-// });
-// FlowRouter.route("/bags/:_bagId", {name:"Kitbag Profile View",action: function(params, queryParams) { /*console.log("Route: Kitbags > N/A (Kitbag Profile View)", params, queryParams);*/ BlazeLayout.render("mainLayout", {main: "startScreen", nav: "navigation",/* footer: "globalFooter" */});}});
-// FlowRouter.route("/bags/:_bagId/edit", {name:"Kitbag Profile Edit",action: function(params, queryParams) { /*console.log("Route: Kitbags > N/A (Kitbag Profile Edit)", params, queryParams);*/ BlazeLayout.render("mainLayout", {main: "startScreen", nav: "navigation",/* footer: "globalFooter" */});}});
-
 
 
 

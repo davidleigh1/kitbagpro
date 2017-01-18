@@ -6,10 +6,10 @@ import './itemView.css';
 import '/imports/ui/pages/kitbags/line.js';
 import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
+// import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 import { Items } from '/imports/startup/both/item-schema.js';
-// import { Items } from '/imports/api/items/items.js';
-// import { Items } from '/both/newItems.js';
 import { listItemStatuses } from '/imports/api/items/items.js';
 
 import '/imports/ui/components/urlImagePreviewRollover.html';
@@ -94,10 +94,8 @@ Template.itemView.helpers({
 		itemKbCount = myItem.itemAssocKitbagCount;
 		return myItem;
 	},
-	thisKitbag: function (kitbagId) {
-		// return Template.currentData().thisKitbag;
-		// var myKitbag = Kitbags.findOne({_id: kitbag_id});
-		var myKitbag = Kitbags.findOne({kitbagId: ""+kitbagId});
+	thisKitbag: function (kitbag_id) {
+		var myKitbag = kb.collections.Kitbags.findOne( kitbag_id );
 		return myKitbag;
 	},
 	joinTextInList: function (t1="",t2="",t3="",t4="",t5="") {

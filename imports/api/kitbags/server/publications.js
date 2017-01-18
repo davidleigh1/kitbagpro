@@ -1,12 +1,12 @@
 // # definition of this collection
 
+import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
 import { Admin } from '/imports/api/admin/admin.js';
 // import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
+// import { Orgs } from '/imports/startup/both/schema-org.js';
 // import { Kitbags } from '/imports/api/kitbags/kitbags.js';
-import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
+// import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
 
 /* PUBLISH */
 
@@ -31,7 +31,7 @@ Meteor.publish("kitbags",function() {
 			} else {
 				var orgId = orgObj.profile.userAssocOrg;
 				console.log("====> orgId ('userAssocOrg'): ", orgId);
-				searchObj = { "kitbagAssocOrg" : orgId };
+				searchObj = { "assocOrgId" : orgId };
 			}
 
 		} else {
@@ -44,17 +44,17 @@ Meteor.publish("kitbags",function() {
 		return null;
 	}
 	updateKitbagCountsObj("onKitbagsPublished");
-	return Kitbags.find(searchObj);
+	return kb.collections.Kitbags.find(searchObj);
 });
 
 /* For Meteor Collection Hooks (https://atmospherejs.com/matb33/collection-hooks) */
 
 updateKitbagCountsObj = function (requestor,userId, doc, fieldNames, modifier){
 	/* Combined function replacing ALL+ACTIVE+HIDDEN */
-	var countAll     = Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInAllCount } 	    }).count();
-	var countActive  = Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInActiveCount } 	}).count();
-	var countHidden  = Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInHiddenCount } 	}).count();
-	var countTrashed = Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInTrashedCount }	}).count();
+	var countAll     = kb.collections.Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInAllCount } 	    }).count();
+	var countActive  = kb.collections.Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInActiveCount } 	}).count();
+	var countHidden  = kb.collections.Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInHiddenCount } 	}).count();
+	var countTrashed = kb.collections.Kitbags.find( { kitbagStatus: { $in: appSettings.kitbags.statusesIncludedInTrashedCount }	}).count();
 
 	Admin.update( {'id':'counts'}, { '$set':{ 'counts.allKitbags': countAll } }, { upsert: true } );
 	Admin.update( {'id':'counts'}, { '$set':{ 'counts.activeKitbags': countActive } }, { upsert: true } );
@@ -69,41 +69,40 @@ updateAssocOrgOnAddEdit = function (requestor, doc, fieldNames, modifier, option
 	// assocOrg.update( { '$set':{ 'orgAssocKitbagids': newCount } }, { upsert: true } );
 
 	/* Fetch the associated Org record (not the curson!) that relates to our Kitbag */
-	// var assocOrg = Orgs.findOne( {orgId: doc.kitbagAssocOrg} );
 	console.log("=== updateAssocOrgOnAdd ("+requestor+") =========================================");
 	console.log(doc);
-	console.log( Orgs.findOne( {orgId: doc.kitbagAssocOrg}) );
+	console.log( kb.collections.Orgs.findOne( doc.assocOrgId ) );
 	/* Then add our kitbagId to the orgAssocKitbagids array - and add a new array if one doesnt already exist */
 	/* TODO - Shouldnt need to add a new array if SimpleSchema is handling that for us...  */
 	try{
-		console.log("UPSERT {orgId: "+doc.kitbagAssocOrg+" (doc.kitbagAssocOrg)} , { $push: { orgAssocKitbagids: "+doc.kitbagId+" (doc.kitbagId) }}");
-		Orgs.direct.update( {orgId: doc.kitbagAssocOrg} , { $push: { orgAssocKitbagIds: doc.kitbagId }} );
+		console.log("UPSERT {org_id: "+doc.assocOrgId+" (doc.assocOrgId)} , { $push: { orgAssocKitbagids: "+doc._id+" (doc.kitbagId) }}");
+		kb.collections.Orgs.direct.update( {_id: doc.assocOrgId} , { $push: { assocKitbagIds: doc.kitbagId }} );
 
 		console.log("modifier: ",requestor, doc, fieldNames, modifier, options);
 
-		Orgs.direct.update( {orgId: doc.kitbagAssocOrg} , { $push: { orgAssocKitbagCount: orgAssocKitbagCount.count() }} );
+		kb.collections.Orgs.direct.update( {_id: doc.assocOrgId} , { $push: { assocKitbagCount: assocKitbagCount.count() }} );
 	} catch (err) {
 		console.log("\n\nERROR: "+err+"\n\n");
 		return false;
 	}
-	console.log( Orgs.findOne( {orgId: doc.kitbagAssocOrg}) );
+	console.log( kb.collections.Orgs.findOne( doc.assocOrgId ) );
 	console.log("=== /updateAssocOrgOnAdd ========================================================");
 };
 
 
-Kitbags.after.insert(function (userId, doc, fieldNames, modifier) {
+kb.collections.Kitbags.after.insert(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER KITBAGS.INSERT");
 	/* Recalculate when new Kitbag is added */
 	updateKitbagCountsObj("onKitbagInserted",doc.kitbagTitle);
 	/* Update associated Org when new Kitbag is added */
 	// updateAssocOrgOnAddEdit("onKitbagInserted",userId, doc, fieldNames, modifier);
 });
-Kitbags.after.remove(function (userId, doc, fieldNames, modifier) {
+kb.collections.Kitbags.after.remove(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER KITBAGS.REMOVE");
 	/* Recalculate when new Kitbag is added */
 	updateKitbagCountsObj("onKitbagRemoved",userId, doc, fieldNames, modifier);
 });
-Kitbags.after.update(function (userId, doc, fieldNames, modifier) {
+kb.collections.Kitbags.after.update(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER KITBAGS.UPDATE");
 	/* Recalculate when new existing Kitbag changes kitbagStatus - which could well render it outside of the count criteria */
 	updateKitbagCountsObj("onKitbagUpdate",userId, doc, fieldNames, modifier);

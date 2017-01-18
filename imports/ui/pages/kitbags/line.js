@@ -24,8 +24,6 @@ Template.kitbagLine.helpers({
 	},
 	userNameLookup: function (userId, paramRequired) {
 		var myUser = Meteor.users.findOne({_id: userId });
-		// Kitbags.findOne({kitbagId: FlowRouter.getParam('_kitbagId') });
-		// console.log("myUser",myUser.profile.displayName);
 
 		var data = {};
 		data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Name not found";

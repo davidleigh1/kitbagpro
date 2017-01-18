@@ -1,5 +1,5 @@
 // # methods related to this collection
-console.log("RUNNING Admin > methods.js - EMPTY ");
+console.log("RUN: Admin > methods.js - EMPTY ");
 
 // import { Meteor } from 'meteor/meteor';
 // import { ValidatedMethod } from 'meteor/mdg:validated-method';

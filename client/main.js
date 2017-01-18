@@ -1,6 +1,6 @@
 // # This is the client entry point - it all starts here!
 
-console.log("RUNNING /client/main.js");
+console.log("RUN: /client/main.js");
 
 import { Template } from 'meteor/templating';
 

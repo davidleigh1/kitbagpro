@@ -1,19 +1,17 @@
-console.log(" >>>> LOADING 'org-schema.js' (FROM /IMPORTS/STARTUP/BOTH) <<<< ");
+console.log("RUN: 'schema-org.js' at '/imports/startup/both'");
 
 import { Mongo } from "meteor/mongo";
 import { SimpleSchema } from "meteor/aldeed:simple-schema";
 import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
 
-
-console.log(">>>>> 'Orgs' collection is defined here!");
-// export const Orgs = new Mongo.Collection("orgs");
+console.log("DEF: 'Orgs' Collection");
 const Orgs = new Mongo.Collection("orgs");
 
 // https://atmospherejs.com/aldeed/simple-schema
 
 let OrgSchema = new SimpleSchema({
-	"orgId": {
+	"_id": {
 		type: String,
 		optional: false,
 		max: 20,
@@ -26,7 +24,7 @@ let OrgSchema = new SimpleSchema({
 		},
 		label: "Organisation ID"
 	},
-	"orgTitle": {
+	"title": {
 		type: String,
 		optional: false,
 		defaultValue: function () {
@@ -36,14 +34,14 @@ let OrgSchema = new SimpleSchema({
 		},
 		label: "Organisation Name"
 	},
-	"orgStatus": {
+	"status": {
 		type: String,
 		allowedValues: appSettings.orgs.statuses,
 		optional: true,
 		defaultValue: "Active",
 		label: "Organisation Status"
 	},
-	"orgDesc": {
+	"desc": {
 		type: String,
 		optional: true,
 		max: 600,
@@ -52,7 +50,7 @@ let OrgSchema = new SimpleSchema({
 
 	/* CONTACT DETAILS */
 
-	"orgIsOfficial": {
+	"isOfficial": {
 		type: Boolean,
 		optional: true,
 		autoform: {
@@ -60,23 +58,23 @@ let OrgSchema = new SimpleSchema({
 		},
 		label: "Is Official Account"
 	},
-	"orgContactPerson": {
+	"contactPerson": {
 		type: String,
 		optional: true,
 		label: "Contact Person"
 	},
-	"orgContactPhone": {
+	"contactPhone": {
 		type: String,
 		optional: true,
 		label: "Contact Phone Number"
 	},
-	"orgContactEmail": {
+	"contactEmail": {
 		type: String,
 		regEx: SimpleSchema.RegEx.Email,
 		optional: true,
 		label: "Contact Email Address"
 	},
-	"orgUrl": {
+	"url": {
 		type: String,
 		regEx: SimpleSchema.RegEx.Url,
 		optional: true,
@@ -85,13 +83,13 @@ let OrgSchema = new SimpleSchema({
 
 	/* BRANDING + RESOURCES */
 
-	"orgImgLarge": {
+	"imgLarge": {
 		type: String,
 		optional: true,
 		regEx: SimpleSchema.RegEx.Url,
 		label: "Profile Photo"
 	},
-	"orgImgSmall": {
+	"imgSmall": {
 		type: String,
 		optional: true,
 		regEx: SimpleSchema.RegEx.Url,
@@ -137,18 +135,18 @@ let OrgSchema = new SimpleSchema({
 
 	/* ASSOCIATED KITBAGS */
 
-	"orgAssocKitbagCount": {
+	"assocKitbagCount": {
 		type: Number,
 		optional: true,
 		defaultValue: 0,
 		label: "Number of Org kitbags"
 	},
-	"orgAssocKitbagIds": {
+	"assocKitbagIds": {
 		type: Array,
 		optional: true,
 		label: "List of Org kitbags"
 	},
-	"orgAssocKitbagIds.$": {
+	"assocKitbagIds.$": {
 		type: String
 	}
 });
@@ -157,6 +155,4 @@ let OrgSchema = new SimpleSchema({
 Orgs.attachSchema( OrgSchema );
 
 // Assign to Global namespace
-console.log(typeof appSettings);
-console.log(typeof kb);
 kb.collections.Orgs = Orgs;

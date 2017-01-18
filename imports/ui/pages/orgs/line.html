@@ -1,24 +1,24 @@
 <template name="orgLine">
 
-<tr data-sorttitle="{{toLower orgTitle}}" data-sortcreated="{{createdAt}}" data-sortkbcount="{{#if orgAssocKitbagCount }}{{orgAssocKitbagCount}}{{else}}0{{/if}}" data-sortupdated="{{createdAt}}" >
+<tr data-sorttitle="{{toLower title}}" data-sortcreated="{{createdAt}}" data-sortkbcount="{{#if assocKitbagCount }}{{assocKitbagCount}}{{else}}0{{/if}}" data-sortupdated="{{createdAt}}" >
 
 	<!-- Small screens only! -->
 	<td class="visible-xs col-xs-3">
 		<!-- Top line -->
-		<a href="/orgs/{{orgId}}/view">
+		<a href="/orgs/{{_id}}/view">
 		<div>
-			{{#unless orgTitle}}
-				<span class="resNote">Org not found (orgID: {{orgId}})</span>
+			{{#unless title}}
+				<span class="resNote">Org not found (_id: {{_id}})</span>
 			{{else}}
-				<a href="/orgs/{{orgId}}/view">{{highlight orgTitle filterVar suppressHightlight}} {{#if orgIsOfficial}}<span class="label label-official">Official</span>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</a>
+				<a href="/orgs/{{_id}}/view">{{highlight title filterVar suppressHightlight}} {{#if isOfficial}}<span class="label label-official">Official</span>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</a>
 			{{/unless}}
 		</div>
 		<!-- /Top line -->
 		<!-- Bottom line -->
 		<div>
-			{{#if orgAssocKitbagCount }}
-					<!-- <a href="/kitbags/list?o={{orgId}}" class="orglistSubtitle make-block">{{plural orgAssocKitbagCount "kitbag" "kitbags"}}</a> -->
-					<span class="orglistSubtitle">{{plural orgAssocKitbagCount "kitbag" "kitbags"}}</span>
+			{{#if assocKitbagCount }}
+					<!-- <a href="/kitbags/list?o={{_id}}" class="orglistSubtitle make-block">{{plural assocKitbagCount "kitbag" "kitbags"}}</a> -->
+					<span class="orglistSubtitle">{{plural assocKitbagCount "kitbag" "kitbags"}}</span>
 			<!-- {{else}} -->
 			{{/if}}
 		</div>
@@ -28,14 +28,14 @@
 	<!-- /Small screens only! -->
 
 
-	<td class="hidden-xs orgTitleCol">
-		{{#unless orgTitle}}
-			<span class="resNote">'orgTitle' not found</span>
+	<td class="hidden-xs titleCol">
+		{{#unless title}}
+			<span class="resNote">'title' not found</span>
 		{{else}}
-			<a href="/orgs/{{orgId}}/view">{{highlight orgTitle filterVar suppressHightlight}}</a>
-			{{#if orgIsOfficial}}
+			<a href="/orgs/{{_id}}/view">{{highlight title filterVar suppressHightlight}}</a>
+			{{#if isOfficial}}
 				<span class="official-line-wrapper cursor-help">
-					<i class="fa fa-certificate" aria-hidden="true" title="This is an Official organisation account for '{{orgTitle}}'"></i>
+					<i class="fa fa-certificate" aria-hidden="true" title="This is an Official organisation account for '{{title}}'"></i>
 				</span>
 			{{/if}}
 		{{/unless}}
@@ -47,26 +47,26 @@
 		{{#unless kitbagAssocOrg}}
 			<span class="resNote">N/A</span>
 		{{else}}
-			{{#if lookupOrgTitle kitbagAssocOrg 'orgTitle'}}
+			{{#if lookupOrgTitle kitbagAssocOrg 'title'}}
 				<a href="/orgs/{{kitbagAssocOrg}}/view">
-					{{lookupOrgTitle kitbagAssocOrg 'orgTitle'}}
+					{{lookupOrgTitle kitbagAssocOrg 'title'}}
 				</a>
 			{{else}}
-				<i>Not found (orgID: {{kitbagAssocOrg}})</i>
+				<i>Not found (_id: {{kitbagAssocOrg}})</i>
 			{{/if}}
 		{{/unless}}
 	</td> -->
 
 	<!-- Org Status Tag -->
-	<td class="hidden-xs orgStatusCol">
+	<td class="hidden-xs statusCol">
 		<span class="label {{gOrgStatusTag.labelClass}}">{{gOrgStatusTag.labelText}}</span>
 	</td>
 
 
 	<!-- Org Kitbag Count -->
-	<td class="hidden-xs orgAssocKitbagCountCol">
-		{{#if orgAssocKitbagCount }}
-			<a href="/kitbags/list?kitbagassocorg={{orgId}}" class="make-block">{{orgAssocKitbagCount}}</a>
+	<td class="hidden-xs assocKitbagCountCol">
+		{{#if assocKitbagCount }}
+			<a href="/kitbags/list?kitbagassocorg={{_id}}" class="make-block">{{assocKitbagCount}}</a>
 		{{else}}
 			0
 		{{/if}}
@@ -75,9 +75,9 @@
 	<!-- Org Users Count -->
 	<!-- TODO: For production - the hyperlink should be for the valid value only -->
 	<td class="hidden-xs orgUsersCountCol">
-		<a href="/orgs/{{orgId}}/view#orgUserListPanel" class="make-block">
+		<a href="/orgs/{{_id}}/view#orgUserListPanel" class="make-block">
 		{{#if orgUsersCount }}
-			<a href="/orgs/{{orgId}}/view#orgUserListPanel" class="make-block">{{orgUsersCount}}</a>
+			<a href="/orgs/{{_id}}/view#orgUserListPanel" class="make-block">{{orgUsersCount}}</a>
 		{{else}}
 			??
 		{{/if}}
@@ -88,20 +88,13 @@
 	<!-- Org ID -->
 	<td class="hidden-xs hidden-sm hidden-md">
 		<!-- // System (Custom ID) -->
-		{{#unless orgId}}
+		{{#unless _id}}
 			<span class="resNote">N/A</span>
 		{{else}}
-			<span title="DBID: {{_id}}" class="cursor-help">{{highlight orgId filterVar suppressHightlight}}</span>
+			<span title="DBID: {{_id}}" class="cursor-help">{{highlight _id filterVar suppressHightlight}}</span>
 		{{/unless}}
 	</td>
 
-
-	<!-- Org DB ID -->
-	<td class="hidden-xs hidden-sm hidden-md">
-		{{#if glb_userIsSuperAdmin}}
-			<span class="adminOnly">{{_id}}</span>
-		{{/if}}
-	</td>
 
 	<!-- Created Date -->
 	<td class="visible-lg orgCreatedAtCol">
@@ -136,9 +129,9 @@
 					{{/if}}
 				</button>
 			{{/if}} -->
-			<button class="delete" data-org="{{orgId}}" title="Trash"><i class="fa fa-fw fa-trash"></i></button>
-			<button class="edit" data-org="{{orgId}}" title="Edit"><i class="fa fa-fw fa-pencil"></i></button>
-			<button class="showDetail" data-org="{{orgId}}" title="View"><i class="fa fa-fw fa-eye"></i></button>
+			<button class="delete" data-org="{{_id}}" title="Trash"><i class="fa fa-fw fa-trash"></i></button>
+			<button class="edit" data-org="{{_id}}" title="Edit"><i class="fa fa-fw fa-pencil"></i></button>
+			<button class="showDetail" data-org="{{_id}}" title="View"><i class="fa fa-fw fa-eye"></i></button>
 		</div>
 	</td>
 
@@ -155,16 +148,16 @@
 				<ul class="dropdown-menu pull-right" role="menu">
 					<!-- Small screens only! -->
 					<li class="visible-xs">
-						<a class="viewOrgDetails" data-action="showOrgDetails" data-org="{{orgId}}" href="#"><i class='fa fa-fw fa-list'></i> View Details</a>
+						<a class="viewOrgDetails" data-action="showOrgDetails" data-org="{{_id}}" href="#"><i class='fa fa-fw fa-list'></i> View Details</a>
 					</li>
 					<li class="visible-xs divider"></li>
 					<!-- /Small screens only! -->
 					<li>
-						<a class="edit" data-action="editOrgDetails" data-org="{{orgId}}" href="#"><i class="fa fa-fw fa-pencil"></i> Edit</a>
+						<a class="edit" data-action="editOrgDetails" data-org="{{_id}}" href="#"><i class="fa fa-fw fa-pencil"></i> Edit</a>
 					</li>
 					{{#if glb_userIsSuperAdmin}}
 						<li>
-							<a class="toggleStatus" data-action="toggleStatus" data-org="{{orgId}}" href="#"><i class='fa fa-fw fa-{{changeOrgStatus.icon}}'></i>
+							<a class="toggleStatus" data-action="toggleStatus" data-org="{{_id}}" href="#"><i class='fa fa-fw fa-{{changeOrgStatus.icon}}'></i>
 								{{> changeOrgStatus}}
 							<!--{{#if ({{kitbagStatus}} == "Active")}}
 									Make Hidden
@@ -177,13 +170,13 @@
 					{{#if glb_userIsSuperAdmin}}
 						<li class="divider"></li>
 						<li>
-							<a class="trash" data-action="trashOrg" data-org="{{orgId}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
+							<a class="trash" data-action="trashOrg" data-org="{{_id}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
 						</li>
 					{{/if}}
 					{{#if glb_userIsSuperAdmin}}
 						<li class="divider"></li>
 						<li>
-							<a class="delete" data-action="deleteOrg" data-org="{{orgId}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
+							<a class="delete" data-action="deleteOrg" data-org="{{_id}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
 						</li>
 					{{/if}}
 
@@ -221,12 +214,12 @@
 
 <!--
 createdAt : Wed Mar 16 2016 02:08:27 GMT+0200 (Jerusalem Standard Time)
-orgContactEmail : "contactus@icrc.org"
-orgContactPerson : "Redman Crossy"
-orgDesc : "The official mission statement says that: "The International Committee of the Red Cross (ICRC) is an impartial, neutral, and independent organization whose exclusively humanitarian mission is to protect the lives and dignity of victims of war and internal violence and to provide them with assistance."
-orgImgLarge : "https://www.icrc.org/sites/default/themes/icrc_theme/images/who-we-are/mandate-and-mission.jpg"
-orgImgSmall : "https://www.icrc.org/sites/default/themes/icrc_theme/images/en/icon-128.png"
-orgTitle : "International Red Cross"
-orgUrl : "https://www.icrc.org"
+contactEmail : "contactus@icrc.org"
+contactPerson : "Redman Crossy"
+desc : "The official mission statement says that: "The International Committee of the Red Cross (ICRC) is an impartial, neutral, and independent organization whose exclusively humanitarian mission is to protect the lives and dignity of victims of war and internal violence and to provide them with assistance."
+imgLarge : "https://www.icrc.org/sites/default/themes/icrc_theme/images/who-we-are/mandate-and-mission.jpg"
+imgSmall : "https://www.icrc.org/sites/default/themes/icrc_theme/images/en/icon-128.png"
+title : "International Red Cross"
+url : "https://www.icrc.org"
 owner : "v3TTtttNdEZZQP6TL"
  -->

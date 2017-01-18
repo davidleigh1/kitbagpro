@@ -1,5 +1,5 @@
 // # methods related to this collection
-console.log("RUNNING items > methods.js");
+console.log("RUN: items > methods.js");
 
 import { Meteor } from 'meteor/meteor';
 // import { ValidatedMethod } from 'meteor/mdg:validated-method';
@@ -66,7 +66,6 @@ Meteor.methods({
 		if (res.owner !== Meteor.userId()){
 			throw new Meteor.Error('ERROR: You are not authorized to change privacy for items owned by other users [error code: 34.5]');
 		}else{
-			// Kitbags.update(id, { $set: {private: private}});
 			Items.update(id, { $set: {private: private}});
 		}
 	},

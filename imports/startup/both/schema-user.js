@@ -1,4 +1,4 @@
-console.log(" >>>> LOADING 'user-schema.js' (FROM /IMPORTS/STARTUP/BOTH) <<<< ");
+console.log("RUN: 'schema-user.js' at '/imports/startup/both'");
 
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
@@ -18,7 +18,8 @@ Meteor.users._transform = function(user) {
 	},
 	user.getUserId = function(){
 		// return this.profile.userId;
-		return ( typeof this.profile == "object" ) ? this.profile.userId : "";
+		console.log("TODO: Using user.getUserId - should use _id instead ------------------");
+		return ( typeof this.profile == "object" ) ? this.userId : "";
 	},
 	user.getType = function(){
 		var typeValue = ( typeof this.profile == "object" ) ? this.profile.userType : "";
@@ -44,7 +45,7 @@ Meteor.users._transform = function(user) {
 /* 																		*/
 /* ==================================================================== */
 
-console.log(">>>>> 'Users' schema is defined here!");
+console.log("DEF: 'Users' Collection");
 export const UserList = new Mongo.Collection("userlist");
 
 Schema = {};

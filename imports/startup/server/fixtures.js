@@ -1,5 +1,5 @@
 // # fill the DB with example data on startup
-console.log("RUNNING server.fixtures.js");
+console.log("RUN: server.fixtures.js");
 
 import { Meteor } from 'meteor/meteor';
 
@@ -11,4 +11,4 @@ import { Meteor } from 'meteor/meteor';
 // import { Todos } from '../../api/todos/todos.js';
 import { Kitbags } from '../../api/kitbags/kitbags.js';
 // import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/org-schema.js';
+import { Orgs } from '/imports/startup/both/schema-org.js';

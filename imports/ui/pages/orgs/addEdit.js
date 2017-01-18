@@ -1,47 +1,33 @@
 // import { Session } from 'meteor/session'
 
-import './itemAddEdit.html';
+import './addEdit.html';
 
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-// import { listOrgStatuses } from '/imports/api/orgs/orgs.js';
-
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
-Template.itemAddEdit.onCreated(function() {
-	console.log("Template.itemAddEdit.onCreated -------------------------------------- onCreated");
+/* PARAMETERS */
+var thisObj = "Orgs";
 
-// 	this.autorun(() => {
-//     	this.subscribe('Items');
-// 	});
-// });
 
-	// var handle2 = Meteor.subscribe('Items');
 
-	// this.autorun(() => {
- //    	this.subscribe('Items');
- //    	if ( handle2.ready() ){
- //    		//console.log("HANDLE2.READY!!!!!!!!!!!!!!!");
- //    	}else{
- //    		//console.log("HANDLE2.NOT READY !!");
- //    	}
-	// });
+Template.orgAddEdit.onCreated(function() {
+	console.log("Template.orgAddEdit.onCreated -------------------------------------- onCreated");
 
-	this.subscribe("items", {
+	this.subscribe("orgs", {
 		onReady: function () {
 
 			//console.log("onReady And the Items actually Arrive", arguments);
 
-			var oid = FlowRouter.getParam('_itemId');
+			var oid = FlowRouter.getParam('_orgId');
 			var avoe = isAddViewOrEdit( FlowRouter.getRouteName() );
 			switch( avoe ) {
 				case "view":
-					//console.log("Context VIEW - View Item Profile for: "+oid);
-					editItem( oid );
+					//console.log("Context VIEW - View Organisation Profile for: "+oid);
+					editOrg( oid );
 					break;
 				case "edit":
 					//console.log("Context EDIT - Update Organisation Profile for: "+oid);
-					editItem( oid );
+					editOrg( oid );
 					break;
 				case "add":
 					//console.log("Context ADD - Register New Organisation");
@@ -61,7 +47,7 @@ Template.itemAddEdit.onCreated(function() {
 });
 
 
-Template.itemAddEdit.onRendered(function(){
+Template.orgAddEdit.onRendered(function(){
 
 	// TODO: THIS IS UGLY! Need to find a way to check against a route name not template name
 	// http://stackoverflow.com/questions/31006474/meteor-onrendered-doesnt-get-fired-again-after-second-render-iron-route
@@ -69,15 +55,15 @@ Template.itemAddEdit.onRendered(function(){
 	//console.log("---------------------------------------------------------");
 	//console.log("FlowRouter: ",FlowRouter);
 	//console.log("getRouteName: " + FlowRouter.getRouteName());
-	//console.log("getParam: " + FlowRouter.getParam('_itemId'));
+	//console.log("getParam: " + FlowRouter.getParam('_orgId'));
 	//console.log("getQueryParam: " + FlowRouter.getQueryParam());
 	//console.log("---------------------------------------------------------");
 
 	var rn = FlowRouter.getRouteName();
-	var oid = FlowRouter.getParam('_itemId');
+	var oid = FlowRouter.getParam('_orgId');
 	var avoe = isAddViewOrEdit( FlowRouter.getRouteName() );
-	var validItemInUrl = ( typeof oid == "string" && oid.indexOf("item_")>=0  && (['view', 'edit'].indexOf(avoe) >= 0) );
-	var thisItem;
+	var validOrgInUrl = ( typeof oid == "string" && oid.indexOf("org_")>=0  && (['view', 'edit'].indexOf(avoe) >= 0) );
+	var thisOrg;
 
 	// MyCollections["Orgs"].findOne({orgId: ""+this.params.orgId});
 
@@ -113,7 +99,7 @@ Template.itemAddEdit.onRendered(function(){
 
 isAddViewOrEdit = function (routeName) {
 	var rt = (!routeName) ? FlowRouter.getRouteName() : routeName;
-	var contextStr = rt.replace("item","").toLowerCase();
+	var contextStr = rt.replace("org","").toLowerCase();
 	var isAddViewOrEdit = (['add', 'view', 'edit'].indexOf(contextStr) >= 0) ? contextStr : undefined;
 	return isAddViewOrEdit;
 };
@@ -158,7 +144,7 @@ getObjFromForm = function(formId,addOrUpdate){
 	formObj.owner = Meteor.userId();
 
 	// Validation
-	if((typeof formObj.itemTitle != "undefined" && formObj.itemTitle == "") || (typeof formObj.kitbagTitle != "undefined" && formObj.kitbagTitle == "")){
+	if((typeof formObj.title != "undefined" && formObj.title == "") || (typeof formObj.kitbagTitle != "undefined" && formObj.kitbagTitle == "")){
 		//console.log('Failed validation!',formObj);
 		return false;
 	}else{
@@ -167,19 +153,18 @@ getObjFromForm = function(formId,addOrUpdate){
 	}
 };
 
-editItem = function(thisItemId,formId){
+editOrg = function(thisOrgId,formId){
 
 	// alert("editOrg",thisOrgId,formId);
 
-	var formId = (typeof formId !== "undefined") ? formId : "add-edit-item";
+	var formId = (typeof formId !== "undefined") ? formId : "add-edit-org";
 
-	//console.log('fn getObjFromForm',' thisItemId:'+thisItemId,' formId:'+formId);
+	//console.log('fn getObjFromForm',' thisOrgId:'+thisOrgId,' formId:'+formId);
 
-	// MyCollections["Items"].findOne({itemId: ""+});
+	// MyCollections["Orgs"].findOne({orgId: ""+});
 
-	// myItem = thisItem;
-	myItem = Items.findOne({itemId: ""+thisItemId});
-	// testOrg = Orgs.findOne({orgId: "12210deb6402efb6"});
+	// myOrg = thisOrg;
+	myOrg = kb.collections[thisObj].findOne( thisOrgId );
 	//console.log(">>>>>>======>>>>>> myOrg: ", thisOrgId);
 
 
@@ -195,8 +180,8 @@ editItem = function(thisItemId,formId){
 		let e = formFields[i];
 
 		if (e.name == "owner") {
-			let un = GlobalHelpers.lookupNameFromUser(myItem[e.name],"name");
-			e.value = un + " (" + myItem[e.name] + ")";
+			let un = GlobalHelpers.lookupNameFromUser(myOrg[e.name],"name");
+			e.value = un + " (" + myOrg[e.name] + ")";
 			continue;
 		}
 
@@ -207,16 +192,16 @@ editItem = function(thisItemId,formId){
 
 			// Skip undefined (rather than "undefined") responses which now return since we added the schema
 			// console.log(e.name + " TYPE: " + typeof myOrg[e.name]);
-			if (typeof myItem[e.name] == "undefined"){
+			if (typeof myOrg[e.name] == "undefined"){
 				// console.log("continue");
 				continue;
 			}
 
 			// Add the values from myOrg
 			if (e.type=="hidden" && e.dataset.type=="array"){
-				e.value = myItem[e.name];
+				e.value = myOrg[e.name];
 			}else{
-				e.value = myItem[e.name];
+				e.value = myOrg[e.name];
 			}
 
 		}
@@ -225,19 +210,19 @@ editItem = function(thisItemId,formId){
 
 
 // Template.myTemplateName.helpers
-Template.itemAddEdit.helpers({
+Template.orgAddEdit.helpers({
 	getTitle: function(context){
 		var c = (!context) ? isAddViewOrEdit( FlowRouter.getRouteName() ) : context;
 		switch( c ) {
 			case "view":
-				return Spacebars.SafeString("View Item Profile");
+				return Spacebars.SafeString("View Organisation Profile");
 				break;
 			case "edit":
-				return Spacebars.SafeString("Update Item Profile");
+				return Spacebars.SafeString("Update Organisation Profile");
 				break;
 			case "add":
 			default:
-				return Spacebars.SafeString("Register New Item");
+				return Spacebars.SafeString("Register New Organisation");
 		}
 	},
 	getIcon: function(context){
@@ -254,28 +239,27 @@ Template.itemAddEdit.helpers({
 				return Spacebars.SafeString("fa fa-plus-square");
 		}
 	},
-	listItemStatuses: function () {
+	listOrgStatuses: function () {
 		//console.log(listOrgStatuses);
-		// listItemStatuses
-		return appSettings.items.statuses;
+		return listOrgStatuses;
 	},
 	getSchemaVar: function (param) {
 		//console.log('getSchemaVar: ',param,"\n\n\nTODO - No better way to do this?????\n\n\n");
 		return window[param];
 	},
 	usernameString: function () {
-		userStr = Meteor.user().profile.name + " (db_id: " + Meteor.userId() + ")";
+		userStr = (Meteor.user())?"Meteor.user().profile.name":"Unknown or Guest User" + " (_id: " + Meteor.userId() + ")";
 		return userStr;
 	}
 });
 
 
 // Template.myTemplateName.events
-Template.itemAddEdit.events({
+Template.orgAddEdit.events({
 	//'submit .add-edit-org': function(event) {
 	'click button.submit': function(event) {
 		// console.log('cside - clicked!');
-		// var orgTitle = event.target.orgTitle.value;
+		// var title = event.target.title.value;
 		event.preventDefault();
 		// console.log('submit button!');
 		// console.log(getObjFromForm("add-edit-org"));
@@ -283,28 +267,28 @@ Template.itemAddEdit.events({
 		var formObj;
 
 		// CHECK TO SEE IF THIS FORM REQUIRES AN ADD OR AN UPDATE - CHECK FOR AN EXISTING ID
-		if ( $("#itemId").val() == false ) {
-			console.log('cside - itemID value not found!');
+		if ( $("#orgId").val() == false ) {
+			console.log('cside - orgID value not found!');
 			// An OrgID was *not* found in the form so assume this is a new Org
-			$("#itemId").val( GlobalHelpers.idGenerator(uniqueIds.itemPrefix) );
-			formObj = getObjFromForm("add-edit-item","add");
+			$("#orgId").val( GlobalHelpers.idGenerator(uniqueIds.orgPrefix) );
+			formObj = getObjFromForm("add-edit-org","add");
 			if (typeof formObj == "object") {
 				console.log('cside - typeof formObj == object');
-				Meteor.call("addItem", formObj );
+				Meteor.call("addOrg", formObj );
 			} else {
-				// console.log('ERROR: getObjFromForm() failed to provide formObj{}. DB insert action cancelled. Hint: Check getObjFromForm(); Missing itemTitle;  [error code: 924]');
+				// console.log('ERROR: getObjFromForm() failed to provide formObj{}. DB insert action cancelled. Hint: Check getObjFromForm(); Missing title;  [error code: 924]');
 			}
-			// outcome = Meteor.call("addItem", getObjFromForm("add-edit-item","add") );
+			// outcome = Meteor.call("addOrg", getObjFromForm("add-edit-org","add") );
 		} else {
 			console.log('cside - true!');
-			// An ItemID *was* found in the form so assume this is an edit to an existing Item
+			// An OrgID *was* found in the form so assume this is an edit to an existing Org
 			// TODO - Catch a case where there is an ID in the form but it's not found in the DB.  This could happen as we have multiple users who could affect this object at any time.
-			formObj = getObjFromForm("add-edit-item","update");
+			formObj = getObjFromForm("add-edit-org","update");
 			console.log(">>>> formObj:",formObj);
 			if (typeof formObj == "object") {
-				Meteor.call("updateItem", formObj );
+				Meteor.call("updateOrg", formObj );
 			} else {
-				// console.log('ERROR: getObjFromForm() failed to provide formObj{}. DB update action cancelled. Hint: Check getObjFromForm(); Missing itemTitle;  [error code: 925]');
+				// console.log('ERROR: getObjFromForm() failed to provide formObj{}. DB update action cancelled. Hint: Check getObjFromForm(); Missing title;  [error code: 925]');
 			}
 			// outcome = Meteor.call("updateOrg", getObjFromForm("add-edit-org","update") );
 		}
@@ -317,19 +301,19 @@ Template.itemAddEdit.events({
 		// console.log("outcome: ",outcome);
 
 		// Clear the input field which is not required when using non-CSS UI
-		// event.target.orgTitle.value = "";
-		$(".add-edit-item")[0].reset();
+		// event.target.title.value = "";
+		$(".add-edit-org")[0].reset();
 		// $(".orgAddEdit").hide();
 		// Prevent the default page refresh which occurs when clicking submit
 		/* TODO - Should we wait for the callback event to confirm org was created successfully? */
-		FlowRouter.go("/items/"+formObj.itemId+"/view", { _id: itemId });
+		FlowRouter.go("/orgs/"+formObj.orgId+"/view", { _id: orgId });
 		return false;
 	},
 	'click button.cancel': function(event) {
 		event.preventDefault();
-		$(".add-edit-item")[0].reset();
+		$(".add-edit-org")[0].reset();
 		// $(".orgAddEdit").hide();
-		// FlowRouter.go("/items/"+formObj.itemId+"/view");
+		// FlowRouter.go("/orgs/"+formObj.orgId+"/view");
 		history.back();
 		// Prevent the default page refresh which occurs when clicking submit
 		return false;
@@ -345,7 +329,7 @@ Meteor.methods({
 		console.log('fn addOrg()');
 
 		if(typeof orgObj != "object" || orgObj == false){
-			console.log('ERROR: No orgObj received in request. DB insert action cancelled. Hint: Check getObjFromForm(); Missing orgTitle;  [error code: 909]');
+			console.log('ERROR: No orgObj received in request. DB insert action cancelled. Hint: Check getObjFromForm(); Missing title;  [error code: 909]');
 			// TODO: Was there a reason this was originally returning "false" and "true" (as strings);
 			return false;
 		}

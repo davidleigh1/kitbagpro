@@ -8,7 +8,7 @@ import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
 import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 import { Items } from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/user-schema.js';
+import { UserList } from '/imports/startup/both/schema-user.js';
 
 import { listItemStatuses } from '/imports/api/items/items.js';
 
@@ -131,10 +131,10 @@ Template.userView.helpers({
 			$.each( this.userKitbags , function( key, assignedBag ) {
 				newArray.push( assignedBag );
 			});
-			//console.log("minilistFilter()",newArray);
 		}
 
-		return { "kitbagId": { $in: newArray } }
+		// return { "kitbagId": { $in: newArray } }
+		return { "_id": { $in: newArray } }
 
 	}
 });

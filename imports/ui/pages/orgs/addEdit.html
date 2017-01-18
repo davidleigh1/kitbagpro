@@ -23,9 +23,9 @@
 			</div>
 
 			<div class="addEditFormline">
-				<label for="orgStatus">Status:</label>
-				<!-- <input type="text" name="orgStatus" data-submit="true" placeholder="Current status of this Org"> -->
-				<select class="statusSelectList" name="orgStatus" data-submit="true">
+				<label for="status">Status:</label>
+				<!-- <input type="text" name="status" data-submit="true" placeholder="Current status of this Org"> -->
+				<select class="statusSelectList" name="status" data-submit="true">
 					{{#each listOrgStatuses}}
 						<option value="{{this}}">{{this}}</option>
 					{{/each}}
@@ -36,36 +36,36 @@
 
 
 			<div class="addEditFormline">
-				<label for="orgTitle">Name:</label>
-				<input type="text" name="orgTitle" data-submit="true" placeholder="Organisation Name">
+				<label for="title">Name:</label>
+				<input type="text" name="title" data-submit="true" placeholder="Organisation Name">
 			</div>
 			<div class="addEditFormline">
-				<label for="orgDesc">Description:<span class="subtitle">(max 400 chars)</span></label>
-				<input type="text" name="orgDesc" data-submit="true" placeholder="Brief summary of organisation and its goals">
+				<label for="desc">Description:<span class="subtitle">(max 400 chars)</span></label>
+				<input type="text" name="desc" data-submit="true" placeholder="Brief summary of organisation and its goals">
 			</div>
 			<div class="addEditFormline">
-				<label for="orgUrl">Website:</label>
-				<input type="url" name="orgUrl" data-submit="true" placeholder="Website/homepage URL" value="">
+				<label for="url">Website:</label>
+				<input type="url" name="url" data-submit="true" placeholder="Website/homepage URL" value="">
 			</div>
 			<div class="addEditFormline">
-				<label for="orgContactPerson">Contact Person:</label>
-				<input type="text" name="orgContactPerson" data-submit="true" placeholder="Name of contact person">
+				<label for="contactPerson">Contact Person:</label>
+				<input type="text" name="contactPerson" data-submit="true" placeholder="Name of contact person">
 			</div>
 			<div class="addEditFormline">
-				<label for="orgContactPhone">Contact Phone:</label>
-				<input type="text" name="orgContactPhone" data-submit="true" placeholder="Contact phone number">
+				<label for="contactPhone">Contact Phone:</label>
+				<input type="text" name="contactPhone" data-submit="true" placeholder="Contact phone number">
 			</div>
 			<div class="addEditFormline">
-				<label for="orgContactEmail">Contact Email:</label>
-				<input type="email" name="orgContactEmail" data-submit="true" placeholder="Contact email address">
+				<label for="contactEmail">Contact Email:</label>
+				<input type="email" name="contactEmail" data-submit="true" placeholder="Contact email address">
 			</div>
 			<div class="addEditFormline">
-				<label for="orgImgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
-				<input type="url" name="orgImgLarge" data-submit="true" placeholder="URL for larger organization logo (max 512x512 / *.jpg or *.png)">
+				<label for="imgLarge">Profile Photo:<span class="subtitle">(max 512x512)</span></label>
+				<input type="url" name="imgLarge" data-submit="true" placeholder="URL for larger organization logo (max 512x512 / *.jpg or *.png)">
 			</div>
 			<div class="addEditFormline">
-				<label for="orgImgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
-				<input type="url" name="orgImgSmall" data-submit="true" placeholder="URL for smaller organization logo icon (max 32x32 / *.jpg or *.png)">
+				<label for="imgSmall">Profile Icon:<span class="subtitle">(max 32x32)</span></label>
+				<input type="url" name="imgSmall" data-submit="true" placeholder="URL for smaller organization logo icon (max 32x32 / *.jpg or *.png)">
 			</div>
 			<div class="addEditFormline">
 				<label for="createdAt">Created:</label>
@@ -81,10 +81,10 @@
 			</div>
 			<div class="addEditFormline">
 				<label for="account_data">Account Data:</label>
-				<textarea>Associated Kitbags => array of Kitbag IDs&#10;Active Users => array of User IDs&#10;Inactive Users => array of User IDs&#10;Deleted Users => array of User ID</textarea>
+				<textarea>&nbsp;</textarea>
 			</div>
 
-			<input type="hidden" name="orgAssocKitbagIds" data-type="array" data-submit="true">
+			<input type="hidden" name="assocKitbagIds" data-type="array" data-submit="true">
 			<input type="hidden" name="createdVia" data-type="text" value="ManualFormEntry" data-submit="true">
 			<input type="hidden" name="createdBy" data-type="text" value="{{usernameString}}" data-submit="true">
 

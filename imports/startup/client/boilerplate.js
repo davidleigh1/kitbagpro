@@ -22,11 +22,10 @@ import '/imports/ui/pages/kitbags/line.js';
 
 /* IMPORT PROJECT OBJECTS */
 
-import { Orgs } 		from '/imports/startup/both/org-schema.js';
+import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
 import { Items } 		from '/imports/startup/both/item-schema.js';
-import { UserList } 	from '/imports/startup/both/user-schema.js';
-import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
+import { UserList } 	from '/imports/startup/both/schema-user.js';
 
 
 
