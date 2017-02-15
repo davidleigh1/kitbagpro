@@ -7,6 +7,9 @@ Template.sidebarMenuItems.helpers({
 		//console.log("gCurrentRoute: ",template,gCurrentRoute.lookupTemplate());
 		return gCurrentRoute &&
 			template.toLowerCase() === gCurrentRoute.toLowerCase() ? 'active' : '';
+	},
+	currentOrgId: function(){
+		return FlowRouter.getParam('_orgId') || "Not found [code: 1258]";
 	}
 });
 

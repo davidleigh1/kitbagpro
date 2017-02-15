@@ -7,13 +7,15 @@
 	{{#if Template.subscriptionsReady}}
 
 		{{ > quickForm
-			autosave     = autoSaveMode
-			collection   = Orgs
-			doc          = selectedOrgDoc
-			id           = "updateOrgForm"
-			meteormethod = "updateOrg"
-			omitFields   = "updatedAt,updatedBy"
-			type         = "method-update"
+			collection      = Orgs
+			doc             = selectedOrgDoc
+			id              = "updateOrgForm"
+			input-col-class = "col-sm-10"
+			label-class     = "col-sm-2"
+			meteormethod    = "updateDoc"
+			omitFields      = getOmitFields
+			template        = "bootstrap3-horizontal"
+			type            = "method-update"
 		}}
 
 	{{else}}

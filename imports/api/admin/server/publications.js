@@ -31,12 +31,12 @@ Meteor.methods({
 		updateItemCountsObj(requestor);
 	},
 	assignAllKBs: function (requestor) {
-		console.log("reassignAllKBs() requested by: " + requestor);
+		console.log("EVT: reassignAllKBs() requested by: " + requestor);
 
 		var allKbs = kb.collections.Kitbags.find().fetch();
 
 		if (!allKbs){
-			console.log("No 'allKbs' found!");
+			console.log("ERR: No 'allKbs' found!");
 			return false;
 		}
 
@@ -51,14 +51,15 @@ Meteor.methods({
 		// return;
 
 		// it'll only come here after the subscription is ready, no .fetch required
-		_.forEach(allKbs, function(item){
-		    console.log( item );
+		_.forEach(allKbs, function(kitbagDoc){
+		    // console.log( kitbagDoc );
 		    // assignKBtoOrg(item.kitbagId);
 		    // TODO - Maybe we can skip the Org lookup in assignKBtoOrg when it is provides as argument.
 		    // In some cases we might have the OrgId easily accessable when we make the call
-		    Meteor.call("assignKBtoOrg", item.kitbagId );
+		    Meteor.call("assignKBtoOrg", kitbagDoc );
 		});
 
+		console.log("LOG: reassignAllKBs() completed!");
 
 	}
 

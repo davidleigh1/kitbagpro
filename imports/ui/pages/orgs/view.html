@@ -9,6 +9,12 @@
 
 {{#if Template.subscriptionsReady}}
 
+{{#unless thisOrg}}
+<div>
+	<h2>Error: This organisation is undefined</h2>
+</div>
+{{/unless}}
+
 	<div class="screen-wrapper objAddEdit orgView">
 
 		{{#with thisOrg}}
@@ -19,7 +25,8 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h3 class="">
-								<i class="fa fa-hospital-o fa-fw"></i>
+								<!-- <i class="fa fa-hospital-o fa-fw"></i> -->
+								{{>orgLogo}}
 								{{title}}
 								<small>{{pageSubtitle}}</small>
 							</h3>
@@ -55,6 +62,9 @@
 									<a href="#orgKitbagListPanel" class="btn btn-info">
 										<i class="fa fa-fw fa-medkit"></i> Kitbag List
 									</a>
+									<a href="#" class="btn btn-info">
+										<i class="fa fa-fw fa-users"></i> View Inventory
+									</a>									
 									<a href="/users/list?org=thisOrgId" class="btn btn-info">
 										<i class="fa fa-fw fa-users"></i> User List
 									</a>
@@ -85,9 +95,15 @@
 											<th class="col-xs-2">Name</th>
 											<td class="col-xs-10">{{title}}</td>
 										</tr>
+										{{#if glb_userIsSuperAdmin}}
+											<tr class="adminOnly">
+												<th class="col-xs-2">Org ID</th>
+												<td class="col-xs-10">{{_id}}</td>
+											</tr>
+										{{/if}}
 										<tr>
 											<th>Status</th>
-											<td><span class="label {{getOrgStatusTag.labelClass}}">{{getOrgStatusTag.labelText}}</span></td>
+											<td><span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span></td>
 										</tr>
 										<tr>
 											<th>assocKitbagCount</th>
@@ -156,12 +172,15 @@
 										<tr>
 											<th class="">Kitbag</th>
 											<!--
-											<th class="hidden-xs">kitbagAssocOrgTitle</th>
+											<th class="hidden-xs">assocOrgTitle</th>
 											-->
 											<th class="hidden-xs">Status</th>
 											<th class="hidden-xs text-center todo">Items</th>
 											<th class="hidden-xs text-center todo">Users</th>
 											<th class="hidden-xs hidden-sm">Bag ID</th>
+											{{#if glb_userIsSuperAdmin}}
+												<th class="hidden-xs hidden-sm adminOnly">DBID</th>
+											{{/if}}
 											<th class="visible-lg">Created</th>
 											<!-- <th class="hidden-xs hidden-sm hidden-md">Owner</th> -->
 											<th class="hidden-xs text-right">Actions</th>

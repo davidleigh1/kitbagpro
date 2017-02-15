@@ -1,39 +1,41 @@
-import './line.html';
-import './line.css';
-import './changeStatus.html';
+/* IMPORT METEOR PACKAGES */
+	// import { Meteor } from 'meteor/meteor'
+	// import { Session } from 'meteor/session'
+	// import { Template } from 'meteor/templating';
+	// import { ReactiveVar } from 'meteor/reactive-var';
 
-// import { Items } 	from '/imports/startup/both/item-schema.js';
-// import { Kitbags } 	from '/imports/startup/both/kitbag-schema.js';
+
+/* IMPORT PAGE COMPONENTS */
+	import './line.html';
+	import './line.css';
+	import './changeStatus.html';
+
+/* IMPORT SHARED TEMPLATES + COMPONENTS */
+	// import '/imports/ui/pages/kitbags/kitbagLine.js';
 
 
-trashKitbag = function (clickObj) {
-	// console.log('deleteKb: ',clickObj);
-	Meteor.call("setKitbagStatus",clickObj.kitbagObj._id, "Trashed");
+/* IMPORT PROJECT OBJECTS */
+	import { kb } from "/imports/startup/both/sharedConstants.js";
+
+/* PARAMETERS */
+	var thisObj = "Kitbags";
+
+
+/* ONCREATED */
+Template.kitbagLine.created = function(){
+	// console.log("---------------- kitbagLine.created --------------------");
 };
 
 
+/* UTIL FUNCTIONS */
+trashKitbag = function (clickObj) {
+	// Required - Called from Action Menu
+	globalTrash("TrashedByUser", "Kitbags", clickObj.kitbagObj, Meteor.userId(), "#");
+};
+
+
+/* HELPERS */
 Template.kitbagLine.helpers({
-	isOwner: function () {
-		return this.owner == Meteor.userId();
-	},
-	lookupUser: function (userId,reqField) {
-		console.log("lookupUser: ",userId);
-		var uname = GlobalHelpers.lookupNameFromUser(userId,reqField);
-		console.log("lookupUser: ",uname);
-		return uname;
-	},
-	userNameLookup: function (userId, paramRequired) {
-		var myUser = Meteor.users.findOne({_id: userId });
-
-		var data = {};
-		data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Name not found";
-		data.dbId  = userId;
-		data.apiId = (myUser && myUser.profile.userId)?myUser.profile.userId:"API-ID not found";
-		data.url   = "/users/"+userId+"/view";
-		data.html  = "<a href='"+data.url+"'>"+data.uname+"</a>";
-
-		return Spacebars.SafeString( data[paramRequired] );
-	},
 	isOrgView: function () {
 		/*
 		NOTE - We need to use parentData() in this helper because the {{#with thisKitbag}} used in the template has the effect of setting the Template.currentData() equal to the datacontext returned by thisKitbag() helper -- so... we need to go up a level (to the parent) to get the listType value that we passed in the original {{>kitbagLine}} declaration.
@@ -51,10 +53,10 @@ Template.kitbagLine.helpers({
 	thisKitbag: function () {
 		//return Template.parentData();
 		return Template.currentData().thisKitbag;
-		// console.log("listType",argument,Template.currentData() );
+		console.log("-- thisKitbag",arguments,Template.currentData() );
 	},
 	changeKitbagStatus: function () {
-		var kbs = (this.kitbagStatus == "Active") ? "Hidden" : "Active";
+		var kbs = (this.status == "Active") ? "Hidden" : "Active";
 		var icon = (kbs == "Active") ? "eye" : "eye-slash";
 		var html = " Make "+kbs;
 		return {'icon':icon, 'html':html};
@@ -87,16 +89,8 @@ Template.kitbagLine.events({
 		Meteor.call("updateKitbag",this._id,!this.checked);
 	},
 	'click .delete': function(event) {
-
 		event.preventDefault();
-		var areYouSure = "Are you sure you want to permanently delete kitbag '"+this.kitbagTitle+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
-		if ( confirm(areYouSure) ) {
-			Meteor.call("deleteKitbag",this._id);
-			// history.go(-1);
-		} else {
-			return false;
-		}
-
+		globalDelete("DeletedByUser", "Kitbags", this, Meteor.userId(), "/kitbags/list");
 	},
 	'click .toggle-private': function(event){
 		Meteor.call("setPrivateKitbag",this._id, !this.private);

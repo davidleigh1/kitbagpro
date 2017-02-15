@@ -40,7 +40,7 @@ Meteor.users._transform = function(user) {
 /* SERVER-SIDE HOOKS:                                                   */
 /* /imports/api/users/server/publications.js							*/
 /* 																		*/
-/* USER CREATION:  														*/
+/* OBJECT CREATION:  													*/
 /* /imports/api/users/methods.js 										*/
 /* 																		*/
 /* ==================================================================== */
@@ -65,7 +65,7 @@ Schema.UserProfile = new SimpleSchema({
 	"userId": {
 		type: String,
 		optional: true,
-		max: 20,
+		max: 33,
 		label: "External User ID",
 		defaultValue: function () {
 			if (this.isSet == true && this.value != ""){
@@ -235,7 +235,21 @@ Schema.UserProfile = new SimpleSchema({
 			// label: false
 		},
 		label: "Updated by"
+	},
+
+	/* THIS OBJECT */
+
+	"collection": {
+		type: String,
+		optional: false,
+		allowedValues: appSettings.global.validObjects,
+		defaultValue: "Users",
+		label: "Collection"
 	}
+
+
+
+
 });
 
 Schema.User = new SimpleSchema({

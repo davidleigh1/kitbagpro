@@ -14,30 +14,36 @@
 		</li>
 
 		<!-- ORGANISATIONS -->
-		<li class="{{ isActiveRoute 'orgList' }}">
-			<a href="/orgs/list"><i class="fa fa-fw fa-building"></i> Organisations</a>
-		</li>
-		<li class="sub-item {{ isActiveRoute 'orgAdd' }}">
-			<a href="/orgs/create"><i class="fa fa-fw fa-plus"></i> Add Organisation</a>
-		</li>
+		{{#if glb_userIsSuperAdmin}}
+			<li class="adminOnly {{ isActiveRoute 'orgList' }}">
+				<a href="/orgs/list"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Orgs'}}"></i> Organisations</a>
+			</li>
+			<li class="adminOnly sub-item {{ isActiveRoute 'orgAdd' }}">
+				<a href="/orgs/create"><i class="fa fa-fw fa-plus"></i> Add Organisation</a>
+			</li>
+		{{/if}}
 		<!-- /ORGANISATIONS -->
 
 		<!-- KITBAGS -->
 		<li class="{{ isActiveRoute 'kitbagList' }}">
 			<a href="/kitbags/list"><i class="fa fa-fw fa-medkit"></i> Kitbags</a>
 		</li>
-		<li class="sub-item {{ isActiveRoute 'kitbagAdd' }}">
-			<a href="/kitbags/create/:_orgId"><i class="fa fa-fw fa-plus"></i> Add Kitbag</a>
-		</li>
+		<!-- {{ #if isActiveRoute 'orgView' }}
+			<li class="sub-item {{ isActiveRoute 'kitbagAdd' }}">
+				<a href="/kitbags/create/{{currentOrgId}}"><i class="fa fa-fw fa-plus"></i> Add Kitbag</a>
+			</li>
+		{{ /if }} -->
 		<!-- /KITBAGS -->
 
 		<!-- ITEMS -->
 		<li class="{{ isActiveRoute 'itemList' }}">
 			<a href="/items/list"><i class="fa fa-fw fa-stethoscope"></i> Items</a>
 		</li>
-		<li class="sub-item {{ isActiveRoute 'itemAdd' }}">
-			<a href="/items/create/:_orgId"><i class="fa fa-fw fa-plus"></i> Add Item</a>
-		</li>
+		<!-- {{ #if isActiveRoute 'orgView' }}
+			<li class="sub-item {{ isActiveRoute 'itemAdd' }}">
+				<a href="/items/create/{{currentOrgId}}"><i class="fa fa-fw fa-plus"></i> Add Item</a>
+			</li>
+		{{ /if }} -->
 		<!-- /ITEMS -->
 
 

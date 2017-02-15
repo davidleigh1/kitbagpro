@@ -5,6 +5,21 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
+/* ==================================================================== */
+/* 																		*/
+/* CLIENT-SIDE HOOKS:                                                   */
+/* /imports/ui/pages/items/add.js										*/
+/* /imports/ui/pages/items/edit.js										*/
+/* /imports/ui/pages/items/duplicate.js									*/
+/* 																		*/
+/* SERVER-SIDE HOOKS:                                                   */
+/* /imports/api/items/server/publications.js							*/
+/* 																		*/
+/* OBJECT CREATION:  													*/
+/* /imports/api/items/methods.js 										*/
+/* 																		*/
+/* ==================================================================== */
+
 console.log("NEW: 'Items' Collection");
 export const Items = new Mongo.Collection("items");
 
@@ -35,7 +50,7 @@ let ItemSchema = new SimpleSchema({
 	"itemId": {
 		type: String,
 		optional: false,
-		max: 20,
+		max: 33,
 		defaultValue: function () {
 			if (this.isSet == true && this.value != ""){
 				return this.value;
@@ -201,6 +216,20 @@ let ItemSchema = new SimpleSchema({
 		defaultValue: "Unknown",
 		label: "Last Updated By User"
 	},
+
+	/* THIS OBJECT */
+
+	"collection": {
+		type: String,
+		optional: false,
+		allowedValues: appSettings.global.validObjects,
+		defaultValue: "Items",
+		label: "Collection"
+	},
+
+
+
+
 	// "owner": {
 	// 	type: String,
 	// 	optional: true, // TODO - Disabled for testing only!  Owner should be required for new record.

@@ -7,13 +7,14 @@
 	{{#if Template.subscriptionsReady}}
 
 		{{> quickForm
-			collection      = "Kitbags"
+			collection      = Kitbags
 			id              = "insertKitbagForm"
-			type            = "method"
-			meteormethod    = "addKitbag"
-			template        = "bootstrap3-horizontal"
-			label-class     = "col-sm-2"
 			input-col-class = "col-sm-10"
+			label-class     = "col-sm-2"
+			meteormethod    = "addKitbag"
+			omitFields      = getOmitFields
+			template        = "bootstrap3-horizontal"
+			type            = "method"
 		}}
 
 	{{else}}

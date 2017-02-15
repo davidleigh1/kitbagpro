@@ -4,7 +4,7 @@
 	{{> pageHeader
 		pageTitle = "Kitbags"
 		pageSubtitle = ""
-		faIcon = "fa-medkit"
+		faIcon = (global_getfontAwesomeIcon 'Kitbags')
 		}}
 
 	<!-- TODO: Make this into a reusable template with only the JS changing each time? -->
@@ -12,7 +12,11 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading kbFilter">
-					<h3 class="panel-title"><i class="fa fa-medkit fa-fw"></i> Kitbags</h3>
+					<h3 class="panel-title">
+						<!-- <i class="fa fa-medkit fa-fw"></i> -->
+						{{>kitbagLogo}}
+						Kitbags
+					</h3>
 				</div>
 				<div class="panel-body">
 					<!-- Filtered list of kitbags -->
@@ -37,7 +41,7 @@
 						<tr>
 							<th class="hidden-xs">Kitbag</th>
 							{{#if glb_userIsSuperAdmin}}
-								<th class="hidden-xs">Associated Org</th>
+								<th class="hidden-xs adminOnly">Associated Org</th>
 							{{/if}}
 							<th class="hidden-xs">Status</th>
 							<th class="hidden-xs text-center todo">Items</th>

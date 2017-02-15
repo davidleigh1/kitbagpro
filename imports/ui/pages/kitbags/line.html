@@ -1,80 +1,62 @@
 <template name="kitbagLine">
 
-<!--
-<li class="{{#if checked}}checked{{/if}}">
-<input type="checkbox" checked="{{checked}}" class="toggle-checked" disabled="{{#unless isOwner}}disabled{{/unless}}">
- -->
-
-<!-- <small>{{listType}}</small> -->
-
 <!-- We use #with to allow us to manually set the 'this' data context via the template.helper called 'thisKitbag' -->
 {{#with thisKitbag}}
-	<tr data-sorttitle="{{toLower kitbagTitle}}" data-sortcreated="{{createdAt}}" data-sortassocorgtitle="{{toLower kitbagAssocOrgTitle}}" data-sortupdated="{{createdAt}}" >
+	<tr data-sorttitle="{{global_toLower title}}" data-sortcreated="{{createdAt}}" data-sortassocorgtitle="{{global_toLower getOrgName.short}}" data-sortupdated="{{updatedAt}}" >
 		<!-- Small screens only! -->
 		<td class="visible-xs col-xs-3">
 			<!-- Top line -->
 			<div>
-				{{#unless kitbagTitle}}
-					<span class="resNote">'kitbagTitle' not found</span>
-				{{else}}
-					<strong>{{highlight kitbagTitle filterVar suppressHightlight}}</strong>
-				{{/unless}}
+				<a href="/kitbags/{{_id}}/view">
+					{{#unless title}}
+						<span class="resNote">'title' not found</span>
+					{{else}}
+						<strong>{{highlight title filterVar suppressHightlight}}</strong>
+					{{/unless}}
+				</a>
 			</div>
 			<!-- /Top line -->
 			<!-- Bottom line -->
+			{{#if glb_userIsSuperAdmin}}
 			<div>
-				{{#unless kitbagAssocOrgTitle}}
-					<a href="/orgs/{{kitbagAssocOrg}}/view">
-						<i>{{highlight kitbagAssocOrg filterVar suppressHightlight}}</i>
+				<!-- {{#unless assocOrgTitle}} -->
+					<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
+						<i>{{highlight getOrgName.short filterVar suppressHightlight}}</i>
 					</a>
-				{{else}}
-					<a href="/orgs/{{kitbagAssocOrg}}/view">
-						{{highlight kitbagAssocOrgTitle filterVar suppressHightlight}}
-					</a>
-				{{/unless}}
+				<!-- {{else}}
+					<a href="/orgs/{{assocOrgId}}/view">
+						{{highlight assocOrgTitle filterVar suppressHightlight}}
+					</a> -->
+				<!-- {{/unless}} -->
 			</div>
+			{{/if}}
 			<!-- /Bottom line -->
 		</td>
 		<!-- /Small screens only! -->
 		<td class="hidden-xs kbTitleCol">
-			{{#unless kitbagTitle}}
-				<span class="resNote">'kitbagTitle' not found</span>
-			{{else}}
-				{{highlight kitbagTitle filterVar suppressHightlight}}
-			{{/unless}}
-		</td>
-
-		<!-- Associated Organisation (refactored to avoid a cross-table-lookup into the Orgs collection every time a kitbag was rendered. We now use the new reactive kitbagAssocOrgTitle field on the Kitbag doc) -->
-		<!--
-		<td class="hidden-xs kbAssocOrgCol">
-			{{#unless kitbagAssocOrg}}
-				<span class="resNote">N/A</span>
-			{{else}}
-				{{#if lookupOrgTitle kitbagAssocOrg 'title'}}
-					<a href="/orgs/{{kitbagAssocOrg}}/view">
-						<i>{{lookupOrgTitle kitbagAssocOrg 'title'}}</i>
-					</a>
+			<a href="/kitbags/{{_id}}/view">
+				{{#unless title}}
+					<span class="resNote">'title' not found</span>
 				{{else}}
-					<i>Not found (orgID: {{kitbagAssocOrg}})</i>
-				{{/if}}
-			{{/unless}}
+					{{highlight title filterVar suppressHightlight}}
+				{{/unless}}
+			</a>
 		</td>
-		 -->
 
-		<!-- Test of new kitbagAssocOrgTitle -->
+		<!-- Test of new assocOrgTitle -->
 
 		{{#if glb_userIsSuperAdmin}}
 			{{#unless isOrgView}}
 				<td class="hidden-xs kbAssocOrgTitleCol adminOnly">
-					{{#unless kitbagAssocOrgTitle}}
-						<a href="/orgs/{{kitbagAssocOrg}}/view">
-							<i>{{highlight kitbagAssocOrg filterVar suppressHightlight}}</i>
+					<!-- {{#unless assocOrgTitle}} -->
+						<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
+							{{highlight getOrgName.short filterVar suppressHightlight}}
 						</a>
-					{{else}}
-						<a href="/orgs/{{kitbagAssocOrg}}/view">
-							{{highlight kitbagAssocOrgTitle filterVar suppressHightlight}}
+<!-- 					{{else}}
+						<a href="/orgs/{{assocOrgId}}/view">
+							{{highlight assocOrgTitle filterVar suppressHightlight}}
 						</a>
-					{{/unless}}
+					{{/unless}} -->
 				</td>
 			{{/unless}}
 		{{/if}}
@@ -84,7 +66,7 @@
 		<!-- Status -->
 
 		<td class="hidden-xs kbStatusCol">
-			<span class="label {{gKitbagStatusTag.labelClass}}">{{gKitbagStatusTag.labelText}}</span>
+			<span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span>
 		</td>
 
 
@@ -117,10 +99,10 @@
 			{{else}}
 				{{highlight kitbagId filterVar suppressHightlight}}
 			{{/unless}}
-			{{#unless kitbagSku}}
+			{{#unless sku}}
 				<span class="resNote"></span>
 			{{else}}
-				<br><small>({{highlight kitbagSku filterVar suppressHightlight}})</small>
+				<br><small>({{highlight sku filterVar suppressHightlight}})</small>
 			{{/unless}}
 		</td>
 
@@ -170,7 +152,7 @@
 							<li>
 								<a class="toggleStatus" data-action="toggleStatus" data-bag="{{kitbagId}}" href="#"><i class='fa fa-fw fa-{{changeKitbagStatus.icon}}'></i>
 									{{changeKitbagStatus.html}}
-								<!--{{#if ({{kitbagStatus}} == "Active")}}
+								<!--{{#if ({{status}} == "Active")}}
 										Make Hidden
 									{{else}}
 										Make Active
@@ -181,13 +163,13 @@
 						{{#if glb_userIsSuperAdmin}}
 							<li class="divider"></li>
 							<li>
-								<a class="trash" data-action="trashKb" data-bag="{{kitbagId}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
+								<a class="trash" data-action="trashKitbag" data-bag="{{kitbagId}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
 							</li>
 						{{/if}}
 						{{#if glb_userIsSuperAdmin}}
 							<li class="divider"></li>
 							<li>
-								<a class="delete" data-action="deleteKb" data-bag="{{kitbagId}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
+								<a class="delete" data-action="delete" data-bag="{{kitbagId}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
 							</li>
 						{{/if}}
 
@@ -198,7 +180,7 @@
 
 				<!-- Show status below menu on small screens -->
 				<div class="visible-xs-block">
-					<span class="label {{gKitbagStatusTag.labelClass}}">{{gKitbagStatusTag.labelText}}</span>
+					<span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span>
 				</div>
 				<!-- /status label -->
 

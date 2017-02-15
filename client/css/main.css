@@ -30,11 +30,6 @@ body {
 	background-color: #fff;
 }
 
-.huge {
-	font-size: 50px;
-	line-height: normal;
-}
-
 @media(min-width:768px) {
 	#wrapper {
 		padding-left: 225px;
@@ -45,11 +40,33 @@ body {
 	}
 }
 
+
+
+/* LINKS */
+
+	.noLink {
+		text-decoration: none !important;
+		color: inherit !important;
+	}
+
+/* TEXT */
+
+	.huge {
+		font-size: 50px;
+		line-height: normal;
+	}
+
+	.light {
+		opacity: 0.4;
+	}
+
+
+
 /* NOTIFICATIONS */
 
-.s-alert-box {
-	z-index: 999999 !important;
-}
+	.s-alert-box {
+		z-index: 999999 !important;
+	}
 
 
 

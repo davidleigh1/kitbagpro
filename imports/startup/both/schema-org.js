@@ -5,7 +5,24 @@ import { SimpleSchema } from "meteor/aldeed:simple-schema";
 import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
 
-console.log("DEF: 'Orgs' Collection");
+/* ==================================================================== */
+/* 																		*/
+/* CLIENT-SIDE HOOKS:                                                   */
+/* /imports/ui/pages/orgs/add.js										*/
+/* /imports/ui/pages/orgs/edit.js										*/
+/* /imports/ui/pages/orgs/duplicate.js									*/
+/* 																		*/
+/* SERVER-SIDE HOOKS:                                                   */
+/* /imports/api/orgs/server/publications.js								*/
+/* 																		*/
+/* OBJECT CREATION:  													*/
+/* /imports/api/orgs/methods.js 										*/
+/* 																		*/
+/* ==================================================================== */
+
+
+console.log("NEW:"+"%ckb.collections.Orgs"+"%c Collection at '/imports/startup/both/schema-org.js'",appSettings.consoleCSS.code,'');
+
 const Orgs = new Mongo.Collection("orgs");
 
 // https://atmospherejs.com/aldeed/simple-schema
@@ -127,11 +144,6 @@ let OrgSchema = new SimpleSchema({
 		defaultValue: "Unknown",
 		label: "Last Updated By User"
 	},
-	// "owner": {
-	// 	type: String,
-	// 	optional: true, // TODO - Disabled for testing only!  Owner should be required for new record.
-	// 	label: "Owner"
-	// },
 
 	/* ASSOCIATED KITBAGS */
 
@@ -148,6 +160,22 @@ let OrgSchema = new SimpleSchema({
 	},
 	"assocKitbagIds.$": {
 		type: String
+	},
+	// "assocKitbagObjs": {
+	// 	type: [Object],
+	// 	optional: true,
+	// 	blackbox: true,
+	// 	label: "Array of Org Kitbag objects"
+	// },
+
+	/* THIS OBJECT */
+
+	"collection": {
+		type: String,
+		optional: false,
+		allowedValues: appSettings.global.validObjects,
+		defaultValue: "Orgs",
+		label: "Collection"
 	}
 });
 

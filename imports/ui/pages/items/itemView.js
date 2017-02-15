@@ -48,13 +48,13 @@ Template.itemView.onRendered(function(){
 
 // Template.myTemplateName.helpers
 Template.itemView.helpers({
-	isTrashed: function (itemId) {
-		if (this.itemStatus.toLowerCase() == "trashed"){
-			return true;
-		} else {
-			return false;
-		}
-	},
+	// isTrashed: function (itemId) {
+	// 	if (this.itemStatus.toLowerCase() == "trashed"){
+	// 		return true;
+	// 	} else {
+	// 		return false;
+	// 	}
+	// },
 	assocKitbags: function () {
 		/* Tidies up the assocKitbags array */
 		/* TODO - Remove this if no longer required */
@@ -80,7 +80,7 @@ Template.itemView.helpers({
 					assignedBag:	assignedBag,
 					kitbag_id: 		assignedBag.split("_")[0],
 					kitbagId: 		assignedBag.split("_")[1],
-					kitbagTitle: 	assignedBag.split("_")[2]
+					title: 	assignedBag.split("_")[2]
 				})
 			});
 			console.log("assocKitbags()",newArray);
@@ -98,43 +98,20 @@ Template.itemView.helpers({
 		var myKitbag = kb.collections.Kitbags.findOne( kitbag_id );
 		return myKitbag;
 	},
-	joinTextInList: function (t1="",t2="",t3="",t4="",t5="") {
-		// console.log("joinTextInList",t1,t2,t3,t4,t5);
-		var newText = ((typeof t1=="string" && t1!="")?t1:"") + ((typeof t2=="string" && t2!="")?t2:"") + ((typeof t3=="string" && t3!="")?t3:"") + ((typeof t4=="string" && t4!="")?t4:"") + ((typeof t5=="string" && t5!="")?t5:"");
-		return Spacebars.SafeString(newText);
-	},
-	// TODO - Is this used???
-	// itemAssocKitbagIds: function () {
-	// 	/* Tidies up the itemAssocKitbagIds array */
-	// 	var arr = this.itemAssocKitbagIds;
-	// 	var prefix = "<code>";
-	// 	var joiner = "</code><br><code>";
-	// 	var suffix = "</code>";
-	// 	if (typeof arr != "object" || arr.length <= 0) {
-	// 		return false;
-	// 	} else {
-	// 		return Spacebars.SafeString( prefix + arr.join(joiner) + suffix );
-	// 	}
+	// userNameLookup: function (userId, paramRequired) {
+	// 	var myUser = Meteor.users.findOne({_id: userId });
+	// 	// Items.findOne({itemId: FlowRouter.getParam('_itemId') });
+	// 	// console.log("myUser",myUser.profile.displayName);
+
+	// 	var data = {};
+	// 	data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Profile Name not found";
+	// 	data.dbId  = userId;
+	// 	data.apiId = (myUser && myUser.profile.userId)?myUser.profile.userId:"API-ID not found";
+	// 	data.url   = "/users/"+userId+"/view";
+	// 	data.html  = "<a href='"+data.url+"'>"+data.uname+"</a>";
+
+	// 	return Spacebars.SafeString( data[paramRequired] );
 	// },
-    toLower: function (str) {
-      // console.log(str,str.toLowerCase());
-      if (!str) { return str }
-      return str.toLowerCase();
-    },
-	userNameLookup: function (userId, paramRequired) {
-		var myUser = Meteor.users.findOne({_id: userId });
-		// Items.findOne({itemId: FlowRouter.getParam('_itemId') });
-		// console.log("myUser",myUser.profile.displayName);
-
-		var data = {};
-		data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Profile Name not found";
-		data.dbId  = userId;
-		data.apiId = (myUser && myUser.profile.userId)?myUser.profile.userId:"API-ID not found";
-		data.url   = "/users/"+userId+"/view";
-		data.html  = "<a href='"+data.url+"'>"+data.uname+"</a>";
-
-		return Spacebars.SafeString( data[paramRequired] );
-	},
 	noFilter: function () {
 		// There is no user filter in minilists - so we just return a null value for objectsFiltered()
 		return;

@@ -1,28 +1,32 @@
-import { ReactiveVar } from 'meteor/reactive-var';
+/* IMPORT METEOR PACKAGES */
+	import { ReactiveVar } from 'meteor/reactive-var';
 
-import './list.html';
-import './line.js';
 
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/schema-org.js';
+/* IMPORT PAGE COMPONENTS */
+	import './logo.html';
+	import './list.html';
+	import './line.js';
+	import '/imports/ui/components/lists/listFilter.js';
 
-import '/imports/ui/components/lists/listFilter.js';
 
+/* IMPORT PROJECT OBJECTS */
+	import { kb } from "/imports/startup/both/sharedConstants.js";
+
+
+/* PARAMETERS*/
+	var thisCollection = "Orgs";
+
+
+/* ONCREATED */
 // on create, initialize our filter as a ReactiveVar
 // need to meteor add reactive-var to use this
 Template.orgList.created = function(){
-	// console.log("Template.orgList.created");
-	//this.filter = new ReactiveVar();
-	//console.log("this.filter: "+this.filter);
+	// EMPTY
 };
 
-// Template.orgList.helpers
 
+/* TEMPLATE HELPERS */
 Template.orgList.helpers({
-// 	// value of the filter to initialize the HTML input
-// 	filter:function(){
-// 		console.log("filter helper in orgList.js - DUPLICATE?");
-// 		return Template.instance().filter.get();
-// 	}
+	// EMPTY
+	// MOVED TO GLOBAL HELPERS
 });

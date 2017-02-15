@@ -9,13 +9,13 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 
 {{#if Template.subscriptionsReady}}
 
+{{#unless thisKitbag}}
+<div>
+	<h2>Error: This kitbag is undefined</h2>
+</div>
+{{/unless}}
+
 <div class="screen-wrapper objAddEdit kitbagView">
-		<!-- Page Heading -->
-	<!--{{> pageHeader
-			pageTitle = getTitle
-			pageSubtitle = ""
-			faIcon = getIcon
-			}} -->
 
 	{{#with thisKitbag}}
 	<div class="row">
@@ -25,7 +25,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 				<div class="panel-heading">
 					<h3 class="">
 						{{>kitbagLogo}}
-						{{kitbagTitle}}
+						{{title}}
 						<small>{{pageSubtitle}}</small>
 					</h3>
 				</div>
@@ -39,10 +39,12 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 							<a href="./edit" class="btn btn-primary">
 								<i class="fa fa-fw fa-edit"></i> Edit Kitbag
 							</a>
+							<!-- 
 							<a href="./edit#kitbagAssocKitbags" class="btn btn-primary">
 								<i class="fa fa-fw fa-medkit"></i> Assign to Kitbag
 							</a>
-							<a href="/kitbags/duplicate/{{kitbagId}}" class="btn btn-primary">
+							-->
+							<a href="./duplicate" class="btn btn-primary">
 								<i class="fa fa-fw fa-files-o"></i> Duplicate
 							</a>
 							{{#if glb_userIsSuperAdmin}}
@@ -51,26 +53,26 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 								</a>
 							{{/if}}
 							{{#if glb_userIsOrgAdmin}}
-								<a href="#" class="btn btn-label-default trash {{#if isTrashed}}disabled{{/if}}">
+								<a href="#" class="btn btn-label-default trash {{#if global_isDocTrashed}}disabled{{/if}}">
 									<i class="fa fa-fw fa-trash"></i> Trash
 								</a>
 							{{/if}}
 							<a href="/dashboard" class="btn btn-info">
 								<i class="fa fa-fw fa-dashboard"></i> Analytics
 							</a>
-							<a href="#kitbagKitbagListPanel" class="btn btn-info">
-								<i class="fa fa-fw fa-medkit"></i> Kitbag List
-							</a>
-							<a href="/users/list?kitbag=thisKitbagId" class="btn btn-info">
+							<a href="/items/list?kitbag={{_id}}" class="btn btn-info">
 								<i class="fa fa-fw fa-users"></i> View Inventory
+							</a>
+							<a href="/users/list?org={{assocOrgId}}" class="btn btn-info">
+								<i class="fa fa-fw fa-users"></i> User List
 							</a>
 						</div>
 					</div>
 
 					<!-- <h2>Bordered with Striped Rows</h2> -->
-					<!--{{#if kitbagDesc}}
+					<!--{{#if desc}}
 						<div class="well">
-							{{kitbagDesc}}
+							{{desc}}
 						</div>
 					{{/if}} -->
 					<div class="table-responsive">
@@ -86,114 +88,32 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 									<tr class="adminOnly">
 										<th>Organisation</th>
 										<td>
-											{{#if kitbagAssocOrg}}
-												<span title="{{kitbagAssocOrg}}">{{lookupFieldFromOrg kitbagAssocOrg 'title'}} ({{kitbagAssocOrg}})</span>
-											{{else}}
-												Organisation not found
-											{{/if}}
+											<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
+												<b>{{getOrgName.full}}</b>{{#if assocOrgId}}<span class="light"> (DBID: {{assocOrgId}})</span>{{/if}}
+											</a>
 										</td>
 									</tr>
+									<tr class="adminOnly">
+										<th>DBID</th>
+										<td>{{_id}}</td>
+									</tr>							
 								{{/if}}
-
 
 								<tr>
 									<th class="col-xs-2">Kitbag</th>
-									<td class="col-xs-10"><strong>{{kitbagTitle}}</strong></td>
-								</tr>
-								<tr>
-									<th>Detail</th>
-									<td>{{kitbagDetail}}</td>
+									<td class="col-xs-10"><strong>{{title}}</strong></td>
 								</tr>
 								<tr>
 									<th>Status</th>
-									<td><span class="label {{gKitbagStatusTag.labelClass}}">{{gKitbagStatusTag.labelText}}</span></td>
+									<td><span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span></td>
 								</tr>
 								<tr>
 									<th>Description</th>
-									<td>{{kitbagDesc}}</td>
-								</tr>
-								<tr>
-									<th>Age Group</th>
-									<td>{{patientAgeGroup}}</td>
-								</tr>
-								<tr>
-									<th>Size</th>
-									<td>{{kitbagSize}}</td>
-								</tr>
-
-								<tr>
-									<th colspan="2" class="table-divider">Inventory Management</th>
-								</tr>
-
-								<tr>
-									<th>Kitbags with this Kitbag</th>
-									<td>{{kitbagAssocKitbagCount}}</td>
-								</tr>
-
-								<tr>
-									<th>List of Kitbags</th>
-									<td>
-										{{assocKitbags}}
-										<!--
- 										{{#each assocKitbags}}
-											{{#with thisKitbag kitbagId}}
-												<a href="/kitbags/{{kitbagId}}/view">
-													{{lookupFieldFromKb kitbagId 'kitbagTitle'}}
-												</a>
-												<span class="label {{gKitbagStatusTag.labelClass}} pull-right">
-													{{gKitbagStatusTag.labelText }}
-												</span>
-												<small><span class="text-muted kitbagIdCol">
-													{{kitbagId}}{{assignedBag}}
-												</span></small>
-												<br>
-											{{/with}}
-										{{/each}}
-										-->
-									</td>
-								</tr>
-								<tr>
-									<th>Is Mandatory for Service</th>
-									<td>{{#if kitbagIsMandatory}}<i class="fa fa-check text-muted" aria-hidden="true"></i>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td>
-								</tr>
-								<tr>
-									<th>Min Quantity (Qmin)</th>
-									<td>{{kitbagQMin}}</td>
-								</tr>
-								<tr>
-									<th>Recommended (Qrec)</th>
-									<td>{{kitbagQRecommended}}</td>
-								</tr>
-								<tr>
-									<th>Max Quantity (Qmax)</th>
-									<td>{{kitbagQMax}}</td>
+									<td>{{desc}}</td>
 								</tr>
 
 
-								<tr>
-									<th colspan="2" class="table-divider">Manufacturer Details</th>
-								</tr>
 
-								<tr>
-									<th>Brand</th>
-									<td>{{kitbagManufacturer}}</td>
-								</tr>
-								<tr>
-									<th>Model</th>
-									<td>{{kitbagModel}}</td>
-								</tr>
-								<tr>
-									<th>Org SKU</th>
-									<td>{{kitbagSku}}</td>
-								</tr>
-								<tr>
-									<th>MfrPart #</th>
-									<td>{{kitbagPartNumber}}</td>
-								</tr>
-								<tr>
-									<th>EAN/UPC</th>
-									<td>{{kitbagEanUpc}}</td>
-								</tr>
 
 								<tr>
 									<th colspan="2" class="table-divider">Advanced Details</th>
@@ -201,16 +121,16 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 
 								<tr>
 									<th>URL</th>
-									<td><a href="{{kitbagUrl}}" target="_blank">{{kitbagUrl}}</a></td>
+									<td><a href="{{url}}" target="_blank">{{url}}</a></td>
 								</tr>
 								<tr>
 									<th>Profile Photo</th>
 									<td class="hover_img">
 
 										{{>urlImagePreviewRollover
-											imageUrl = kitbagImgLarge
-											imagePreviewText = (joinTextInList "Photo of '<b>" kitbagTitle "</b>'. Click to open in a new tab." )
-											imageAltText = (joinTextInList "Photo of '" kitbagTitle "'. Click or mouseover to view." )
+											imageUrl = imgLarge
+											imagePreviewText = (global_joinTextInList "Photo of '<b>" title "</b>'. Click to open in a new tab." )
+											imageAltText = (global_joinTextInList "Photo of '" title "'. Click or mouseover to view." )
 											imagePreviewHeight = "50%"
 										}}
 
@@ -221,9 +141,9 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 									<td class="hover_img">
 
 										{{>urlImagePreviewRollover
-											imageUrl = kitbagImgSmall
-											imagePreviewText = (joinTextInList "Icon preview for '<b>" kitbagTitle "</b>'. Click to open in a new tab." )
-											imageAltText = (joinTextInList "Icon image for '" kitbagTitle "'. Click or mouseover to view." )
+											imageUrl = imgSmall
+											imagePreviewText = (global_joinTextInList "Icon preview for '<b>" title "</b>'. Click to open in a new tab." )
+											imageAltText = (global_joinTextInList "Icon image for '" title "'. Click or mouseover to view." )
 											imagePreviewHeight = "20%"
 										}}
 
@@ -243,11 +163,11 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 		</div>
 
 
-		<!-- KITBAGS MINILIST (listing 'assocKitbags') -->
+		<!-- ITEMS MINILIST (listing 'assocKitbags') -->
 		<div class="col-lg-12">
 			<div class="panel panel-default" id="kitbagKitbagListPanel">
 				<div class="panel-heading">
-					<h3 class="panel-title"><i class="fa fa-fw fa-medkit"></i> Kitbags Containing This Kitbag ({{get_kitbagBagsFound}})</h3>
+					<h3 class="panel-title"><i class="fa fa-fw fa-medkit"></i> Items in this Kitbag</h3>
 				</div>
 				<div class="panel-body">
 					<!-- <h2>Bordered with Striped Rows</h2> -->
@@ -318,20 +238,17 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 							<tbody>
 								<!-- end -->
 								<tr>
-									<th>External ID</th>
-									<td><code>{{kitbagId}}</code></td>
-								</tr>
-								<tr>
-									<th>Internal ID</th>
+									<th>DBID</th>
 									<td>{{_id}}</td>
 								</tr>
 								<tr>
 									<th>Created</th>
-									<td>{{createdAt}} by {{#if createdBy}}<code>{{createdBy}}</code>{{else}}Unknown{{/if}}</td>
+									<td>{{getCreatedString}}</td>
+									<!-- <td>{{createdAt}} by {{#if createdBy}}<code>{{createdBy}}</code>{{else}}Unknown{{/if}}</td> -->
 								</tr>
 								<tr>
 									<th>Last Updated</th>
-									<td>{{updatedAt}} by {{#if updatedBy}}<code>{{updatedBy}}</code>{{else}}Unknown{{/if}}</td>
+									<td>{{getLastUpdatedString}}</td>
 								</tr>
 								<tr>
 									<th>Created Via</th>
@@ -347,10 +264,6 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 									{{/if}}
 									</td>
 								</tr> -->
-								<tr>
-									<th>Account Data</th>
-									<td>&nbsp;</td>
-								</tr>
 							</tbody>
 						</table>
 					<!-- /table-responsive -->

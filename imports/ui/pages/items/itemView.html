@@ -51,7 +51,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 								</a>
 							{{/if}}
 							{{#if glb_userIsOrgAdmin}}
-								<a href="#" class="btn btn-label-default trash {{#if isTrashed}}disabled{{/if}}">
+								<a href="#" class="btn btn-label-default trash {{#if global_isDocTrashed}}disabled{{/if}}">
 									<i class="fa fa-fw fa-trash"></i> Trash
 								</a>
 							{{/if}}
@@ -106,7 +106,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 								</tr>
 								<tr>
 									<th>Status</th>
-									<td><span class="label {{gItemStatusTag.labelClass}}">{{gItemStatusTag.labelText}}</span></td>
+									<td><span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span></td>
 								</tr>
 								<tr>
 									<th>Description</th>
@@ -138,7 +138,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
  										{{#each assocKitbags}}
 											{{#with thisKitbag kitbagId}}
 												<a href="/kitbags/{{kitbagId}}/view">
-													{{lookupFieldFromKb kitbagId 'kitbagTitle'}}
+													{{lookupFieldFromKb kitbagId 'title'}}
 												</a>
 												<span class="label {{gKitbagStatusTag.labelClass}} pull-right">
 													{{gKitbagStatusTag.labelText }}
@@ -209,8 +209,8 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 
 										{{>urlImagePreviewRollover
 											imageUrl = itemImgLarge
-											imagePreviewText = (joinTextInList "Photo of '<b>" itemTitle "</b>'. Click to open in a new tab." )
-											imageAltText = (joinTextInList "Photo of '" itemTitle "'. Click or mouseover to view." )
+											imagePreviewText = (global_joinTextInList "Photo of '<b>" itemTitle "</b>'. Click to open in a new tab." )
+											imageAltText = (global_joinTextInList "Photo of '" itemTitle "'. Click or mouseover to view." )
 											imagePreviewHeight = "50%"
 										}}
 
@@ -222,8 +222,8 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 
 										{{>urlImagePreviewRollover
 											imageUrl = itemImgSmall
-											imagePreviewText = (joinTextInList "Icon preview for '<b>" itemTitle "</b>'. Click to open in a new tab." )
-											imageAltText = (joinTextInList "Icon image for '" itemTitle "'. Click or mouseover to view." )
+											imagePreviewText = (global_joinTextInList "Icon preview for '<b>" itemTitle "</b>'. Click to open in a new tab." )
+											imageAltText = (global_joinTextInList "Icon image for '" itemTitle "'. Click or mouseover to view." )
 											imagePreviewHeight = "20%"
 										}}
 

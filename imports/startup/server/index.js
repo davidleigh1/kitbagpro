@@ -2,13 +2,17 @@
 
 console.log("RUN: server.index.js");
 
+console.log("============================================================");
+console.log("======   SERVER STARTUP at '/startup/server/index.js' ======");
+console.log("============================================================");
+
 // import { Meteor } from 'meteor/meteor';
 
 // This defines a starting set of data to be loaded if the app is loaded with an empty db.
 // import '../imports/startup/server/fixtures.js';
 import './fixtures.js';
+// import './globalFunctions.js';
 import { kb } from "/imports/startup/both/sharedConstants.js";
-// import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 
 /*
 	// Not loaded...
@@ -29,6 +33,8 @@ import { kb } from "/imports/startup/both/sharedConstants.js";
 
 console.log("IMPORT register-api.js");
 import './register-api.js';
+
+/* GLOBAL FUNCTIONS */
 
 globalIsThisObjectUnique = function (objId, objectType) {
 	console.log("globalIsThisObjectUnique()", objId, objectType);
@@ -109,6 +115,12 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 		doc.createdBy = userId || Meteor.userId() || "Unknown User";
 		// doc.assocKitbagCount = (typeof doc.assocKitbags == "object") ? doc.assocKitbags.length : 0;
 	}
+
+	if (requestor == "beforeKitbagInsert" && typeof doc == "object") {
+		doc._id = doc.assocOrgId + "-" + doc._id;
+		doc.createdAt = doc.createdAt || new Date();
+		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+	}
 };
 globalBeforeUpdateHook = function (requestor, userId, doc, fieldNames, modifier, options) {
 	console.log("\n globalBeforeUpdateHook() in /startup/server/index.js\n\nrequestor\n",requestor, "\n\nuserId\n",userId, "\n\ndoc\n",doc, "\n\nfieldNames\n",fieldNames, "\n\nmodifier\n",modifier, "\n\noptions\n",options, "\n\n");
@@ -152,3 +164,81 @@ globalBeforeUpdateHook = function (requestor, userId, doc, fieldNames, modifier,
 		console.log("globalBeforeUpdateHook() in /startup/server/index.js - No modifier found.")
 	}
 };
+
+/* GLOBAL METHODS */
+
+Meteor.methods({
+	updateDoc: function(updatedObj, objId){
+		console.log("FN: -GENERIC- updateDoc()", arguments);
+
+		var thisCollectionName = updatedObj.$set.collection;
+
+		var success = kb.collections[thisCollectionName].update( objId, updatedObj );
+
+		if (success) {
+			var updatedDoc = kb.collections[thisCollectionName].findOne( objId );			
+			var returnObj = {
+				"thisAction": "update",
+				"thisCollectionName": thisCollectionName,
+				"obj": updatedDoc,
+				"title": updatedDoc.title,
+				"id": objId
+			};
+			console.log("generic.update() updated "+returnObj.thisObj+": ",returnObj);
+			return returnObj;
+		} else {
+			console.log("ERROR: generic.update(>> "+thisObj+" <<) failed.");
+		}
+	},
+	deleteDoc: function(requestor, thisObj, assocObj = {}, userId){
+		console.log("FN: -GENERIC- deleteDoc()",arguments);
+		// var res = MyCollections["Orgs"].findOne(id);
+		var res = kb.collections[thisObj].findOne(assocObj._id);
+
+		serverlog({
+			actor: userId,
+			subject: "deleteDoc()",
+			object: thisObj,
+			message: "User '"+userId+"' requested to delete "+thisObj+": '"+assocObj._id+"'"
+		});
+
+		// if ( !fn_userIsSuperAdmin && res.owner !== Meteor.userId()){
+		// 	// throw new Meteor.Error('You are not authorized to trash items owned by other users (error code: 34.6)');
+
+		// 	var msg = 'ERROR: You are not authorized to trash items owned by other users [error code: 34.6]';
+		// 	console.log(msg);
+		// 	serverlog({
+		// 		actor: userId,
+		// 		subject: org_id,
+		// 		object: "Org",
+		// 		message: msg
+		// 	});
+		// 	return false;
+		// } else {
+			kb.collections[thisObj].remove(assocObj._id);
+			serverlog({
+				actor: userId,
+				subject: "deleteDoc()",
+				object: thisObj,
+				message: "User '"+userId+"' successfully deleted "+thisObj+": '"+assocObj._id+"'"
+			});
+			return true;
+		// }
+	},
+	setDocStatus: function(docCollection, docId, newStatus){
+		console.log("FN: -GENERIC- setDocStatus()",arguments);
+		var success = kb.collections[docCollection].update(docId, { $set: {status: newStatus}});
+		console.log("Status set: ", success, kb.collections[docCollection].findOne(docId) );
+	},
+	setDocField: function(docCollection, docId, docfield, newValue){
+		console.log("FN: -GENERIC- setDocField()", docCollection, docId, docfield, newValue);
+		var success = kb.collections[docCollection].update( docId , { $set: { docfield : newValue } });
+		console.log("Field updated: ", success, docCollection, docId, docfield, newValue );
+	},
+
+	printLine: function(){
+		console.log("\n\n\n------------------------------------------------------\n\n");
+	}
+});
+
+

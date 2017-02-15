@@ -4,9 +4,11 @@ import './itemLogo.html';
 import './itemList.html';
 import './itemLine.js';
 
+import { kb } from "/imports/startup/both/sharedConstants.js";
+
 // import { Orgs } from '/imports/api/orgs/orgs.js';
-import { Orgs } from '/imports/startup/both/schema-org.js';
-import { Kitbags } from '/imports/api/kitbags/kitbags.js';
+// import { Orgs } from '/imports/startup/both/schema-org.js';
+// import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 import { Items } from '/imports/startup/both/item-schema.js';
 // import { Items } from '/imports/api/items/items.js';
 // import { Items } from '/both/newItems.js';
@@ -19,8 +21,8 @@ Template.itemList.created = function(){
 	// console.log("Template.itemList.created");
 	//this.filter = new ReactiveVar();
 	//console.log("this.filter: "+this.filter);
-	localOrgs = Orgs;
-	localKitbags = Kitbags;
+	localOrgs = kb.collections.Orgs;
+	localKitbags = kb.collections.Kitbags;
 	localItems = Items;
 };
 

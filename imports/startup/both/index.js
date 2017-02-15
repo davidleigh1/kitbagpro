@@ -1,9 +1,13 @@
 console.log("RUN: /imports/startup/both/index.js");
 
 import './at_config.js';
-import './item-schema.js';
-import './schema-user.js';
 import './sharedConstants.js';
+import './globalFunctions.js';
+
+import './schema-org.js';
+import './schema-kitbag.js';
+import './schema-user.js';
+import './item-schema.js';
 
 Accounts.onLogin(function() {
   console.log('$ ********** Login complete 2! (both)');
@@ -14,7 +18,11 @@ Accounts.onLogout(function() {
 });
 
 Meteor.startup(function() {
-	console.log("$ ######### Meteor.startup at /startup/both/index.js");
+
+	console.log("==========================================================");
+	console.log("======   BOTH STARTUP at '/startup/both/index.js'   ======");
+	console.log("==========================================================");
+
 });
 
 fn_userIsSuperAdmin = function(userObject){

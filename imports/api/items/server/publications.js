@@ -3,8 +3,6 @@
 import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
 
 import { Admin } from '/imports/api/admin/admin.js';
-// import { Orgs } from '/imports/startup/both/schema-org.js';
-// import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 
 import { Items } from '/imports/startup/both/item-schema.js';
 
@@ -58,7 +56,7 @@ We need to trigger jobs to update Item-related calculated fields in response to 
 [ ] An 	existing	item changes itemTitle (need to updated associated kitbags)
 [ ] An 	existing	kitbag changes status (especially if it changes into or out of the list of active statuses)
 [ ] An 	existing	kitbag changes kitbagId (need to updated associated items)
-[ ] An 	existing	kitbag changes kitbagTitle (need to updated associated items)
+[ ] An 	existing	kitbag changes title (need to updated associated items)
 
 Item-related counts include:
 
@@ -113,7 +111,7 @@ updateAssocKitbagCountOnAddEdit = function (requestor, userId, doc, fieldNames, 
 Items.after.insert(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ITEMS.INSERT");
 	/* Recalculate when new Kitbag is added */
-	// updateKitbagCountsObj("onKitbagInserted",doc.kitbagTitle);
+	// updateKitbagCountsObj("onKitbagInserted",doc.title);
 	/* Update associated Org when new Kitbag is added */
 	// updateAssocOrgOnAddEdit("onKitbagInserted",userId, doc, fieldNames, modifier);
 });
@@ -125,7 +123,7 @@ Items.after.remove(function (userId, doc, fieldNames, modifier) {
 
 Items.after.update(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ITEMS.UPDATE");
-	/* Recalculate when new existing Kitbag changes kitbagStatus - which could well render it outside of the count criteria */
+	/* Recalculate when new existing Kitbag changes status - which could well render it outside of the count criteria */
 	// updateKitbagCountsObj("onKitbagUpdate",userId, doc, fieldNames, modifier);
 	/* Update associated Kitbag Count */
 	// updateAssocKitbagCountOnAddEdit("onItemUpdate",userId, doc, fieldNames, modifier);

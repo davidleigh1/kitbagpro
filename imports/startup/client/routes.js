@@ -6,7 +6,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 
 /* CONTENT PROTECTION - DISABLE THE FOLLOWING LINE TO REMOVE USER ACCOUNT / PASSWORD PROTECTION */
-FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
+// FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 
 
 /*----------------------------------------*/
@@ -168,7 +168,7 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 		// prefix: '/:_orgId([0-9]*)?',
 		//prefix: '/:_orgId(^(?=\\d{16}$)(1221)\\d+)',
 		prefix: '/:_orgId',
-		name: 'NEW2_orgsWithId',
+		name: 'orgs',
 		triggersEnter: [function(context, redirect) {
 			//console.log('Route: Running /orgs/:_id GROUP triggers <<--------------------');
 		}]
@@ -244,7 +244,7 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 		}
 	});
 	import '/imports/ui/pages/kitbags/edit.js';
-	FlowRouter.route("/kitbags/:_itemId/edit", {
+	FlowRouter.route("/kitbags/:_kitbagId/edit", {
 		name: "kitbagEdit",
 		action: function(params, queryParams) {
 			BlazeLayout.render("mainLayout", {
@@ -255,11 +255,22 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 		}
 	});
 	import '/imports/ui/pages/kitbags/add.js';
-	FlowRouter.route("/kitbags/create/:_kitbagId", {
+	FlowRouter.route("/kitbags/create/:_orgId", {
 		name: "kitbagAdd",
 		action: function(params, queryParams) {
 			BlazeLayout.render("mainLayout", {
 				main: "kitbagAdd",
+				nav: "navigation",
+				footer: "globalFooter"
+			});
+		}
+	});
+	import '/imports/ui/pages/kitbags/duplicate.js';
+	FlowRouter.route("/kitbags/:_kitbagId/duplicate", {
+		name: "kitbagDuplicate",
+		action: function(params, queryParams) {
+			BlazeLayout.render("mainLayout", {
+				main: "kitbagDuplicate",
 				nav: "navigation",
 				footer: "globalFooter"
 			});

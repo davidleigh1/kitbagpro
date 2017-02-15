@@ -6,10 +6,8 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 /* import './main.html'; */
 
-import { kb } from "/imports/startup/both/sharedConstants.js";
+import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
-// import { Orgs } from '/imports/startup/both/schema-org.js';
-// import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 import { Items } from '/imports/startup/both/item-schema.js';
 import { UserList } from '/imports/startup/both/schema-user.js';
 
@@ -20,12 +18,16 @@ import { Admin } from '/imports/api/admin/admin.js';
 
 import './routes.js';
 import './globalHelpers.js';
-import './globalFunctions.js';
+// import './globalFunctions.js';
 import './globalReactiveVars.js';
 
 
 Meteor.startup(function() {
-	//console.log("Loading Google fonts");
+
+	console.log("======================================================================");
+	console.log("======   CLIENT STARTUP at '/imports/startup/client/index.js'   ======");
+	console.log("======================================================================");
+
 	WebFontConfig = {
 		google: { families: [ 'Open+Sans:400,300,600,700:latin' ] }
 	};
@@ -46,12 +48,12 @@ Meteor.startup(function() {
 	/* ================================================== */
 
 
-	console.log("sAlert.config() in mainLayout.js");
+	console.log("sAlert.config() in 'startup\\client\\index.js'");
 
 	sAlert.config({
 		effect: 'stackslide',
 		position: 'top',
-		timeout: 500,
+		timeout: appSettings.sAlert.defaultTimeout,
 		html: true,
 		onRouteClose: true,
 		stack: true,
@@ -122,11 +124,13 @@ Template.body.onRendered(function() {
 	/* Reference - autoform requires collection in windows scope - https://github.com/aldeed/meteor-autoform/issues/1449 */
 	/* More isolated solution will be to make collection available via the template helper in the relevant template */
 	window.kb_reference_only = kb;
-	var kb_docs = {
-		Orgs: kb.collections.Orgs._collection._docs._map
+	kb_docs = {
+		Orgs: kb.collections.Orgs._collection._docs._map,
 		Kitbags: kb.collections.Kitbags._collection._docs._map
 	};
+	console.log(kb_docs);
 	window.kb_reference_only.docs = kb_docs;
+	window.kb_appSettings = appSettings;
 
 
 	/* REDIRECT USER WHEN PASSWORD IS CHANGED BY ADMIN */
@@ -157,11 +161,11 @@ Template.body.onRendered(function() {
 					if (response == "userFound") {
 						msg = "<strong>SUCCESS: </strong>Server confirms user is logged in ("+context+"/"+response+")";
 						// console.log("$ "+msg);
-						sAlert.success(msg);
+						sAlert.success(msg,{position:'bottom-right',timeout:appSettings.sAlert.shortTimeout});
 					} else {
 						msg = "<strong>ERROR: </strong>Server indicates <strong>remote logout</strong> ("+context+"/"+response+")";
 						// console.log("$ "+msg);
-						sAlert.error(msg, {html:true});
+						sAlert.error(msg,{html:true});
 						/* Force a page reload as Meteor server-side logout does *not* do this prior to killing session  */
 						window.location.reload();
 					}

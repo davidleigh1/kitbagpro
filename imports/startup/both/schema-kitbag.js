@@ -1,11 +1,27 @@
-console.log("RUN: 'kitbag-schema.js' at '/imports/startup/both'");
+console.log("RUN: 'schema-kitbag.js' at '/imports/startup/both'");
 
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
-console.log("DEF: 'kb.Kitbags' Collection");
+/* ==================================================================== */
+/* 																		*/
+/* CLIENT-SIDE HOOKS:                                                   */
+/* /imports/ui/pages/kitbags/add.js										*/
+/* /imports/ui/pages/kitbags/edit.js									*/
+/* /imports/ui/pages/kitbags/duplicate.js								*/
+/* 																		*/
+/* SERVER-SIDE HOOKS:                                                   */
+/* /imports/api/kitbags/server/publications.js							*/
+/* 																		*/
+/* OBJECT CREATION:  													*/
+/* /imports/api/kitbags/methods.js 										*/
+/* 																		*/
+/* ==================================================================== */
+
+console.log("NEW:"+"%ckb.collections.Kitbags"+"%c Collection at '/imports/startup/both/schema-kitbag.js'",appSettings.consoleCSS.code,'');
+
 const Kitbags = new Mongo.Collection("kitbags");
 
 // https://atmospherejs.com/aldeed/simple-schema
@@ -14,7 +30,7 @@ let KitbagSchema = new SimpleSchema({
 	"_id": {
 		type: String,
 		optional: false,
-		max: 20,
+		max: 33,
 		defaultValue: function () {
 			if (this.isSet == true && this.value != ""){
 				return this.value;
@@ -52,10 +68,17 @@ let KitbagSchema = new SimpleSchema({
 
 	"assocOrgId": {
 		type: String,
-		optional: true,
+		optional: false,
+		defaultValue: function () {
+			if (this.isSet == true){
+				return this.value;
+			} else {
+				return FlowRouter.getParam('_orgId') || "Not found [code: 1246]";
+			}
+		},	
 		label: "Associated Organisation ID"
 	},
-	"assocOrgTitle": {
+	"assocOrgTitle": {  // Should be deprecated!!!!
 		type: String,
 		optional: true,
 		label: "Associated Organisation Title",
@@ -111,6 +134,16 @@ let KitbagSchema = new SimpleSchema({
 		optional: true,
 		defaultValue: "Unknown",
 		label: "Last Updated By User"
+	},
+
+	/* THIS OBJECT */
+
+	"collection": {
+		type: String,
+		optional: false,
+		allowedValues: appSettings.global.validObjects,
+		defaultValue: "Kitbags",
+		label: "Collection"
 	}
 
 	/* SHOULD WE INCLUDE assocItemIds[] HERE OR SHOULD WE LIST KITBAGS IN THE ITEM RECORDS? */

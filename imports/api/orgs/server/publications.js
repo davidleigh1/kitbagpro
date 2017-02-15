@@ -113,13 +113,14 @@ kb.collections.Orgs.after.update(function (userId, doc, fieldNames, modifier) {
 	updateOrgCountsObj("onOrgUpdate",doc.title);
 
 	if (doc.title !== this.previous.title) {
-		console.log("\n\n=== SERVER SIDE ==================\nNow updating all Kitbags associated with OrgId '"+doc._id+"'\nto reflect change in 'kitbagAssocOrgTitle' from '"+this.previous.title+"' to '"+doc.title+"'\n===================================\n\n");
+		console.log("\n\n=== SERVER SIDE ==================\nNow updating all Kitbags associated with OrgId '"+doc._id+"'\nto reflect change in 'assocOrgIdTitle' from '"+this.previous.title+"' to '"+doc.title+"'\n===================================\n\n");
+
 		// TODO - Log name change to the logging table
 
 		/*
 
-		IMPORTANT: Following an Org name change, we will increment through all of the Kitbags looking for the matching orgID in each Kitbag's kitbagAssocOrg field rather than retrieving the list of orgAssocKitbagids from the Org and just matching by Kitbag IDs
-		* This approach should be more reliable as we are basing our search/replace on a simple, mandatory text field (kitbagAssocOrg) on each document - rather than on one single, non-mandatory array (orgAssocKitbagids) which is potentially more corruptible
+		IMPORTANT: Following an Org name change, we will increment through all of the Kitbags looking for the matching Org ID in each Kitbag's assocOrgId array rather than retrieving the list of orgAssocKitbagids from the Org and just matching by Kitbag IDs
+		* This approach should be more reliable as we are basing our search/replace on a simple, mandatory text field (assocOrgId) on each document - rather than on one single, non-mandatory array (orgAssocKitbagids) which is potentially more corruptible
 		* This approach is more fault-tolerant overall
 		* This better supports data imports and APIs where the kitbags records for each Org would be uploaded independently (and after!) the main Org document
 

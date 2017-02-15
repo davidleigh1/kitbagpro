@@ -10,14 +10,12 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { kb } from "/imports/startup/both/sharedConstants.js";
 
 /* METHODS */
-
-var thisObj = "Kitbags";
+var thisCollectionName = "Kitbags";
 
 Meteor.methods({
-
 	/* -- KITBAG METHODS -- */
 	addKitbag: function(kitbagObj){
-		console.log('fn Meteor.methods.addKitbag()',kitbagObj);
+		console.log('FN: Meteor.methods.addKitbag()(>>'+thisCollectionName+'<<)',kitbagObj);
 		if(typeof kitbagObj != "object" || kitbagObj == false){
 			console.log('ERROR: No kitbagObj received in request. DB insert action cancelled. [error code: 322]');
 			return "false";
@@ -31,64 +29,92 @@ Meteor.methods({
 		// We return the method in order to be able to passback and reuse the _id generated when the doc is created in the database
 		// http://stackoverflow.com/questions/16439055
     	// var dbNewKB = MyCollections["Kitbags"].insert(kitbagObj);
-		var dbNewKB = kb.collections[thisObj].insert(kitbagObj);
-		console.log('added Kitbag: ', kitbagObj);
-		// console.log(dbNewKB);
-		return dbNewKB;
+		var dbNewKB = kb.collections[thisCollectionName].insert(kitbagObj);
+
+		/* REMOVING THIS AS WE ONLY WANT SEPARATE COLLECTIONS SO WILL ASSOCIATE THE ID - NOT EMBED THE KITBAG OBJECT */
+			// var dbNewKbObj = kb.collections["Kitbags"].find( {_id: dbNewKB} );
+			// console.log("dbNewKbObj",dbNewKbObj);
+			// console.log("kitbagObj._id",kitbagObj._id);
+			// Add cursor (copy of) kitbag object to Org document
+			// kb.collections["Orgs"].assocKitbagObjs.push( kb.collections["Kitbags"].findOne( {_id: dbNewKB} ) );
+			// var pushed = kb.collections["Orgs"].update(
+			// 	{ _id: kitbagObj.assocOrgId },
+			// 	{ $push: { assocKitbagObjs: dbNewKbObj } }
+			// );
+			// var updatedOrgObj = kb.collections["Orgs"].findOne( { _id: kitbagObj.assocOrgId } );
+			// console.log("\n\n\n\n\n\n",kitbagObj.assocOrgId," / pushed:\n",pushed,"\n\n",updatedOrgObj,"\n\n\n\n\n\n");
+
+		// db.orgs.update({ _id: "ByA4SG4ceRakkGPkN" },{ $push: { assocKitbagIds: "newbag3" } })		
+
+		var returnObj = {
+			"thisAction": "insert",
+			"thisCollectionName": thisCollectionName,
+			"obj": kitbagObj,
+			"title": kitbagObj.title,
+			"id": dbNewKB
+		};		
+		console.log('addKitbag() added Kitbag: ',kitbagObj.title,kitbagObj._id,"\n",returnObj);
+		return returnObj;
 	},
 	updateKitbagField: function(dbId,field,newValue){
 		console.log(">>> fn updateKitbagField()",dbId,field,newValue);
-		kb.collections[thisObj].update( dbId , { $set: { field : newValue } });
+		kb.collections[thisCollectionName].update( dbId , { $set: { field : newValue } });
 	},
-	updateKitbag: function(updatedObj,documentId){
-		console.log(">>> fn updateKitbag()",updatedObj,documentId);
-		console.log("TODO - CREATE GENERIC updateObj PROTOTYPE!!!");
+	// OLD_DELETE_assignKBtoOrg: function(kitbag_id,org_id){
+	// 	/* UTIL FUNCTION ONLY - RUN BY ADMIN TO REASSIGN ALL KITBAGS */
+	// 	console.log("RUN: assignKBtoOrg() assigning bag: '"+kitbag_id+"' to org: '"+org_id+"'");
+	// 	// badInCode - MyCollections["Orgs"].update(org_id, { $push: { "orgAssocKitbagids": kitbag_id }});
+	// 	// GoodInDBConsole - db.orgs.update({org_id:"org_be44df86cb2f"}, { $push: { orgAssocKitbagids: "kb_ccaa81f04fc6" }});
 
-		var editId,dbObj;
-		if( updatedObj._id ){
-			editId = updatedObj._id;
-		}else{
-			dbObj = kb.collections[thisObj].findOne( updatedObj.id );
-		}
+	// 	// Use the full names (rather than thisCollectionName variable) when referencing
+	// 	// multiple collections in the same function
+	// 	var myOrgId = kb.collections.Kitbags.findOne( {_id: kitbag_id} ).assocOrgId;
 
-/* TODO - FIX THIS !!!!! */
+	// 	kb.collections.Orgs.update(
+	// 		{ _id: myOrgId },
+	// 		{ $push: { assocKitbagIds: ""+kitbag_id }},
+	// 		function( error, result) {
+ //    			if ( error ) console.log ( error ); //info about what went wrong
+ //    			if ( result ) {
+ //    				console.log ( "Successful update to Org records: ", result ); //the _id of new object if successful
+ //    				var bagCount = kb.collections.Orgs.findOne( myOrgId ).assocKitbagIds.length;
+	// 				kb.collections.Orgs.update(
+	// 					{ _id: myOrgId },
+	// 					{ $set: { assocKitbagCount: bagCount }}
+	// 				);
+ //    			}
+ //  			}
+	// 	);
+	// },
+	assignKBtoOrg: function(kitbagDoc){
+		/* UTIL FUNCTION ONLY - RUN BY ADMIN TO REASSIGN ALL KITBAGS */
+		console.log("RUN: assignKBtoOrg() assigning bag: '"+kitbagDoc._id+"' to org: '"+kitbagDoc.assocOrgId+"'");
+		// badInCode - MyCollections["Orgs"].update(org_id, { $push: { "orgAssocKitbagids": kitbag_id }});
+		// GoodInDBConsole - db.orgs.update({org_id:"org_be44df86cb2f"}, { $push: { orgAssocKitbagids: "kb_ccaa81f04fc6" }});
 
-		kb.collections[thisObj].update( documentId, updatedObj );
-
-		var orgId = kb.collections[thisObj].findOne({_id:documentId},{ orgId:1 })["orgId"];
-
-		return { "orgId": orgId, "updatedObj": updatedObj, "documentId": documentId };
-
-	},
-	// Meteor.call("assignKBtoOrg", newKB.kitbagAssocOrg, newKB._id);
-	assignKBtoOrg: function(bagId,orgId){
-		console.log("assignKBtoOrg adding bag: '"+bagId+"' to org: '"+orgId+"'");
-		// badInCode - MyCollections["Orgs"].update(orgId, { $push: { "orgAssocKitbagids": bagId }});
-		// GoodInDBConsole - db.orgs.update({orgId:"org_be44df86cb2f"}, { $push: { orgAssocKitbagids: "kb_ccaa81f04fc6" }});
-
-		// Use the full names (rather than thisObj variable) when referencing
+		// Use the full names (rather than thisCollectionName variable) when referencing
 		// multiple collections in the same function
-		var myOrgId = kb.collections.Kitbags.findOne( {_id: bagId} ).kitbagAssocOrg;
+		// var myOrgId = kb.collections.Kitbags.findOne( {_id: kitbag_id} ).assocOrgId;
 
-		kb.collections.Orgs.update(
-			{ _id: myOrgId },
-			{ $push: { assocKitbagIds: ""+bagId }},
+		kb.collections.Orgs.direct.update(
+			{ _id: kitbagDoc.assocOrgId },
+			{ $push: { assocKitbagIds: kitbagDoc._id }},
 			function( error, result) {
     			if ( error ) console.log ( error ); //info about what went wrong
     			if ( result ) {
-    				console.log ( "Successful update to Org records: ", result ); //the _id of new object if successful
-    				var bagCount = kb.collections.Orgs.findOne( myOrgId ).assocKitbagIds.length;
-					kb.collections.Orgs.update(
-						{ _id: myOrgId },
+    				var thisOrgObj = kb.collections.Orgs.findOne( kitbagDoc.assocOrgId );
+    				var bagCount = thisOrgObj.assocKitbagIds.length;
+					kb.collections.Orgs.direct.update(
+						{ _id: kitbagDoc.assocOrgId },
 						{ $set: { assocKitbagCount: bagCount }}
 					);
+    				console.log ( "OK!: Successfully updated 'assocKitbagCount' (new value: " + bagCount + ") for Org: " + kitbagDoc.assocOrgId  ); //the _id of new object if successful
     			}
   			}
 		);
 	},
-	trashKitbag: function(id){
-    // var res = MyCollections["Kitbags"].findOne(id);
-		var res = kb.collections[thisObj].findOne(id);
+	trashKitbag: function(item_id){
+		var res = kb.collections[thisCollectionName].findOne(item_id);
 		console.log("res: ",res);
 
 		if (res.owner !== Meteor.userId()){
@@ -96,38 +122,31 @@ Meteor.methods({
 			console.log('ERROR: You are not authorized to trash items owned by other users [error code: 34.6]');
 			return false;
 		}else{
-      // MyCollections["Kitbags"].remove(id);
-			kb.collections[thisObj].remove(id);
+			kb.collections[thisCollectionName].remove(item_id);
 		}
 	},
-	setPrivateKitbag: function(id,private){
-    // var res = MyCollections["Kitbags"].findOne(id);
-		var res = kb.collections[thisObj].findOne(id);
-		console.log("setPrivateKitbag("+id,private+")");
+	setPrivateKitbag: function(item_id,private){
+		var res = kb.collections[thisCollectionName].findOne(item_id);
+		console.log("setPrivateKitbag("+item_id,private+")");
 		console.log("res: ",res);
 
 		if (res.owner !== Meteor.userId()){
 			throw new Meteor.Error('ERROR: You are not authorized to change privacy for items owned by other users [error code: 34.5]');
 		}else{
-      // MyCollections["Kitbags"].update(id, { $set: {private: private}});
-			kb.collections[thisObj].update(id, { $set: {private: private}});
-      // console.log("Kitbag privacy set: ",MyCollections["Kitbags"].findOne(id));
-			console.log("Kitbag privacy set: ",kb.collections[thisObj].findOne(id));
+			kb.collections[thisCollectionName].update(item_id, { $set: {private: private}});
+			console.log("Kitbag privacy set: ",kb.collections[thisCollectionName].findOne(item_id));
 		}
-	},
-	setStatus: function(id,newStatus){
-    // var res = MyCollections["Kitbags"].findOne(id);
-		var res = kb.collections[thisObj].findOne(id);
-		console.log("setStatus("+id,newStatus+")");
-		console.log("res: ",res);
+	// },
+	// setStatus: function(item_id,newStatus){
+	// 	var res = kb.collections[thisCollectionName].findOne(item_id);
+	// 	console.log("setStatus("+item_id,newStatus+")");
+	// 	console.log("res: ",res);
 
-		if (res.owner !== Meteor.userId()){
-			throw new Meteor.Error('ERROR: You are not authorized to change status for items owned by other users [error code: 34.6]');
-		}else{
-      // MyCollections["Kitbags"].update(id, { $set: {kitbagStatus: newStatus}});
-			kb.collections[thisObj].update(id, { $set: {kitbagStatus: newStatus}});
-      // console.log("kitbagStatus set: ",MyCollections["Kitbags"].findOne(id));
-			console.log("kitbagStatus set: ",kb.collections[thisObj].findOne(id));
-		}
+	// 	if (res.owner !== Meteor.userId()){
+	// 		throw new Meteor.Error('ERROR: You are not authorized to change status for items owned by other users [error code: 34.6]');
+	// 	}else{
+	// 		kb.collections[thisCollectionName].update(item_id, { $set: {status: newStatus}});
+	// 		console.log("status set: ",kb.collections[thisCollectionName].findOne(item_id));
+	// 	}
 	}
 });

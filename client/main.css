@@ -4,9 +4,9 @@
 .screentitle
 .kitbagline
 .header
-.kitbagTitle
-.kitbagSku
-.kitbagAssocOrg
+.title
+.sku
+.assocOrgId
 .kitbagCreatedAt
 .kitbagOwner
 .kitbagActions
@@ -349,15 +349,15 @@ h1 .subtitle {
 		vertical-align: top;
 }
 
-.kitbagTitle {
+.title {
 	width: 20%;
 	border-right: 1px dotted gray;
 }
-.kitbagSku {
+.sku {
 	width: 15%;
 	border-right: 1px dotted gray;
 }
-.kitbagAssocOrg {
+.assocOrgId {
 	width: 20%;
 	border-right: 1px dotted gray;
 }

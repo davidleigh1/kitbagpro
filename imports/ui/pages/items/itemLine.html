@@ -1,7 +1,7 @@
 <template name="itemLine">
 
 {{#with thisItem}}
-	<tr data-sorttitle="{{toLower itemTitle}}" data-sortcreated="{{createdAt}}" data-sortkbcount="{{#if itemAssocKitbagCount }}{{itemAssocKitbagCount}}{{else}}0{{/if}}" data-sortupdated="{{createdAt}}" >
+	<tr data-sorttitle="{{global_toLower itemTitle}}" data-sortcreated="{{createdAt}}" data-sortkbcount="{{#if itemAssocKitbagCount }}{{itemAssocKitbagCount}}{{else}}0{{/if}}" data-sortupdated="{{createdAt}}" >
 
 		<!-- Small screens only! -->
 		<td class="visible-xs col-xs-3">
@@ -31,7 +31,7 @@
 		<td class="hidden-xs itemTitleCol">{{#unless itemTitle}}<span class="resNote">'itemTitle' not found</span>{{else}}<a href="/items/{{itemId}}/view">{{highlight itemTitle filterVar suppressHightlight}}</a>{{/unless}}</td>
 
 		<!-- Item Status Tag -->
-		<td class="hidden-xs itemStatusCol"><span class="label {{gItemStatusTag.labelClass}}">{{gItemStatusTag.labelText}}</span></td>
+		<td class="hidden-xs itemStatusCol"><span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span></td>
 
 		<td class="hidden-xs itemDetailCol">{{itemDetail}}</td>
 		<td class="hidden-xs patientAgeGroupCol">{{patientAgeGroup}}</td>
@@ -45,7 +45,7 @@
 		<!-- Associated Org (Calculated) -->
 		{{#if glb_userIsSuperAdmin}}
 			<td class="hidden-xs hidden-sm hidden-md orgCol adminOnly">
-				{{getOrgDataForThisItem itemId "kitbagAssocOrgTitle"}}
+				{{getOrgDataForThisItem itemId "assocOrgTitle"}}
 			</td>
 		{{/if}}
 
@@ -71,14 +71,6 @@
 				{{_id}}
 			</td>
 		{{/if}}
-
-		<!-- Owner -->
-		<!-- <td class="hidden-xs hidden-sm hidden-md itemOwnerCol">
-			TODO: Look up user name rather than ID
-			TODO: Link to User page
-			<a href="/users/{{owner}}/view">{{lookupUser owner}}</a>
-			{{#if userNameLookup owner "html"}}{{userNameLookup owner "html"}}{{else}}{{owner}}<span class="subtitle">(User details not found)</span>{{/if}}
-		</td> -->
 
 		<td class="hidden-xs itemIsMandatoryCol text-center">{{#if itemIsMandatory}}<i class="fa fa-check text-muted" aria-hidden="true"></i>{{/if}}</td>
 
@@ -184,7 +176,7 @@
 							<li>
 								<a class="toggleStatus" data-action="toggleStatus" data-item="{{itemId}}" href="#"><i class='fa fa-fw fa-{{changeItemStatus.icon}}'></i>
 									{{> changeItemStatus}}
-								<!--{{#if ({{kitbagStatus}} == "Active")}}
+								<!--{{#if ({{status}} == "Active")}}
 										Make Hidden
 									{{else}}
 										Make Active
@@ -212,7 +204,7 @@
 
 				<!-- Show status below menu on small screens -->
 				<div class="visible-xs-block">
-					<span class="label {{gItemStatusTag.labelClass}}">{{gItemStatusTag.labelText}}</span>
+					<span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span>
 				</div>
 				<!-- /status label -->
 

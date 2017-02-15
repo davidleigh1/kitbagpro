@@ -23,20 +23,20 @@ Template.itemLine.helpers({
 		console.log("lookupUser: ",uname);
 		return uname;
 	},
-	userNameLookup: function (userId, paramRequired) {
-		var myUser = Meteor.users.findOne({_id: userId });
-		// Items.findOne({itemId: FlowRouter.getParam('_itemId') });
-		// console.log("myUser",myUser.profile.displayName);
+	// userNameLookup: function (userId, paramRequired) {
+	// 	var myUser = Meteor.users.findOne({_id: userId });
+	// 	// Items.findOne({itemId: FlowRouter.getParam('_itemId') });
+	// 	// console.log("myUser",myUser.profile.displayName);
 
-		var data = {};
-		data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Name not found";
-		data.dbId  = userId;
-		data.apiId = (myUser && myUser.profile.userId)?myUser.profile.userId:"API-ID not found";
-		data.url   = "/users/"+userId+"/view";
-		data.html  = "<a href='"+data.url+"'>"+data.uname+"</a>";
+	// 	var data = {};
+	// 	data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Name not found";
+	// 	data.dbId  = userId;
+	// 	data.apiId = (myUser && myUser.profile.userId)?myUser.profile.userId:"API-ID not found";
+	// 	data.url   = "/users/"+userId+"/view";
+	// 	data.html  = "<a href='"+data.url+"'>"+data.uname+"</a>";
 
-		return Spacebars.SafeString( data[paramRequired] );
-	}
+	// 	return Spacebars.SafeString( data[paramRequired] );
+	// }
 });
 
 Template.itemLine.events({

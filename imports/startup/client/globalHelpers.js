@@ -2,11 +2,153 @@
 
 import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
-// import { Kitbags } from '/imports/startup/both/kitbag-schema.js';
 import { Items } 	from '/imports/startup/both/item-schema.js';
 import { UserList } from '/imports/startup/both/schema-user.js';
 
 
+/* NEW GENERIC HELPERS */
+
+Template.registerHelper('getOrgName', function() {
+	/* NOTE: The associated template data is passed to this function so the associated object so kitbag/item/org object is 'this' */
+	// console.log("-------------------\ngetOrgName()","\nARGUMENTS:\n",arguments,"\nTHIS:\n",this,"\n-------------------\n");
+
+	/* DEFAULT RESULTS */
+
+		var resultsObj = {
+			orgId: this.assocOrgId,
+			success: false,
+			short: false,
+			full: false,
+			urlView: "/orgs/{{assocOrgId}}/view",
+			urlEdit: "/orgs/{{assocOrgId}}/edit",
+			detail: false
+		};
+
+	/* NO ASSOCIATED ORG ID ON 'THIS' DOCUMENT */
+
+		if (!this.assocOrgId) {
+			resultsObj.short = "-";
+			resultsObj.full = "No Organisation assigned [code: 632]";
+			resultsObj.detail = "No assocOrgId found [code: 632]";
+			resultsObj.urlView = "#";
+			resultsObj.urlEdit = "#";
+			return resultsObj;
+		}
+
+	/* ASSOCIATED ORG ID FOUND 'THIS' DOCUMENT */
+
+		var orgFound = kb.collections.Orgs.findOne(this.assocOrgId);
+		var orgName = (orgFound) ? orgFound.title : "Org Not Found";
+		// console.log("orgName: ",orgName,JSON.stringify(orgName));
+
+	/* ORG ID VALUE FOUND BUT NO ORG DOCUMENT - OR NO ORG TITLE -  WAS FOUND WITH THAT ID */
+
+		resultsObj.success = (orgFound) ? true : false;
+		resultsObj.short = (!orgName) ? this.assocOrgId : orgName;
+		resultsObj.full = (!orgName) ? "Unnamed Org ("+this.assocOrgId+") [code: 1222]" : orgName;
+		resultsObj.detail = (!orgName) ? "assocOrgId found ("+this.assocOrgId+") but org has no title [code: 1222]" : orgName;
+		resultsObj.urlView = "/orgs/" + this.assocOrgId + "/view";
+		resultsObj.urlEdit = "/orgs/" + this.assocOrgId + "/edit";
+
+	/* RETURN */
+
+		// console.log("resultsObj: ",JSON.stringify(resultsObj));
+		return resultsObj;
+});
+
+Template.registerHelper('getCreatedString', function() {
+	/* NOTE: The associated template data is passed to this function so the associated object so kitbag/item/org object is 'this' */
+	if (!this.createdAt) {
+		return "No Created Date";
+	};
+	var createdString = this.createdAt;
+	if (this.createdBy) {
+		createdString = createdString + " by <code>" + getUsername(this.createdBy) + "</code>";
+	};
+	return Spacebars.SafeString(createdString);
+});
+
+Template.registerHelper('getLastUpdatedString', function() {
+	/* NOTE: The associated template data is passed to this function so the associated object so kitbag/item/org object is 'this' */
+	if (!this.updatedAt) {
+		return "No Last Update";
+	};
+	var updatedString = this.updatedAt;
+	if (this.updatedBy) {
+		updatedString = updatedString + " by <code>" + getUsername(this.updatedBy) + "</code>";
+	};
+	return Spacebars.SafeString(updatedString);
+});
+
+Template.registerHelper('isOwner', function(doc) {
+	console.log("\n\nGLOBAL ISOWNER\n\n");
+	return this.owner == Meteor.userId();
+});
+
+Template.registerHelper('global_isDocTrashed', function(docId) {
+	if (this.status.toLowerCase() == "trashed"){
+		return true;
+	} else {
+		return false;
+	}
+});
+
+Template.registerHelper('global_getDocStatusTag', function(docId) {
+	/* Returns object with {'labelClass' and 'labelText'} */
+	var labelClass, labelText;
+
+	// TODO: Add check for profile to generically support users too!
+	var checkMe = (typeof this.profile == "object" && typeof this.profile.userStatus == "string") ? this.profile.userStatus.toLowerCase() : "";
+
+	switch(this.status.toLowerCase()) {
+		case "active":
+			labelClass = "label-success";
+			labelText = "Active";
+			break;
+		case "hidden":
+			labelClass = "label-warning";
+			labelText = "Hidden";
+			break;
+		case "retired":
+			labelClass = "label-retired";
+			labelText = "Retired";
+			break;			
+		case "deleted":
+		case "trashed":
+			labelClass = "label-default";
+			labelText = "Trashed";
+			break;
+		default:
+			labelClass = "label-danger";
+			labelText = "Unknown";
+		break;
+	}
+	return { 'labelClass': labelClass, 'labelText': "*"+labelText };
+});
+
+Template.registerHelper('global_joinTextInList', function(t1="",t2="",t3="",t4="",t5="") {
+	// console.log("global_joinTextInList",t1,t2,t3,t4,t5);
+	var newText = ((typeof t1=="string" && t1!="")?t1:"") + ((typeof t2=="string" && t2!="")?t2:"") + ((typeof t3=="string" && t3!="")?t3:"") + ((typeof t4=="string" && t4!="")?t4:"") + ((typeof t5=="string" && t5!="")?t5:"");
+	return Spacebars.SafeString(newText);
+});
+
+Template.registerHelper('global_getfontAwesomeIcon', function(docType) {
+	// console.log("\n\ngetThisfontAwesomeIcon\n\n",docType,appSettings[docType.toLowerCase()].fontAwesomeIcon);
+	return appSettings[docType.toLowerCase()].fontAwesomeIcon || "fa-question-circle-o";
+});
+
+Template.registerHelper('global_toLower', function(str) {
+	if (typeof str != "string") { return str }
+		return str.toLowerCase();
+});
+
+// Template.registerHelper('global_thisDoc', function(docId) {
+// 	console.log('\n\nGLOBAL thisDoc\n\n',docId,this,Template.parentData(),Template.parentData().thisUrlId);
+// 	var docFound = kb.collections[Template.parentData().thisObj].findOne( FlowRouter.getParam(Template.parentData().thisUrlId) || docId );
+// 	return docFound;
+// });
+
+/* OLD GENERIC HELPERS */
 
 
 Template.registerHelper('totalSum', function(num1, num2, num3) {
@@ -38,10 +180,6 @@ Template.registerHelper('plural', function(count, singular, plural) {
 	return window.pluralize(count, singular, plural);
 });
 
-Template.registerHelper('toLower', function(str) {
-	if (typeof str != "string") { return str }
-		return str.toLowerCase();
-});
 
 Template.registerHelper('gCurrentRoute', function(routeToTest) {
 	if (!routeToTest) {
@@ -316,132 +454,133 @@ Template.registerHelper('glb_userIsStoreManager',function(){
 
 /* USER HELPERS */
 
-Template.registerHelper('getUserStatusTag',function(){
+// Template.registerHelper('getUserStatusTag',function(){
 
-	var labelClass, labelText;
+// 	var labelClass, labelText;
 
-	var checkMe = (typeof this.profile == "object" && typeof this.profile.userStatus == "string") ? this.profile.userStatus.toLowerCase() : "";
+// 	var checkMe = (typeof this.profile == "object" && typeof this.profile.userStatus == "string") ? this.profile.userStatus.toLowerCase() : "";
 
-	switch(checkMe) {
-		case "active":
-			labelClass = "label-success";
-			labelText = "Active";
-			break;
-		case "hidden":
-			labelClass = "label-warning";
-			labelText = "Hidden";
-			break;
-		case "trashed":
-			labelClass = "label-default";
-			labelText = "Trashed";
-			break;
-		default:
-			labelClass = "label-danger";
-			labelText = "Unknown";
-		break;
-	}
-	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-	return { 'labelClass': labelClass, 'labelText': labelText };
-});
+// 	switch(checkMe) {
+// 		case "active":
+// 			labelClass = "label-success";
+// 			labelText = "Active";
+// 			break;
+// 		case "hidden":
+// 			labelClass = "label-warning";
+// 			labelText = "Hidden";
+// 			break;
+// 		case "trashed":
+// 			labelClass = "label-default";
+// 			labelText = "Trashed";
+// 			break;
+// 		default:
+// 			labelClass = "label-danger";
+// 			labelText = "Unknown";
+// 		break;
+// 	}
+// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
+// 	return { 'labelClass': labelClass, 'labelText': labelText };
+// });
 
 
-Template.registerHelper('gOrgStatusTag',function(){
+// Template.registerHelper('gOrgStatusTag',function(){
 
-	var labelClass, labelText;
+// 	var labelClass, labelText;
 
-	switch(this.status.toLowerCase()) {
-		case "active":
-			labelClass = "label-success";
-			labelText = "Active";
-			break;
-		case "hidden":
-			labelClass = "label-warning";
-			labelText = "Hidden";
-			break;
-		case "trashed":
-			labelClass = "label-default";
-			labelText = "Trashed";
-			break;
-		default:
-			labelClass = "label-danger";
-			labelText = "Unknown";
-		break;
-	}
-	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-	return { 'labelClass': labelClass, 'labelText': labelText };
-});
+// 	switch(this.status.toLowerCase()) {
+// 		case "active":
+// 			labelClass = "label-success";
+// 			labelText = "Active";
+// 			break;
+// 		case "hidden":
+// 			labelClass = "label-warning";
+// 			labelText = "Hidden";
+// 			break;
+// 		case "trashed":
+// 			labelClass = "label-default";
+// 			labelText = "Trashed";
+// 			break;
+// 		default:
+// 			labelClass = "label-danger";
+// 			labelText = "Unknown";
+// 		break;
+// 	}
+// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
+// 	return { 'labelClass': labelClass, 'labelText': labelText };
+// });
 
-Template.registerHelper('gKitbagStatusTag',function(textStatus){
-	var kbstatus = (typeof textStatus != "undefined" && textStatus != "") ? textStatus : this.status;
-	if (!kbstatus) return;
-	var labelClass, labelText;
-	// console.log("kbstatus: ",textStatus,kbstatus);
-	switch( kbstatus.toLowerCase() ) {
-		case "active":
-			labelClass = "label-success";
-			labelText = "Active";
-			break;
-		case "hidden":
-			labelClass = "label-warning";
-			labelText = "Hidden";
-			break;
-		case "retired":
-			labelClass = "label-retired";
-			labelText = "Retired";
-			break;
-		case "deleted":
-		case "trashed":
-			labelClass = "label-default";
-			labelText = "Trashed";
-			break;
-		default:
-			labelClass = "label-danger";
-			labelText = "Unknown";
-		break;
-	}
-	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-	return { 'labelClass': labelClass, 'labelText': labelText };
-});
+// Template.registerHelper('gKitbagStatusTag',function(textStatus){
+// 	var kbstatus = (typeof textStatus != "undefined" && textStatus != "") ? textStatus : this.status;
+// 	if (!kbstatus) return;
+// 	var labelClass, labelText;
+// 	// console.log("kbstatus: ",textStatus,kbstatus);
+// 	switch( kbstatus.toLowerCase() ) {
+// 		case "active":
+// 			labelClass = "label-success";
+// 			labelText = "Active";
+// 			break;
+// 		case "hidden":
+// 			labelClass = "label-warning";
+// 			labelText = "Hidden";
+// 			break;
+// 		case "retired":
+// 			labelClass = "label-retired";
+// 			labelText = "Retired";
+// 			break;
+// 		case "deleted":
+// 		case "trashed":
+// 			labelClass = "label-default";
+// 			labelText = "Trashed";
+// 			break;
+// 		default:
+// 			labelClass = "label-danger";
+// 			labelText = "Unknown";
+// 		break;
+// 	}
+// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
+// 	return { 'labelClass': labelClass, 'labelText': labelText };
+// });
 
-Template.registerHelper('gItemStatusTag',function(){
+// Template.registerHelper('gItemStatusTag',function(){
 
-	var labelClass, labelText;
+// 	var labelClass, labelText;
 
-	switch(this.itemStatus.toLowerCase()) {
-		case "active":
-			labelClass = "label-success";
-			labelText = "Active";
-			break;
-		case "hidden":
-			labelClass = "label-warning";
-			labelText = "Hidden";
-			break;
-		case "retired":
-			labelClass = "label-retired";
-			labelText = "Retired";
-			break;
-		case "deleted":
-		case "trashed":
-			labelClass = "label-default";
-			labelText = "Trashed";
-			break;
-		default:
-			labelClass = "label-danger";
-			labelText = "Unknown";
-		break;
-	}
-	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-	return { 'labelClass': labelClass, 'labelText': labelText };
-});
+// 	switch(this.itemStatus.toLowerCase()) {
+// 		case "active":
+// 			labelClass = "label-success";
+// 			labelText = "Active";
+// 			break;
+// 		case "hidden":
+// 			labelClass = "label-warning";
+// 			labelText = "Hidden";
+// 			break;
+// 		case "retired":
+// 			labelClass = "label-retired";
+// 			labelText = "Retired";
+// 			break;
+// 		case "deleted":
+// 		case "trashed":
+// 			labelClass = "label-default";
+// 			labelText = "Trashed";
+// 			break;
+// 		default:
+// 			labelClass = "label-danger";
+// 			labelText = "Unknown";
+// 		break;
+// 	}
+// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
+// 	return { 'labelClass': labelClass, 'labelText': labelText };
+// });
 
 
 /* ============================================================================================*/
 
 Template.registerHelper('objectsFiltered',function( str_CollectionName , str_userFilter , obj_listFilter ){
 	// console.log("objectsFiltered(arg1) str_CollectionName: ", str_CollectionName);
-	// console.log("objectsFiltered(arg2) str_userFilter: ", str_userFilter);
 	// console.log("objectsFiltered(arg3) obj_listFilter: ", obj_listFilter , JSON.stringify(obj_listFilter) , typeof obj_listFilter );
 	// console.log("objectsFiltered(var) obj_defineDataset: ", JSON.stringify(obj_defineDataset) , typeof obj_defineDataset );
+
+	// console.log("objectsFiltered()", arguments);
 
 	/* str_CollectionName is required - will determine what we listing! */
 	if ( typeof str_CollectionName == 'undefined' ) return;
@@ -464,24 +603,21 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	/* List all parameters we are willing to accept.  These will be checked against the keys in listSelect shortly. */
 	var validList = [
-		"status",
-		"title",
-		"kitbagtitle",
-		"kitbagid",
-		"kitbagstatus",
-		"kitbagsku",
-		"kitbagassocorg",
-		"kitbagassocorgtitle",
-		"itemstatus",
-		"itemtitle",
+		"_id",
+		"assocOrgId",
+		"assocOrgTitle",
+		"emails",
 		"itemassockitbagid",
 		"itemassockitbagtitle",
 		"itemassocorgid",
 		"itemassocorgtitle",
+		"itemstatus",
+		"itemtitle",
 		"owner",
-		"_id",
-		"username",
-		"emails"
+		"sku",
+		"status",
+		"title",
+		"username"
 	];
 
 
@@ -544,25 +680,25 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 	if (str_CollectionName == "Orgs"){
 		//console.log("Orgs",listSelect,userFilter);
 
-		var orgsFound = kb.collections.Orgs.find(
+		var queryObject = {
+			$and: [
+				/* Match listSelect */
+				{title: 	{ $regex: new RegExp(listSelect.orgtitle, "i") }},
+				{_id: 		{ $regex: new RegExp(listSelect._id, "i") }},
+				{status:	{ $regex: new RegExp(listSelect.orgstatus, "i") }},
 			{
-				$and: [
-					/* Match listSelect */
-					{title: 	{ $regex: new RegExp(listSelect.orgtitle, "i") }},
-					{_id: 	{ $regex: new RegExp(listSelect._id, "i") }},
-					{status:	{ $regex: new RegExp(listSelect.orgstatus, "i") }},
-					/*{owner: 	{ $regex: new RegExp(listSelect.owner, "i") }},*/
-					/* AND match the User's Filter String */
-					{
-						$or: [
-								{title: 	{ $regex: new RegExp(userFilter, "i") }},
-								{_id: 	{ $regex: new RegExp(userFilter, "i") }}
-						]
-					}
+				$or: [
+						{title: { $regex: new RegExp(userFilter, "i") }},
+						{_id: 	{ $regex: new RegExp(userFilter, "i") }}
 				]
 			}
-		).fetch();
-		//console.log("orgsFound: ",orgsFound.length,orgsFound);
+			]
+		};
+
+		var orgsFound = kb.collections.Orgs.find( queryObject ).fetch();
+
+		// console.log("queryObject: ",queryObject,JSON.stringify(queryObject));
+		// console.log("orgsFound: ",orgsFound.length,orgsFound);
 		if( typeof int_orgsFound != "undefined" ){
 			int_orgsFound.set(orgsFound.length);
 			//appendToResultsObj("orgsFound",orgsFound.length);
@@ -573,24 +709,21 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 	};
 
 	if (str_CollectionName == "Kitbags"){
-
 		//console.log("Kitbags",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
 
 		var queryObject = {
 			$and: [
 				/* Match listSelect */
-				{title: 			{ $regex: new RegExp(listSelect.kitbagtitle, "i") }},
-				{_id: 				{ $regex: new RegExp(listSelect.kitbagid, "i") }},
-				{status:			{ $regex: new RegExp(listSelect.kitbagstatus, "i") }},
-				{assocOrgId: 		{ $regex: new RegExp(listSelect.kitbagassocorg, "i") }},
-				{assocOrgTitle: 	{ $regex: new RegExp(listSelect.kitbagassocorgtitle, "i") }},
-				// {owner: 				{ $regex: new RegExp(listSelect.owner, "i") }},
-				/* AND match the User's Filter String */
+				{title: 			{ $regex: new RegExp(listSelect.title, "i") }},
+				{_id: 				{ $regex: new RegExp(listSelect._id, "i") }},
+				{status:			{ $regex: new RegExp(listSelect.status, "i") }},
+				{assocOrgId: 		{ $regex: new RegExp(listSelect.assocorgid, "i") }},
+			//	{assocOrgTitle: 	{ $regex: new RegExp(listSelect.assocorgtitle, "i") }},
 				{
 					$or: [
 							{title: 			{ $regex: new RegExp(userFilter, "i") }},
 							{_id: 				{ $regex: new RegExp(userFilter, "i") }},
-							{kitbagSku: 		{ $regex: new RegExp(userFilter, "i") }},
+							{sku: 				{ $regex: new RegExp(userFilter, "i") }},
 							{assocOrgId: 		{ $regex: new RegExp(userFilter, "i") }},
 							{assocOrgTitle: 	{ $regex: new RegExp(userFilter, "i") }}
 					]
@@ -600,8 +733,8 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 		var bagsFound = kb.collections.Kitbags.find( queryObject ).fetch();
 
-		// console.log("queryObject: ",queryObject);
-		// console.log("bagsFound: ",bagsFound.length);
+		// console.log("queryObject: ",queryObject,JSON.stringify(queryObject));
+		// console.log("bagsFound: ",bagsFound.length,bagsFound);
 		if( typeof int_orgBagsFound != "undefined" ){
 			int_orgBagsFound.set(bagsFound.length);
 			// appendToResultsObj("bagsFound",bagsFound.length);
@@ -694,8 +827,8 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 		var usersFound = Meteor.users.find( queryObject ).fetch();
 
-		console.log("queryObject: ",queryObject);
-		console.log("usersFound: ", usersFound.length, usersFound);
+		// console.log("queryObject: ",queryObject);
+		// console.log("usersFound: ", usersFound.length, usersFound);
 
 		if( typeof int_usersFound != "undefined" ){
 			int_usersFound.set(usersFound.length);
@@ -708,15 +841,15 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	if (str_CollectionName == "UsersInThisOrg"){
 
-		console.log("objectsFiltered('UsersInThisOrg') --- Users",listSelect,userFilter);
+		// console.log("objectsFiltered('UsersInThisOrg') --- Users",listSelect,userFilter);
 		//console.log("AssocKitbagsFromArray",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
 
 		var queryObject = { "profile.userAssocOrg" : FlowRouter.getParam('_orgId') };
 
 		var usersFound = Meteor.users.find( queryObject ).fetch();
 
-		console.log("queryObject: ",queryObject);
-		console.log("usersFound: ",usersFound.length,usersFound);
+		// console.log("queryObject: ",queryObject);
+		// console.log("usersFound: ",usersFound.length,usersFound);
 		if( typeof int_orgUsersFound != "undefined" ){
 			int_orgUsersFound.set(usersFound.length);
 			// appendToResultsObj("usersFound",usersFound.length)
@@ -733,6 +866,10 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 
 GlobalHelpers = {
+	getThisfontAwesomeIcon: function(thisObj) {
+		// console.log("\n\ngetThisfontAwesomeIcon\n\n",thisObj,this);
+		return appSettings[thisObj.toLowerCase()].fontAwesomeIcon || "fa-question-circle-o";
+	},
 	// Random number generator for object IDs (to avoid using the Mongo doc Id)
 	// http://stackoverflow.com/questions/105034/
 	// See: http://stackoverflow.com/questions/894860/ for ES6/ES2015, default parameters
@@ -792,7 +929,7 @@ GlobalHelpers = {
 		return true;
 
 	},
-	// Takes an Organisation ID and responds with the value of the requested field for that organisation e.g. {{lookupOrg kitbagAssocOrg 'title'}}
+	// Takes an Organisation ID and responds with the value of the requested field for that organisation e.g. {{lookupOrg assocOrgId 'title'}}
 	lookupFieldFromOrg: function(orgId,requiredField){
 		//console.log(">>> lookupFieldFromOrg("+orgId+","+requiredField+")");
 		//console.log(orgId,requiredField);

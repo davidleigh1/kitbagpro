@@ -9,4 +9,7 @@ import '/imports/startup/both';
 
 import '/imports/api/admin/admin.js';
 // import '/imports/api/orgs/orgs.js';
-import '/imports/startup/both/schema-org.js';
+
+
+// import '/imports/startup/both/schema-org.js';
+// import '/imports/startup/both/schema-kitbag.js';

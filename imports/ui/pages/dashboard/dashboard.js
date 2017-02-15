@@ -99,5 +99,11 @@ Template.dashboard.events({
 		//console.log("Reassign Bags to Orgs Now!");
 		// Meteor.call("updateCounts","onDemand");
 		Meteor.call("assignAllKBs","onDemand");
+	},
+	'click #printLine': function(event) {
+		event.preventDefault();
+		//console.log("Reassign Bags to Orgs Now!");
+		// Meteor.call("updateCounts","onDemand");
+		Meteor.call("printLine","onDemand");
 	}
 });

@@ -4,7 +4,7 @@
 	{{> pageHeader
 		pageTitle = "Organisations"
 		pageSubtitle = ""
-		faIcon = "fa-building"
+		faIcon = (global_getfontAwesomeIcon 'Orgs')
 		}}
 
 	<!-- TODO: Make this into a reusable template with only the JS changing each time? -->
@@ -12,7 +12,11 @@
 		<div class="col-lg-12">
 			<div class="panel panel-default">
 				<div class="panel-heading orgFilter">
-					<h3 class="panel-title"><i class="fa fa-building fa-fw"></i> Organisations</h3>
+					<h3 class="panel-title">
+						<!-- <i class="fa fa-building fa-fw"></i> -->
+						{{>orgLogo}}
+						Organisations
+					</h3>
 				</div>
 				<div class="panel-body">
 					<!-- Filtered list of organizations -->
@@ -28,7 +32,6 @@
 		</div>
 	</div>
 	<!-- /.row -->
-
 
 {{#if Template.subscriptionsReady}}
 

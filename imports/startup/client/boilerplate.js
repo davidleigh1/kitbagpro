@@ -23,7 +23,6 @@ import '/imports/ui/pages/kitbags/line.js';
 /* IMPORT PROJECT OBJECTS */
 
 import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
-import { Kitbags } 		from '/imports/startup/both/kitbag-schema.js';
 import { Items } 		from '/imports/startup/both/item-schema.js';
 import { UserList } 	from '/imports/startup/both/schema-user.js';
 

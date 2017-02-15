@@ -19,28 +19,26 @@
 
 
 /* PARAMETERS */
-	var thisCollectionName = "Orgs";
+	var thisCollectionName = "Kitbags";
 	var thisAction = "created from duplicate";
-	var thisUrlId = "_orgId";	
-
+	var thisUrlId = "_kitbagId";
 
 
 /* ONCREATED */
-Template.orgDuplicate.onCreated(function() {
+Template.kitbagDuplicate.onCreated(function() {
 	// EMPTY
 });
 
 
-
 /* ONRENDERED */
-Template.orgDuplicate.onRendered(function(){
-	globalDuplicate(thisCollectionName,"orgPrefix");
+Template.kitbagDuplicate.onRendered(function(){
+	globalDuplicate(thisCollectionName,"kbPrefix");
 });
 
 
 /* HELPERS */
-Template.orgDuplicate.helpers({
-	Orgs: function () {
+Template.kitbagDuplicate.helpers({
+	Kitbags: function () {
 		/* 
 		Reference - autoform requires collection in windows scope
 		But most isolated solution is to make collection available
@@ -51,36 +49,34 @@ Template.orgDuplicate.helpers({
 	},
 	getOmitFields: function() {
 		return appSettings[thisCollectionName.toLowerCase()].omitFields;
-	},
+	},	
 	autoSaveMode: function () {
 		return Session.get("autoSaveMode") ? true : false;
 	},
-	selectedOrgDoc: function () {
+	selectedKitbagDoc: function () {
 		return kb.collections[thisCollectionName].findOne(GlobalHelpers.get_urlParam(thisUrlId));
 	}
-	// },
-	// isSelectedOrg: function () {
-	// 	return GlobalHelpers.get_urlParam(thisUrlId);
-	// },
-	// disableButtons: function () {
-		// return (FlowRouter.getRouteName() !== "orgEdit");
 });
 
 
 /* HOOKS */
 AutoForm.hooks({
-	duplicateOrgForm: {
+	duplicateKitbagForm: {
 		onSuccess: function(formType, resultObj) {
+			// console.log("AutoForm.hooks.duplicateKitbagForm.onSuccess: ", formType, resultObj);
+			// console.log("Calling globalOnSuccess()", thisCollectionName, thisAction, resultObj);		
 			globalOnSuccess(thisCollectionName, thisAction, resultObj);
 		},
 		onError: function(formType, error, arg3, arg4) {
+			// console.log("AutoForm.hooks.insertKitbagForm.onError: ", formType, error, arg3, arg4);
 			globalOnError(thisCollectionName, error, arg3, arg4);
 		}
   }
 });
 
+
 /* EVENTS */
-Template.orgDuplicate.events({
+Template.kitbagDuplicate.events({
 	'change .autosave-toggle': function () {
 		Session.set("autoSaveMode", !Session.get("autoSaveMode"));
 	}

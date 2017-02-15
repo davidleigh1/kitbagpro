@@ -1,14 +1,134 @@
 /* IMPORT PROJECT OBJECTS */
-
-// import { Orgs } 		from '/imports/startup/both/schema-org.js';
-// import { Kitbags } 	from '/imports/api/kitbags/kitbags.js';
-// import { Items } 	from '/imports/startup/both/item-schema.js';
-// import { UserList } 	from '/imports/startup/both/schema-user.js';
 import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 
 
+/* GLOBAL GENERICS */
 
-window.pluralize = function(count, singular, plural) {
+globalOnSuccess = function(thisCollectionName, thisAction = 'created', resultObj = {id:'unknown'},	formType = 'unknown', alertMsgPrefix = '') {
+	console.log("globalOnSuccess()",arguments);
+
+	// TODO: Remove all instances of thisObj (where string is used) in favour of thisCollectionName
+	thisCollectionName = thisCollectionName || thisObj || 'unknown';
+
+	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
+	var alertMessage = alertMsgPrefix + "<strong>SUCCESS: </strong> "+appSettings[thisCollectionName.toLowerCase()].labelCapsSingular+": '<i>"+resultObj.title+"</i>' was successfully "+thisAction+".";
+
+	sAlert.success(alertMessage, {
+		html: true,
+		onRouteClose: false
+	});
+	console.log("globalOnSuccess()","resultObj",resultObj);
+	var goToUrl = "/"+thisCollectionName.toLowerCase()+"/"+resultObj.id+"/view";
+
+	console.log("globalOnSuccess()","Redirect: "+goToUrl);
+
+	FlowRouter.go(goToUrl);
+};
+
+globalOnError = function(thisCollectionName, thisAction = null, error = 'Unknown Error', arg3, arg4) {
+	console.log("globalOnError()",arguments);
+
+	// TODO: Remove all instances of thisObj (where string is used) in favour of thisCollectionName
+	thisCollectionName = thisCollectionName || thisObj || 'unknown';
+
+	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
+
+	var msg = alertMsgPrefix + "<strong>Error: </strong><code>"+error.message+"</code>";
+	sAlert.error(msg, {
+		html: true,
+		timeout: appSettings.sAlert.longTimeout
+	});
+};
+
+globalDelete = function (origin = 'unknown', thisCollectionName, assocObj, userId, goUrl) {
+	/* TODO: Based on globalfn_deleteOrg() - below - which should be deprecated  */
+	// event.preventDefault();
+	console.log("globalDelete()");
+
+	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
+	var areYouSure = "Permanently delete "+ appSettings[thisCollectionName.toLowerCase()].labelSingular + " '"+assocObj.title+"'?\n\nThere is no undo!\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
+	if ( confirm(areYouSure) ) {
+
+		console.log("\n\nTODO: BLOCK DELETION TO AVOID ORPHAN KITBAGS OR ITEMS!");
+
+		Meteor.call("deleteDoc", origin, thisCollectionName, assocObj, userId, function(error, result) {
+			console.log("error: " + error + "\n" + "result: " + result);
+			// TODO: Get message prefix from appSettings!
+			if (!error && true === result){
+				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>"+appSettings[thisCollectionName.toLowerCase()].labelCapsSingular+": <i>'"+assocObj.title+"'</i> was successfully deleted.",
+					{
+						html: true
+					}
+				);
+			} else {
+				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete "+appSettings[thisCollectionName.toLowerCase()].labelSingular+": '<strong>"+assocObj.title+"</strong>' with error: <code>"+error+"</code>",
+					{
+						html: true,
+						timeout: appSettings.sAlert.longTimeout
+					}
+				);
+			}
+		});
+		if (typeof goUrl == "string" && goUrl != "") {
+			FlowRouter.go(goUrl);
+		}
+	} else {
+		return false;
+	}
+};
+
+// globalTrashed("TrashedByUser", "Kitbags", this, Meteor.userId(), "#");
+
+globalTrash = function (origin = 'unknown', thisObj, assocObj, userId, goUrl) {
+	console.log("globalTrash()", arguments);
+
+	var areYouSure = "Trash "+appSettings[thisObj.toLowerCase()].labelSingular+" '"+assocObj.title+"'?\n(ID: "+assocObj._id+")";
+	if ( confirm(areYouSure) ) {
+		Meteor.call("setDocStatus", thisObj, assocObj._id, "Trashed");
+	} else {
+		return false;
+	}
+};
+
+globalDuplicate = function(thisObj,objPrefix) {
+	console.log("globalDuplicate()",arguments);
+
+	var oldId = $("input[name='_id']").val();
+	var oldTitle = $("input[name='title']").val();
+	var oldDesc = $("input[name='desc']").val();
+	/* New ID - the old ID is still visible in the URL */
+	$("input[name='_id']").val( GlobalHelpers.idGenerator(uniqueIds[objPrefix]) );
+	/* Prepend to title */
+	$("input[name='title']").val( appSettings.global.duplicatedPrefix + oldTitle );
+	/* Prepend leading whitespace if there is an existing value */
+	var leadingSpace = (oldDesc.length > 0) ? "\n " : "";
+	$("input[name='desc']").val( oldDesc + leadingSpace + "[Duplicated from "+oldTitle+" (ID: "+oldId+")]" );
+	/* Auto-select createdvia dropdown field as manual duplicate */
+	$("select[name='createdVia']").find('option').each(function() {
+		if ( $(this).val().match("ManualDuplicate") ){
+			$(this).attr('selected','true');
+		}
+	});
+};
+
+getUsername = function (userId, showMe) {
+	var userFound = Meteor.users.findOne(userId);
+
+	if (!userFound) {
+		return "Unknown User ("+userId+")";
+	}
+
+	if (userId === Meteor.userId() && showMe){
+		return "me";
+	} else {
+		return userFound.profile.displayName || userFound.username;
+	}
+};
+
+
+/* END - GLOBAL GENERICS */
+
+pluralize = function(count, singular, plural) {
 	switch (count) {
 	case 0:
 	case "":
