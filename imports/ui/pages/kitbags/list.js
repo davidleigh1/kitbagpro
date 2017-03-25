@@ -6,12 +6,13 @@
 	import './logo.html';
 	import './list.html';
 	import './line.js';
+
+/* IMPORT SHARED TEMPLATES + COMPONENTS */
 	import '/imports/ui/components/lists/listFilter.js';
 
 
 /* IMPORT PROJECT OBJECTS */
-	import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
-	import { Items } from '/imports/startup/both/item-schema.js';
+	import { kb } from "/imports/startup/both/sharedConstants.js";
 
 
 /* PARAMETERS*/
@@ -19,13 +20,13 @@
 
 
 /* ONCREATED */
-Template.kitbagList.created = function(){
-	// EMPTY
-};
+	Template.kitbagList.created = function(){
+		// EMPTY
+	};
 
 
 /* HELPERS */
-Template.kitbagList.helpers({
-	// EMPTY
-	// MOVED TO GLOBAL HELPERS
-});
+	Template.kitbagList.helpers({
+		// EMPTY
+		// MOVED TO GLOBAL HELPERS
+	});

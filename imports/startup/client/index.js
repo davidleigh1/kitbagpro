@@ -6,12 +6,9 @@ import { ReactiveVar } from 'meteor/reactive-var';
 
 /* import './main.html'; */
 
-import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
+	import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
-import { Items } from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/schema-user.js';
-
-import { Admin } from '/imports/api/admin/admin.js';
+	import { Admin } from '/imports/api/admin/admin.js';
 
 
 
@@ -126,7 +123,9 @@ Template.body.onRendered(function() {
 	window.kb_reference_only = kb;
 	kb_docs = {
 		Orgs: kb.collections.Orgs._collection._docs._map,
-		Kitbags: kb.collections.Kitbags._collection._docs._map
+		Kitbags: kb.collections.Kitbags._collection._docs._map,
+		Items: kb.collections.Items._collection._docs._map,
+		Users: kb.collections.Users._collection._docs._map
 	};
 	console.log(kb_docs);
 	window.kb_reference_only.docs = kb_docs;
@@ -218,32 +217,30 @@ Template.body.onRendered(function() {
 		const isReady = itemHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
 		console.log("SUB: Handle for items is " + status + "");
-		if (status == "ready") {
-			console.log("Setting window.Items : ",window.Items);
-			window.Items = Items;
-			// allSubscriptionsReady("kbHandle");
-		}
+		// if (status == "ready") {
+		// 	console.log("Setting window.Items : ",window.Items);
+		// 	window.Items = Items;
+		// 	// allSubscriptionsReady("kbHandle");
+		// }
 	});
 
 	const adminHandle = Meteor.subscribe('admin');
 	Tracker.autorun(() => {
 		const isReady = adminHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		console.log("SUB: Handle for kitbags is " + status + "");
+		console.log("SUB: Handle for admin is " + status + "");
 		// if (status == "ready") {
 		// 	allSubscriptionsReady("adminHandle");
 		// }
 	});
 
-	const userlistHandle = Meteor.subscribe('userlist');
+	const userHandle = Meteor.subscribe('users');
 	Tracker.autorun(() => {
-		const isReady = userlistHandle.ready();
+		const isReady = userHandle.ready();
 		var status =  isReady ? 'ready' : 'not ready';
-		console.log("SUB: Handle for userlist is " + status + "");
-		// if (status == "ready") {
-		// 	allSubscriptionsReady("adminHandle");
-		// }
+		console.log("SUB: Handle for users is " + status + "");
 	});
+
 });
 
 Template.body.helpers({

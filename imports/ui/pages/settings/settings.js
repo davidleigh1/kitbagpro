@@ -49,15 +49,15 @@ Template.settings.helpers({
 				case 'userInternalId':
 					return (Meteor.userId())?Meteor.userId():notFound;
 					break;
-				case 'profileName':
+				case 'displayName':
 					// console.log(Meteor.user());
-					return (Meteor.user().profile.name)?Meteor.user().profile.name:notFound;
+					return (Meteor.user().displayName)?Meteor.user().displayName:notFound;
 					break;
 				case 'userName':
 					return (Meteor.user().username)?Meteor.user().username:notFound;
 					break;
 				case 'firstName':
-					return (Meteor.user().profile.first_name)?Meteor.user().profile.first_name:notFound;
+					return (Meteor.user().first_name)?Meteor.user().first_name:notFound;
 					break;
 				default:
 					return "'"+attr+"' not found";

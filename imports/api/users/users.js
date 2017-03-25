@@ -2,6 +2,6 @@
 
 // console.log(">>>>> Empty 'users.js' at imports/api/users/users.js");
 
-console.log(">>>>> 'UserList' is defined here!");
+// console.log(">>>>> 'Users' is defined here!");
 
 // export const UserList = Meteor.users.find();

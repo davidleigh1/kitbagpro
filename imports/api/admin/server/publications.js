@@ -24,11 +24,11 @@ Meteor.publish("admin",function() {
 /* Admin Only Methods */
 
 Meteor.methods({
-	updateCounts: function (requestor) {
-		console.log("updateCounts() requested by: " + requestor);
-		updateOrgCountsObj(requestor);
-		updateKitbagCountsObj(requestor);
-		updateItemCountsObj(requestor);
+	updateGlobalCounts: function (requestor) {
+		console.log("EVT: updateGlobalCounts() requested by: " + requestor);
+		updateGlobalOrgCountsObj(requestor);
+		updateGlobalKitbagCountsObj(requestor);
+		updateGlobalItemCountsObj(requestor);
 	},
 	assignAllKBs: function (requestor) {
 		console.log("EVT: reassignAllKBs() requested by: " + requestor);

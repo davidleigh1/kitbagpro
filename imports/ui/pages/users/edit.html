@@ -1,5 +1,14 @@
 <template name="userEdit">
 
+<style>
+	.oldProfileField {
+    	color: red;
+    	background-color: rgba(255, 192, 203, 0.3);
+	}
+</style>
+
+{{#if userHasPermission 'canEditOrgUsers'}}
+
 	<h1>Edit User</h1>
 
 	<div class="screen-wrapper">
@@ -21,57 +30,60 @@
 
 		{{#autoForm
 			autosave     = autoSaveMode
-			collection   = "Meteor.users"
+			collection   = Users
 			doc          = selectedUserDoc
 			id           = "updateUserForm"
 			type         = "method-update"
-			meteormethod = "updateUserMethod"
+			meteormethod = "updateDoc"
 			class		 = "form-horizontal"
 			template	 = "bootstrap3-horizontal"
 		}}
+			<!--
+			collection   = "Meteor.users"
+			meteormethod = "updateUserMethod"
+			-->
 
  			<!-- <fieldset> -->
 
 			<!-- USER PERSONAL ATTRIBUTES -->
 			<legend>User Details</legend>
-				{{> afQuickField name='profile.displayName' label-class="col-sm-2" input-col-class="col-sm-10"}}
-				{{> afQuickField name='profile.userCallsign' label-class="col-sm-2" input-col-class="col-sm-10"}}
-				{{> afQuickField name='profile.phoneNumber' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='displayName' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='callsign' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='phoneNumber' label-class="col-sm-2" input-col-class="col-sm-10"}}
 				{{> afQuickField name='emails.0.address' label-class="col-sm-2" input-col-class="col-sm-10"}}
-				{{#if glb_userIsSuperAdmin}}
+				<!-- {{#if glb_userIsSuperAdmin}} -->
 					<div class="adminOnly">
 					{{> afQuickField name='emails.0.verified' label-class="col-sm-2" input-col-class="col-sm-10"}}
 					</div>
-				{{/if}}
-				{{> afQuickField name='profile.userNotes' rows=4 label-class="col-sm-2" input-col-class="col-sm-10"}}
+				<!-- {{/if}} -->
+				{{> afQuickField name='notes' rows=4 label-class="col-sm-2" input-col-class="col-sm-10"}}
 
 			<!-- USER WITHIN ORG STRUCTURE -->
 			<legend>User Affiliations</legend>
 				{{#if glb_userIsSuperAdmin}}
 					<div class="adminOnly">
-					{{> afQuickField name='profile.userAssocOrg' label-class="col-sm-2" input-col-class="col-sm-10"}}
+					{{> afQuickField name='assocOrgId' label-class="col-sm-2" input-col-class="col-sm-10"}}
 					</div>
 				{{/if}}
-				{{> afQuickField name='profile.userDivision' label-class="col-xs-2" input-col-class="col-xs-10" }}
-				{{> afQuickField name='profile.userTeam' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='division' label-class="col-xs-2" input-col-class="col-xs-10" }}
+				{{> afQuickField name='team' label-class="col-sm-2" input-col-class="col-sm-10"}}
 
 			<!-- LOGIN / USER ACCOUNT -->
 			<legend>User Account</legend>
-				{{> afQuickField name='profile.userStatus' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='status' label-class="col-sm-2" input-col-class="col-sm-10"}}
 				{{> afQuickField name='username' label-class="col-sm-2" input-col-class="col-sm-10"}}
-				<!-- {{> afQuickField name='profile.adminResetPassword' label-class="col-sm-2" input-col-class="col-sm-10" }} -->
-				{{> afQuickField name='profile.userType' label-class="col-sm-2" input-col-class="col-sm-10"}}
-				{{> afQuickField name='profile.profilePicture' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='type' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='profilePicture' label-class="oldProfileField col-sm-2" input-col-class="oldProfileField col-sm-10"}}
 
 			<!-- INVENTORY -->
 			<legend>Inventory</legend>
-				{{> afQuickField name='profile.defaultStore' label-class="col-sm-2" input-col-class="col-sm-10"}}
-				{{> afQuickField name='profile.userKitbags' label-class="col-sm-2" input-col-class="col-sm-10"}}
-				<!-- {{> afQuickField name='profile.userKitbagCount' label-class="col-sm-2" input-col-class="col-sm-10"}} -->
+				{{> afQuickField name='defaultStore' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='assocKitbagIds' label-class="col-sm-2" input-col-class="col-sm-10"}}
 
 			<!-- SYSTEM INFO -->
 			<legend>System Information</legend>
-				{{> afQuickField name='profile.userId' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='_id' label-class="col-sm-2" input-col-class="col-sm-10"}}
+				{{> afQuickField name='collection' label-class="col-sm-2" input-col-class="col-sm-10"}}
 			<!-- </fieldset> -->
 		<!-- </div> -->
 
@@ -102,5 +114,9 @@
 	{{/if}}
 
 	</div>
+
+{{else}}
+	{{>accessRestricted}}
+{{/if}}
 
 </template>

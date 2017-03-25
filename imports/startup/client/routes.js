@@ -6,7 +6,10 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 
 /* CONTENT PROTECTION - DISABLE THE FOLLOWING LINE TO REMOVE USER ACCOUNT / PASSWORD PROTECTION */
-// FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
+FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
+
+
+
 
 
 /*----------------------------------------*/
@@ -134,7 +137,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 		orgsRoutes.route("/list", {
 			name:"orgList",
 			action: function(params, queryParams) {
-				//console.log("Route: Organizations > Org List (Org List)", params, queryParams);
+				//console.log("Route: Organisations > Org List (Org List)", params, queryParams);
 				BlazeLayout.render("mainLayout", {
 					main: "orgList",
 					nav: "navigation",
@@ -283,7 +286,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 /*-------------  I T E M S   -------------*/
 /*----------------------------------------*/
 
-	import '/imports/ui/pages/items/itemList.js';
+	import '/imports/ui/pages/items/list.js';
 	FlowRouter.route("/items/list", {
 		name: "itemList",
 		action: function(params, queryParams) {
@@ -295,7 +298,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 			});
 		}
 	});
-	import '/imports/ui/pages/items/itemView.js';
+	import '/imports/ui/pages/items/view.js';
 	FlowRouter.route("/items/:_itemId/view", {
 		name: "itemView",
 		action: function(params, queryParams) {
@@ -307,7 +310,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 			});
 		}
 	});
-	import '/imports/ui/pages/items/itemEdit.js';
+	import '/imports/ui/pages/items/edit.js';
 	FlowRouter.route("/items/:_itemId/edit", {
 		name: "itemEdit",
 		action: function(params, queryParams) {
@@ -319,7 +322,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 			});
 		}
 	});
-	import '/imports/ui/pages/items/itemAdd.js';
+	import '/imports/ui/pages/items/add.js';
 	FlowRouter.route("/items/create/:_kitbagId", { // NOTE - We have the kitbag ID here in the URL to enable us to assign this new item automatically to a predefined kitbag
 		name: "itemAdd",
 		action: function(params, queryParams) {
@@ -334,6 +337,29 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 
 
+
+
+/*-------------------------------------------------------*/
+/*---------  A C C E S S   R E S T R I C T E D  ---------*/
+/*-------------------------------------------------------*/
+
+	// the routeNotFound template is used for unknown routes and missing lists
+
+	import '/imports/ui/pages/notFound/accessRestricted.js';
+	FlowRouter.route("/accessRestricted", {
+		name: "accessRestricted",
+		action: function(params, queryParams) {
+			// console.log("Route: Page not known / not found!", params, queryParams);
+			BlazeLayout.render("mainLayout", {
+				main: "accessRestricted",
+				nav: "navigation",
+				footer: "globalFooter"
+			},{
+				blockedUrl: FlowRouter.current().path,
+				referrerUrl: document.referrer
+			});
+		}
+	});
 
 
 /*-----------------------------------*/
@@ -374,7 +400,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 
 	/* USER MANAGEMENT + USER PROFILES */
 
-	import '/imports/ui/pages/users/userList.js';
+	import '/imports/ui/pages/users/list.js';
 	FlowRouter.route("/users/list", {
 		name:"userList",
 		action: function(params, queryParams) {
@@ -386,7 +412,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 			});
 		}
 	});
-	import '/imports/ui/pages/users/userView.js';
+	import '/imports/ui/pages/users/view.js';
 	FlowRouter.route("/users/:_userId/view", {
 		name:"userView",
 		action: function(params, queryParams) {
@@ -398,7 +424,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 			});
 		}
 	});
-	import '/imports/ui/pages/users/userEdit.js';
+	import '/imports/ui/pages/users/edit.js';
 	FlowRouter.route("/users/:_userId/edit", {
 		name:"userEdit",
 		action: function(params, queryParams) {
@@ -410,7 +436,7 @@ import { BlazeLayout } from 'meteor/kadira:blaze-layout';
 			});
 		}
 	});
-	import '/imports/ui/pages/users/userAdd.js';
+	import '/imports/ui/pages/users/add.js';
 	FlowRouter.route("/users/create/:_orgId", {
 		name:"userAdd",
 		action: function(params, queryParams) {

@@ -49,7 +49,7 @@ listFilter = function () {
 	/* Nothing here */
 };
 
-listSorter = function (thisObj,sortElem,sortField,sortOrder) {
+listSorter = function (domElem,sortElem,sortField,sortOrder) {
 
 	// Internal function to do the compare
 	var textSorter = function (a, b){
@@ -93,48 +93,30 @@ listSorter = function (thisObj,sortElem,sortField,sortOrder) {
 
 	if (sortField == "sortupdated" || sortField == "sortcreated"){
 		//console.log("Using dateSorter");
-		$(sortElem,thisObj).sort(dateSorter).appendTo(thisObj);
+		$(sortElem,domElem).sort(dateSorter).appendTo(domElem);
 		return;
 	}
 
 	if (sortField == "sortkbcount"){
 		//console.log("Using numberSorter");
-		$(sortElem,thisObj).sort(numberSorter).appendTo(thisObj);
+		$(sortElem,domElem).sort(numberSorter).appendTo(domElem);
 		return;
 	}
 
 	// Else - use standard lexicon/text sorting
 	//console.log("Using textSorter");
-	$(sortElem,thisObj).sort(textSorter).appendTo(thisObj);
+	$(sortElem,domElem).sort(textSorter).appendTo(domElem);
 };
 
 Template.listFilter.helpers({
-	thisObj: function (obj, result) {
+	thisCollection: function (collectionName, result) {
 
-		if (obj.toLowerCase() == result.toLowerCase()){
+		if (collectionName.toLowerCase() == result.toLowerCase()){
 			return true;
 		} else {
 			return false;
 		}
 
-		// switch(obj.toLowerCase()) {
-		// 	case "org":
-		// 		return true;
-		// 	case "item":
-		// 		return true;
-		// 	case "kitbag":
-		// 		return true;
-		// 	case "user":
-		// 		return true;
-		// 	default:
-		// 		return false;
-		// }
-		// get_orgsFound
-		// get_orgBagsFound
-		// get_itemBagsFound
-		// get_itemsFound
-		// get_usersFound
-		// get_orgUsersFound
 	}
 });
 
@@ -159,12 +141,12 @@ Template.listFilter.events({
 	},
 	"change .listSorter": function(event,template){
 
-			var thisObj = "table>tbody";
+			var domElem = "table>tbody";
 			var sortElem = "tr";
 			var sortField = $(event.target).val().split("_")[0];
 			var sortOrder = $(event.target).val().split("_")[1];
 
-			listSorter(thisObj,sortElem,sortField,sortOrder);
+			listSorter(domElem,sortElem,sortField,sortOrder);
 
 	}
 });

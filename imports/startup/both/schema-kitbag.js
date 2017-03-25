@@ -78,11 +78,11 @@ let KitbagSchema = new SimpleSchema({
 		},	
 		label: "Associated Organisation ID"
 	},
-	"assocOrgTitle": {  // Should be deprecated!!!!
-		type: String,
-		optional: true,
-		label: "Associated Organisation Title",
-	},
+	// "assocOrgTitle": {  // Should be deprecated!!!!
+	// 	type: String,
+	// 	optional: true,
+	// 	label: "Associated Organisation Title",
+	// },
 	"sku": {
 		type: String,
 		optional: true,

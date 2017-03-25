@@ -7,6 +7,8 @@ console.log("RUN: 'sharedConstants.js' at '/imports/startup/both/sharedConstants
 export const kb = {
 	collections: {
 		something: "here"
+	},
+	schemas: {
 	}
 };
 
@@ -24,19 +26,33 @@ uniqueIds = {
 /* Will be used as the main config namespace */
 export const appSettings = {
 	global: {
-		createdVia	 					: ["Unknown","ManualFormEntry","ManualDataImport","ManualDuplicate","AdminDataImport","FixtureData"],
+		appName          				: "JumpbagApp",
+		appUrl           				: "http://kitbagpro.com",
+		createdVia       				: ["Unknown","ManualFormEntry","ManualDataImport","ManualDuplicate","AdminDataImport","FixtureData"],
 		createdViaDefault				: "ManualFormEntry",
-		duplicatedPrefix				: "Duplicate of ",
-		validObjects	 				: ["Orgs","Kitbags","Items","Users"],
-		omitFields						: "createdVia, createdAt, createdBy, updatedAt, updatedBy, "
+		duplicatedPrefix 				: "Duplicate of ",
+		validObjects     				: ["Orgs","Kitbags","Items","Users"],
+		omitFields       				: "createdVia, createdAt, createdBy, updatedAt, updatedBy, "
 	},
 	sAlert: {
 		defaultTimeout					: 1000,
-		shortTimeout					: 500,
+		shortTimeout					: 1000,
 		longTimeout						: 10000
 	},
 	userInventory: {
 		itemInventoryStatus 			: ["Available","Deficient/Unavailable","On Loan","In Repair"]
+	},
+	fontAwesomeIcon: {
+		orgs   : "fa-hospital-o",
+		kitbags: "fa-medkit",
+		items  : "fa-stethoscope",
+		users  : "fa-users",		// Plural
+		user   : "fa-user",			// Single
+		trash  : "fa-trash",
+		edit   : "fa-pencil",
+		view   : "fa-eye",
+		delete : "fa-ban",
+		addUser: "fa-user-plus"
 	},
 	orgs: {
 		labelSingular                 : "org",
@@ -52,7 +68,7 @@ export const appSettings = {
 		divisions                     : ["North", "Central", "South", "East", "West", "Regional", "HQ", "Mobile", "Flight"],
 		teams                         : ["BLS", "ALS", "Doctor", "Motorcycle", "Technical", "Logisitics", "Management", "Training"],
 		get omitFields () {
-			return appSettings.global.omitFields + "assocKitbagCount";
+			return appSettings.global.omitFields + "assocKitbagCount, assocKitbagIds";
 		}
 	},
 	kitbags: {
@@ -84,7 +100,7 @@ export const appSettings = {
 		standardSizes                 : ["One Size","Extra Small","Small","Medium","Large","Extra Large"],
 		patientAgeGroups              : ["One Size","New Born","Infant","Child","Adult","Geriatric"], /* http://www.medscape.com/viewarticle/495441 */
 		get omitFields () {
-			return appSettings.global.omitFields + "itemAssocKitbagCount";
+			return appSettings.global.omitFields + "assocKitbagCount";
 		}		
 	},
 	users: {
@@ -93,21 +109,21 @@ export const appSettings = {
 		labelCapsSingular: "User",
 		labelCapsPlural  : "Users",
 		fontAwesomeIcon  : "fa-users",
-		allUserTypes     : [
+		allUserTypes     : [	// Suspected to be obsolete
 							{
 								label: "System Admin",
 								value: "SuperAdmin"
 							},
 							{
-								label: "Organizational Administrator",
+								label: "Organisational Administrator",
 								value: "OrgAdmin"
 							},
 							{
-								label: "Organizational Manager",
+								label: "Organisational Manager",
 								value: "OrgManager"
 							},
 							{
-								label: "Organizational User",
+								label: "Organisational User",
 								value: "User"
 							}
 						  ],
@@ -117,23 +133,53 @@ export const appSettings = {
 								value: "SuperAdmin"
 							},
 							"OrgAdmin": {
-								label: "Organizational Administrator",
+								label: "Organisational Administrator",
 								value: "OrgAdmin"
 							},
 							"OrgManager": {
-								label: "Organizational Manager",
+								label: "Organisational Manager",
 								value: "OrgManager"
 							},
 							"User": {
-								label: "Organizational User",
+								label: "Organisational User",
 								value: "User"
 							}
 						  },
-		userAdminTypes	: ["SuperAdmin", "OrgAdmin", "OrgManager"],
+		adminTypes	: ["SuperAdmin", "OrgAdmin"],	// Suspected to be obsolete
+		managerTypes: ["OrgManager"],				// Suspected to be obsolete
+		nonAdminTypes: ["User"],					// Suspected to be obsolete
 		statuses 		: ["Active","Hidden","Retired","Trashed"],
 		get omitFields () {
-			return appSettings.global.omitFields + "";
+			return appSettings.global.omitFields + "itemAssocKitbagCount, services";
 		}		
+	},
+	permissions: {
+		/* Use with userHasPermission (helper) / fn_userHasPermission() */
+		/* SuperAdmin */
+		isSuperAdmin: 			["SuperAdmin"],
+		/* Pages */
+		canViewOrgList: 		["SuperAdmin"],
+		canViewKitbagList: 		["SuperAdmin", "OrgAdmin", "OrgManager"],
+		canViewItemList: 		["SuperAdmin", "OrgAdmin", "OrgManager"],
+		canViewUserList: 		["SuperAdmin", "OrgAdmin", "OrgManager"],
+		/* Global Data */
+		canViewAllOrgs: 		["SuperAdmin"],
+		canViewAllKitbags: 		["SuperAdmin"],
+		canViewAllItems: 		["SuperAdmin"],
+		canViewAllUsers:		["SuperAdmin"],
+		/* VIEW Org Data */
+		canViewOrgDetails: 		["SuperAdmin", "OrgAdmin"],
+		canViewAllOrgKitbags: 	["SuperAdmin", "OrgAdmin", "OrgManager"],
+		canViewAllOrgItems: 	["SuperAdmin", "OrgAdmin", "OrgManager"],
+		canViewAllOrgUsers:		["SuperAdmin", "OrgAdmin"],
+		/* EDIT Org Data */
+		canEditOrgDetails: 		["SuperAdmin", "OrgAdmin"],
+		canEditOrgKitbags: 		["SuperAdmin", "OrgAdmin", "OrgManager"],
+		canEditOrgItems: 		["SuperAdmin", "OrgAdmin", "OrgManager"],
+		canEditOrgUsers:		["SuperAdmin", "OrgAdmin"],
+		/* DELETE Data */
+		canDeleteAllUsers:		["SuperAdmin"],
+		canDeleteOrgUsers:		["SuperAdmin", "OrgAdmin"],
 	},
 	uniqueIds: {
 		orgPrefix      : "1221",
@@ -153,7 +199,7 @@ export const appSettings = {
 		{	catName:  "DRUGS",			catLabel: "Medicine",																catStatus: "Active" },
 		{	catName:  "MISC",			catLabel: "Miscellaneous, Special, and Optional Items",								catStatus: "Active" },
 		{	catName:  "MBIKE",			catLabel: "Motorcycle",																catStatus: "Active" },
-		{	catName:  "ORGDOC",			catLabel: "Organizational Equipment / Documentation",								catStatus: "Active" },
+		{	catName:  "ORGDOC",			catLabel: "Organisational Equipment / Documentation",								catStatus: "Active" },
 		{	catName:  "POV",			catLabel: "Private Vehicle",														catStatus: "Active" },
 		{	catName:  "VITALS",			catLabel: "Vital Signs / Diagnostic Tools (BP / Glucose)",							catStatus: "Active" },
 		{	catName:  "TRAUMA",			catLabel: "Wound / Trauma Management",												catStatus: "Active"	}

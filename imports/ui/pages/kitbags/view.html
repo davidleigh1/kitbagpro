@@ -1,5 +1,7 @@
 <template name="kitbagView">
 
+{{#if userHasPermission 'canViewKitbag'}}
+
 <!--
 Examples:
 https://elgg.item/plugins/350857/icons/1899256.jpg
@@ -7,283 +9,358 @@ http://vendroid.venmond.com/img/screenshot/vendroid-09.jpg
 http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
  -->
 
-{{#if Template.subscriptionsReady}}
+	{{#if Template.subscriptionsReady}}
 
-{{#unless thisKitbag}}
-<div>
-	<h2>Error: This kitbag is undefined</h2>
-</div>
-{{/unless}}
+	{{#unless thisKitbag}}
+	<div>
+		<h2>Error: This kitbag is undefined</h2>
+	</div>
+	{{/unless}}
 
-<div class="screen-wrapper objAddEdit kitbagView">
+	<div class="screen-wrapper objAddEdit kitbagView">
 
-	{{#with thisKitbag}}
-	<div class="row">
+		{{#with thisKitbag}}
+		<div class="row">
 
-		<div class="col-lg-12">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					<h3 class="">
-						{{>kitbagLogo}}
-						{{title}}
-						<small>{{pageSubtitle}}</small>
-					</h3>
-				</div>
-				<div class="panel-body">
-
-					<!-- Control Panel -->
-					<div class="row">
-						<div class="col-lg-12 tableControlPanel">
-							<!-- Control Buttons -->
-							<!-- fa-fw  makes the icons 'fixed width' -->
-							<a href="./edit" class="btn btn-primary">
-								<i class="fa fa-fw fa-edit"></i> Edit Kitbag
-							</a>
-							<!-- 
-							<a href="./edit#kitbagAssocKitbags" class="btn btn-primary">
-								<i class="fa fa-fw fa-medkit"></i> Assign to Kitbag
-							</a>
-							-->
-							<a href="./duplicate" class="btn btn-primary">
-								<i class="fa fa-fw fa-files-o"></i> Duplicate
-							</a>
-							{{#if glb_userIsSuperAdmin}}
-								<a href="#" class="btn btn-danger delete">
-									<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
-								</a>
-							{{/if}}
-							{{#if glb_userIsOrgAdmin}}
-								<a href="#" class="btn btn-label-default trash {{#if global_isDocTrashed}}disabled{{/if}}">
-									<i class="fa fa-fw fa-trash"></i> Trash
-								</a>
-							{{/if}}
-							<a href="/dashboard" class="btn btn-info">
-								<i class="fa fa-fw fa-dashboard"></i> Analytics
-							</a>
-							<a href="/items/list?kitbag={{_id}}" class="btn btn-info">
-								<i class="fa fa-fw fa-users"></i> View Inventory
-							</a>
-							<a href="/users/list?org={{assocOrgId}}" class="btn btn-info">
-								<i class="fa fa-fw fa-users"></i> User List
-							</a>
-						</div>
+			<div class="col-lg-12">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="">
+							{{>kitbagLogo}}
+							{{title}}
+							<small>{{pageSubtitle}}</small>
+						</h3>
 					</div>
+					<div class="panel-body">
 
-					<!-- <h2>Bordered with Striped Rows</h2> -->
-					<!--{{#if desc}}
-						<div class="well">
-							{{desc}}
-						</div>
-					{{/if}} -->
-					<div class="table-responsive">
-						<table class="table table-hover table-condensed">
-
-							<tbody>
-
-								<tr>
-									<th colspan="2" class="table-divider">Kitbag Details</th>
-								</tr>
-
+						<!-- Control Panel -->
+						<div class="row">
+							<div class="col-lg-12 tableControlPanel">
+								<!-- Control Buttons -->
+								<!-- fa-fw  makes the icons 'fixed width' -->
+								<a href="./edit" class="btn btn-primary">
+									<i class="fa fa-fw fa-edit"></i> Edit Kitbag
+								</a>
+								<!-- 
+								<a href="./edit#kitbagAssocKitbags" class="btn btn-primary">
+									<i class="fa fa-fw fa-medkit"></i> Assign to Kitbag
+								</a>
+								-->
+								<a href="./duplicate" class="btn btn-primary">
+									<i class="fa fa-fw fa-files-o"></i> Duplicate
+								</a>
+								<a href="/items/create/{{_id}}" class="btn btn-primary">
+									<i class="fa fa-fw {{global_getfontAwesomeIcon 'Items'}}"></i> Add Item
+								</a>
 								{{#if glb_userIsSuperAdmin}}
-									<tr class="adminOnly">
-										<th>Organisation</th>
-										<td>
-											<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
-												<b>{{getOrgName.full}}</b>{{#if assocOrgId}}<span class="light"> (DBID: {{assocOrgId}})</span>{{/if}}
-											</a>
+									<a href="#" class="btn btn-danger delete">
+										<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
+									</a>
+								{{/if}}
+								{{#if userHasPermission 'canEditOrgKitbags'}}
+									<a href="#" class="btn btn-label-default trash {{#if global_isDocTrashed}}disabled{{/if}}">
+										<i class="fa fa-fw fa-trash"></i> Trash
+									</a>
+								{{/if}}
+								<a href="/dashboard" class="btn btn-info">
+									<i class="fa fa-fw fa-dashboard"></i> Analytics
+								</a>
+								<a href="/items/list?kitbag={{_id}}" class="btn btn-info">
+									<i class="fa fa-fw fa-users"></i> View Inventory
+								</a>
+								<a href="/users/list?org={{assocOrgId}}" class="btn btn-info">
+									<i class="fa fa-fw fa-users"></i> User List
+								</a>
+							</div>
+						</div>
+
+						<!-- <h2>Bordered with Striped Rows</h2> -->
+						<!--{{#if desc}}
+							<div class="well">
+								{{desc}}
+							</div>
+						{{/if}} -->
+						<div class="table-responsive">
+							<table class="table table-hover table-condensed">
+
+								<tbody>
+
+									<tr>
+										<th colspan="2" class="table-divider">Kitbag Details</th>
+									</tr>
+
+									{{#if glb_userIsSuperAdmin}}
+										<tr class="adminOnly">
+											<th>Organisation</th>
+											<td>
+												<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
+													<b>{{getOrgName.full}}</b>{{#if assocOrgId}}<span class="light"> (DBID: {{assocOrgId}})</span>{{/if}}
+												</a>
+											</td>
+										</tr>
+										<tr class="adminOnly">
+											<th>Kitbag DBID</th>
+											<td>{{_id}}</td>
+										</tr>							
+									{{/if}}
+
+									<tr>
+										<th class="col-xs-2">Kitbag</th>
+										<td class="col-xs-10"><strong>{{title}}</strong></td>
+									</tr>
+									<tr>
+										<th>Status</th>
+										<td><span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span></td>
+									</tr>
+									<tr>
+										<th>Description</th>
+										<td>{{desc}}</td>
+									</tr>
+
+
+
+
+									<tr>
+										<th colspan="2" class="table-divider">Advanced Details</th>
+									</tr>
+
+									<tr>
+										<th>URL</th>
+										<td><a href="{{url}}" target="_blank">{{url}}</a></td>
+									</tr>
+									<tr>
+										<th>Profile Photo</th>
+										<td class="hover_img">
+
+											{{>urlImagePreviewRollover
+												imageUrl = imgLarge
+												imagePreviewText = (global_joinTextInList "Photo of '<b>" title "</b>'. Click to open in a new tab." )
+												imageAltText = (global_joinTextInList "Photo of '" title "'. Click or mouseover to view." )
+												imagePreviewHeight = "50%"
+											}}
+
 										</td>
 									</tr>
-									<tr class="adminOnly">
-										<th>DBID</th>
-										<td>{{_id}}</td>
-									</tr>							
-								{{/if}}
+									<tr>
+										<th>Profile Icon</th>
+										<td class="hover_img">
 
-								<tr>
-									<th class="col-xs-2">Kitbag</th>
-									<td class="col-xs-10"><strong>{{title}}</strong></td>
-								</tr>
-								<tr>
-									<th>Status</th>
-									<td><span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span></td>
-								</tr>
-								<tr>
-									<th>Description</th>
-									<td>{{desc}}</td>
-								</tr>
+											{{>urlImagePreviewRollover
+												imageUrl = imgSmall
+												imagePreviewText = (global_joinTextInList "Icon preview for '<b>" title "</b>'. Click to open in a new tab." )
+												imageAltText = (global_joinTextInList "Icon image for '" title "'. Click or mouseover to view." )
+												imagePreviewHeight = "20%"
+											}}
 
+										</td>
+									</tr>
+								<!-- start -->
+								</tbody>
+							</table>
+						<!-- /table-responsive -->
+						</div>
 
-
-
-								<tr>
-									<th colspan="2" class="table-divider">Advanced Details</th>
-								</tr>
-
-								<tr>
-									<th>URL</th>
-									<td><a href="{{url}}" target="_blank">{{url}}</a></td>
-								</tr>
-								<tr>
-									<th>Profile Photo</th>
-									<td class="hover_img">
-
-										{{>urlImagePreviewRollover
-											imageUrl = imgLarge
-											imagePreviewText = (global_joinTextInList "Photo of '<b>" title "</b>'. Click to open in a new tab." )
-											imageAltText = (global_joinTextInList "Photo of '" title "'. Click or mouseover to view." )
-											imagePreviewHeight = "50%"
-										}}
-
-									</td>
-								</tr>
-								<tr>
-									<th>Profile Icon</th>
-									<td class="hover_img">
-
-										{{>urlImagePreviewRollover
-											imageUrl = imgSmall
-											imagePreviewText = (global_joinTextInList "Icon preview for '<b>" title "</b>'. Click to open in a new tab." )
-											imageAltText = (global_joinTextInList "Icon image for '" title "'. Click or mouseover to view." )
-											imagePreviewHeight = "20%"
-										}}
-
-									</td>
-								</tr>
-							<!-- start -->
-							</tbody>
-						</table>
-					<!-- /table-responsive -->
+						<!-- /panel-body -->
 					</div>
+					<!-- /panel-default -->
+				</div>
+				<!-- /col-12 -->
+			</div>
+
+
+			<!-- ITEMS MINILIST (listing 'assocKitbags') -->
+			<div class="col-lg-12">
+				<div class="panel panel-default" id="kitbagKitbagListPanel">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i> Items in this Kitbag ({{get_itemBagsFound}})</h3>
+					</div>
+					<div class="panel-body">
+						<!-- <h2>Bordered with Striped Rows</h2> -->
+
+						<div class="table-responsive">
+							<table class="table table-bordered-XXX table-hover table-striped-XXX table-condensed">
+								<thead>
+									<tr>
+										<th class="hidden-xs">Item</th>
+										<th class="hidden-xs">Status</th>
+										<th class="hidden-xs">Detail</th>
+										<th class="hidden-xs">AgeGp</th>
+										<th class="hidden-xs">Size</th>
+										<th class="hidden-xs">Brand</th>
+										<th class="hidden-xs">Model</th>
+										<th class="hidden-xs">Req'd</th>
+										<th class="hidden-xs">qMn/qR/qMx</th>
+										{{#if glb_userIsSuperAdmin}}
+											<th class="hidden-xs adminOnly">AssocOrg</th>
+										{{/if}}
+										{{#if glb_userIsSuperAdmin}}
+											<th class="hidden-xs hidden-sm hidden-md adminOnly">DBID</th>
+										{{/if}}
+										<th class="hidden-xs">Controls</th>
+										<th class="hidden-xs">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<!-- Show 'Loading...' if not ready -->
+									{{#if Template.subscriptionsReady}}
+										<!-- Show 'noListObjectsFound' template if none found -->
+										{{#if objectsFiltered "itemsInThisKitbag" noFilter minilistFilter_items}}
+											<!-- Select subset of kitbag docs based on user/template filters-->
+											{{#each objectsFiltered "itemsInThisKitbag" noFilter minilistFilter_items}}
+												{{ >itemLine thisItem=this listType="kitbagView" }}
+											{{/each}}
+										{{else}}
+											{{ >noListObjectsFound objectName="kitbags containing this kitbag were" }}
+										{{/if}}
+									{{else}}
+										loading...
+									{{/if}}
+
+								</tbody>
+							</table>
+						</div>
 
 					<!-- /panel-body -->
-				</div>
+					</div>
 				<!-- /panel-default -->
+				</div>
+			<!-- /col-12 -->
+			</div>
+
+
+			<!-- USERS MINILIST -->
+			<div class="col-lg-12">
+				<div class="panel panel-default" id="kitbagUserListPanel">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i> Users with this Kitbag ({{get_kitbagUsersFound}})</h3>
+					</div>
+					<div class="panel-body">
+						<!-- <h2>Bordered with Striped Rows</h2> -->
+
+						<div class="table-responsive">
+							<table class="table table-bordered-XXX table-hover table-striped-XXX">
+								<thead>
+									<tr>
+										<th class="hidden-xs 						displayName">Name</th>
+										<th class="hidden-xs						status">Status</th>
+										<th class="hidden-xs 						callsign">Callsign</th>
+										<th class="hidden-xs 					 	division">Division</th>
+										<th class="hidden-xs 					 	team">Team</th>
+										<th class="hidden-xs 					 	assocKitbagCount">Kitbags</th>
+										<th class="hidden-xs 					 	isSuperAdmin">Level</th>
+										{{#if glb_userIsSuperAdmin}}
+										<th class="hidden-xs hidden-sm 				assocOrgId adminOnly">Organisation</th>
+										{{/if}}
+										<th class="									username">Username</th>
+										<th class="hidden-xs hidden-sm 				userEmail">Email</th>
+										{{#if glb_userIsSuperAdmin}}
+										<th class="hidden-xs hidden-sm hidden-md 	userDbId adminOnly">DBID</th>
+										{{/if}}
+										<th class="hidden-xs hidden-sm hidden-md 	createdAt">CreatedAt</th>
+										<th class="hidden-xs 					 	userActions">Actions</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<!-- Show 'Loading...' if not ready -->
+									{{#if Template.subscriptionsReady}}
+										<!-- Show 'noListObjectsFound' template if none found -->
+										{{#if objectsFiltered "KitbagUsers" noFilter minilistFilter_kitbag_users}}
+											<!-- Select subset of user docs based on user/template filters-->
+											{{#each objectsFiltered "KitbagUsers" noFilter minilistFilter_kitbag_users}}
+												{{ >userLine thisUser=this listType="kitbagUsers" }}
+											{{/each}}
+										{{else}}
+											{{ >noListObjectsFound objectName="Kitbag Users" }}
+										{{/if}}
+									{{else}}
+										loading...
+									{{/if}}
+
+								</tbody>
+
+							</table>
+						</div>
+
+					<!-- /panel-body -->
+					</div>
+				<!-- /panel-default -->
+				</div>
 			</div>
 			<!-- /col-12 -->
-		</div>
 
 
-		<!-- ITEMS MINILIST (listing 'assocKitbags') -->
-		<div class="col-lg-12">
-			<div class="panel panel-default" id="kitbagKitbagListPanel">
-				<div class="panel-heading">
-					<h3 class="panel-title"><i class="fa fa-fw fa-medkit"></i> Items in this Kitbag</h3>
-				</div>
-				<div class="panel-body">
-					<!-- <h2>Bordered with Striped Rows</h2> -->
 
-					<div class="table-responsive">
-						<table class="table table-bordered-XXX table-hover table-striped-XXX table-condensed">
-							<thead>
-								<tr>
-									<th class="hidden-xs">Kitbag</th>
-									{{#if glb_userIsSuperAdmin}}
-										<th class="hidden-xs adminOnly">Org</th>
-									{{/if}}
-									<th class="hidden-xs">Status</th>
-									<th class="hidden-xs text-center todo">Kitbags</th>
-									<th class="hidden-xs text-center todo">Users</th>
-									<th class="hidden-xs hidden-sm">Bag ID</th>
-									<th class="visible-lg">Created</th>
-									<th class="hidden-xs hidden-sm hidden-md">Owner</th>
-									<th class="text-right">Actions</th>
-								</tr>
-							</thead>
-							<tbody>
 
-								<!-- Show 'Loading...' if not ready -->
-								{{#if Template.subscriptionsReady}}
-									<!-- Show 'noListObjectsFound' template if none found -->
-									{{#if objectsFiltered "kitbagsContainingThisKitbag" noFilter minilistFilter}}
-										<!-- Select subset of kitbag docs based on user/template filters-->
-										{{#each objectsFiltered "kitbagsContainingThisKitbag" noFilter minilistFilter}}
-											{{ >kitbagLine thisKitbag=this listType="kitbagView" }}
-										{{/each}}
-									{{else}}
-										{{ >noListObjectsFound objectName="kitbags containing this kitbag were" }}
-									{{/if}}
-								{{else}}
-									loading...
-								{{/if}}
-
-							</tbody>
-						</table>
+			<div class="col-lg-12">
+				<div class="panel panel-info" id="systemInfo">
+					<div class="panel-heading">
+						<h3 class="panel-title"><i class="fa fa-fw fa-database"></i> System Info</h3>
 					</div>
-
-				<!-- /panel-body -->
-				</div>
-			<!-- /panel-default -->
-			</div>
-		<!-- /col-12 -->
-		</div>
-
-
-		<div class="col-lg-12">
-			<div class="panel panel-info" id="systemInfo">
-				<div class="panel-heading">
-					<h3 class="panel-title"><i class="fa fa-fw fa-database"></i> System Info</h3>
-				</div>
-				<div class="panel-body">
-					<!-- <h2>Bordered with Striped Rows</h2> -->
-					<div class="table-responsive">
-						<table class="table table-hover table-condensed">
-							<!-- <thead>
-								<tr>
-									<th>Page</th>
-									<th>Visits</th>
-									<th>% New Visits</th>
-									<th>Revenue</th>
-								</tr>
-							</thead> -->
-							<tbody>
-								<!-- end -->
-								<tr>
-									<th>DBID</th>
-									<td>{{_id}}</td>
-								</tr>
-								<tr>
-									<th>Created</th>
-									<td>{{getCreatedString}}</td>
-									<!-- <td>{{createdAt}} by {{#if createdBy}}<code>{{createdBy}}</code>{{else}}Unknown{{/if}}</td> -->
-								</tr>
-								<tr>
-									<th>Last Updated</th>
-									<td>{{getLastUpdatedString}}</td>
-								</tr>
-								<tr>
-									<th>Created Via</th>
-									<td>{{#if createdVia}}<code>{{createdVia}}</code>{{else}}Unknown{{/if}}</td>
-								</tr>
-								<!-- <tr>
-									<th>Owner</th>
-									<td>
-									{{#if userNameLookup owner "html"}}
-										{{userNameLookup owner "html"}} (api_id: <code>{{userNameLookup owner "apiId"}}</code> / db_id: {{owner}})
-									{{else}}
-										{{owner}}<span class="subtitle">(User details not found)</span>
-									{{/if}}
-									</td>
-								</tr> -->
-							</tbody>
-						</table>
-					<!-- /table-responsive -->
+					<div class="panel-body">
+						<!-- <h2>Bordered with Striped Rows</h2> -->
+						<div class="table-responsive">
+							<table class="table table-hover table-condensed">
+								<!-- <thead>
+									<tr>
+										<th>Page</th>
+										<th>Visits</th>
+										<th>% New Visits</th>
+										<th>Revenue</th>
+									</tr>
+								</thead> -->
+								<tbody>
+									<!-- end -->
+									<tr>
+										<th>DBID</th>
+										<td><code>{{_id}}</code></td>
+									</tr>
+									<tr>
+										<th>Created</th>
+										<td>{{getCreatedString}}</td>
+										<!-- <td>{{createdAt}} by {{#if createdBy}}<code>{{createdBy}}</code>{{else}}Unknown{{/if}}</td> -->
+									</tr>
+									<tr>
+										<th>Last Updated</th>
+										<td>{{getLastUpdatedString}}</td>
+									</tr>
+									<tr>
+										<th>Created Via</th>
+										<td>{{#if createdVia}}<code>{{createdVia}}</code>{{else}}Unknown{{/if}}</td>
+									</tr>
+									<!-- <tr>
+										<th>Owner</th>
+										<td>
+										{{#if userNameLookup owner "html"}}
+											{{userNameLookup owner "html"}} (api_id: <code>{{userNameLookup owner "apiId"}}</code> / db_id: {{owner}})
+										{{else}}
+											{{owner}}<span class="subtitle">(User details not found)</span>
+										{{/if}}
+										</td>
+									</tr> -->
+								</tbody>
+							</table>
+						<!-- /table-responsive -->
+						</div>
+					<!-- /panel-body -->
 					</div>
-				<!-- /panel-body -->
+				<!-- /panel-default -->
 				</div>
-			<!-- /panel-default -->
+			<!-- /col-12 -->
 			</div>
-		<!-- /col-12 -->
+		<!-- /row -->
 		</div>
-	<!-- /row -->
+		{{/with}}
 	</div>
-	{{/with}}
+	<!-- /screen-wrapper -->
 
-</div>
-<!-- /screen-wrapper -->
-
+	{{else}}
+		{{>loading}}
+	{{/if}}
 
 {{else}}
-	{{>loading}}
+	{{>accessRestricted}}
 {{/if}}
 
 </template>

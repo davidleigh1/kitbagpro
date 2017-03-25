@@ -41,7 +41,7 @@ Template.dashboard.helpers({
 				return kb.collections.Kitbags.find().count();
 			case "Items":
 			case "items":
-				return Items.find().count();
+				return kb.collections.Items.find().count();
 			default:
 				return "??";
 		}
@@ -92,13 +92,13 @@ Template.dashboard.events({
 	'click #updateCounts': function(event) {
 		event.preventDefault();
 		//console.log("Update Counts Now!");
-		Meteor.call("updateCounts","onDemand");
+		Meteor.call("updateGlobalCounts", Meteor.userId());
 	},
 	'click #reassignBagsToOrgs': function(event) {
 		event.preventDefault();
 		//console.log("Reassign Bags to Orgs Now!");
 		// Meteor.call("updateCounts","onDemand");
-		Meteor.call("assignAllKBs","onDemand");
+		Meteor.call("assignAllKBs", Meteor.userId());
 	},
 	'click #printLine': function(event) {
 		event.preventDefault();

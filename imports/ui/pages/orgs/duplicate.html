@@ -1,5 +1,7 @@
 <template name="orgDuplicate">
 
+{{#if userHasPermission 'canEditOrgDetails'}}
+
 	<h1>Duplicate Org</h1>
 
 	<div class="screen-wrapper">
@@ -26,5 +28,9 @@
 	{{/if}}
 
 	</div>
+
+{{else}}
+	{{>accessRestricted}}
+{{/if}}
 
 </template>

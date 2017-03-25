@@ -74,7 +74,7 @@ AutoForm.hooks({
 			globalOnSuccess(thisCollectionName, thisAction, resultObj);
 		},
 		onError: function(formType, error, arg3, arg4) {
-			globalOnError(thisCollectionName, error, arg3, arg4);
+			globalOnError(thisCollectionName, thisAction, error, arg3, arg4);
 		}
   }
 });

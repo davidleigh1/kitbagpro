@@ -6,12 +6,10 @@ import './myCustomFullPageAtForm.css';
 /* ONCREATED */
 
 Template.myCustomFullPageAtForm.onCreated(function() {
-});
-
-
+}); 
 
 /* IMPORTANT - THE img- PREFIX IS REQUIRED IN ORDER THAT THE CLASSES CAN BE CORRECTLY ADDED AND REMOVED!! */
-backgroundClasses = ["img-uh_italy", "img-tram", "img-icrc", "img-snow", "img-mada-evac", "img-forest_orange_blanket"];
+backgroundClasses = ["img-uh_italy", "img-tram", "img-icrc", "img-snow", "img-mada-evac", "img-forest_orange_blanket", "img-police-line", "img-relief-worker"];
 non_active_backgrounds = ["img-wild"];
 
 cyclebackgrounds_start = function() {

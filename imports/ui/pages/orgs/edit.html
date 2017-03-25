@@ -1,6 +1,8 @@
 <template name="orgEdit">
 
-	<h1>Edit Org</h1>
+{{#if userHasPermission 'canEditOrgDetails'}}
+
+	<h1>Edit Organisation</h1>
 
 	<div class="screen-wrapper">
 
@@ -24,5 +26,10 @@
 	{{/if}}
 
 	</div>
+
+
+{{else}}
+	{{>accessRestricted}}
+{{/if}}
 
 </template>

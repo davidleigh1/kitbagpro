@@ -26,7 +26,7 @@
 
 		<!-- KITBAGS -->
 		<li class="{{ isActiveRoute 'kitbagList' }}">
-			<a href="/kitbags/list"><i class="fa fa-fw fa-medkit"></i> Kitbags</a>
+			<a href="/kitbags/list"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i> Kitbags</a>
 		</li>
 		<!-- {{ #if isActiveRoute 'orgView' }}
 			<li class="sub-item {{ isActiveRoute 'kitbagAdd' }}">
@@ -37,7 +37,7 @@
 
 		<!-- ITEMS -->
 		<li class="{{ isActiveRoute 'itemList' }}">
-			<a href="/items/list"><i class="fa fa-fw fa-stethoscope"></i> Items</a>
+			<a href="/items/list"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Items'}}"></i> Items</a>
 		</li>
 		<!-- {{ #if isActiveRoute 'orgView' }}
 			<li class="sub-item {{ isActiveRoute 'itemAdd' }}">
@@ -52,9 +52,9 @@
 			<a href="/settings"><i class="fa fa-fw fa-cogs"></i> Settings</a>
 		</li>
 
-		{{#if glb_userIsSuperAdmin}}
-			<li class="{{ isActiveRoute 'usersList' }} adminOnly">
-				<a href="/users/list"><i class="fa fa-fw fa-users"></i> Users</a>
+		{{#if userHasPermission 'canViewUserList'}}
+			<li class="{{ isActiveRoute 'usersList' }}">
+				<a href="/users/list"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i> Users</a>
 			</li>
 		{{/if}}
 
@@ -98,7 +98,7 @@
 				{{currentUser.getDisplayName}}<br>
 				{{currentUser.username}}<br>
 				{{currentUser.getEmail}}<br>
-				{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'title'}}<br>
+				{{lookupFieldFromOrg currentUser.assocOrgId 'title'}}<br>
 				{{currentUser.getType.label}} ({{currentUser.getType.value}})<br>
 				{{currentUser.getUserId}} ({{currentUser._id}})
 			</div>

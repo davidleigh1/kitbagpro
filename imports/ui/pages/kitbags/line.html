@@ -49,10 +49,18 @@
 			{{#unless isOrgView}}
 				<td class="hidden-xs kbAssocOrgTitleCol adminOnly">
 					<!-- {{#unless assocOrgTitle}} -->
-						<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
+						<!--
+ 						<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
 							{{highlight getOrgName.short filterVar suppressHightlight}}
 						</a>
-<!-- 					{{else}}
+						-->
+
+						<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.title}}">
+							<b>{{getOrgName.full}}</b>{{#if assocOrgId}}<small><span class="light"> ({{assocOrgId}})</span></small>{{/if}}
+						</a>
+
+
+				<!--	{{else}}
 						<a href="/orgs/{{assocOrgId}}/view">
 							{{highlight assocOrgTitle filterVar suppressHightlight}}
 						</a>
@@ -82,18 +90,18 @@
 
 		<!-- Item Count-->
 
-		<td class="hidden-xs kbUsersCountCol text-center todo">
-			{{#if kitbagUserCount}}
-				<a href="/kitbags/{{kitbagId}}/view#kitbagUserListPanel">{{kitbagUserCount}}</a>
-			{{else}}
-				<a href="/kitbags/{{kitbagId}}/view#kitbagUserListPanel">View Users</a>
-			{{/if}}
-		</td>
+		{{#unless isItemView}}
+			<td class="hidden-xs kbUsersCountCol text-center todo">
+				{{#if kitbagUserCount}}
+					<a href="/kitbags/{{kitbagId}}/view#kitbagUserListPanel">{{kitbagUserCount}}</a>
+				{{else}}
+					<a href="/kitbags/{{kitbagId}}/view#kitbagUserListPanel">View Users</a>
+				{{/if}}
+			</td>
+		{{/unless}}
 
-		<!-- Kitbag ID -->
-
+		<!-- Custom Kitbag ID
 		<td class="hidden-xs hidden-sm kbSkuCol">
-			<!-- // System (Custom ID) -->
 			{{#unless kitbagId}}
 				<span class="resNote">N/A</span>
 			{{else}}
@@ -105,6 +113,7 @@
 				<br><small>({{highlight sku filterVar suppressHightlight}})</small>
 			{{/unless}}
 		</td>
+		-->
 
 		<!-- DB ID -->
 
@@ -169,7 +178,9 @@
 						{{#if glb_userIsSuperAdmin}}
 							<li class="divider"></li>
 							<li>
-								<a class="delete" data-action="delete" data-bag="{{kitbagId}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
+								<a class="delete" data-action="delete" data-bag="{{kitbagId}}" href="#" 
+								title="Available to SuperAdmins only.
+								Hold down <shift> to skip confirmation"><i class="fa fa-fw fa-ban"></i> Delete</a>
 							</li>
 						{{/if}}
 

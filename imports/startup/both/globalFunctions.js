@@ -5,10 +5,9 @@ import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 /* GLOBAL GENERICS */
 
 globalOnSuccess = function(thisCollectionName, thisAction = 'created', resultObj = {id:'unknown'},	formType = 'unknown', alertMsgPrefix = '') {
-	console.log("globalOnSuccess()",arguments);
+	console.log("FN: globalOnSuccess()", arguments);
 
-	// TODO: Remove all instances of thisObj (where string is used) in favour of thisCollectionName
-	thisCollectionName = thisCollectionName || thisObj || 'unknown';
+	var thisCollectionName = thisCollectionName || 'unknown';
 
 	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
 	var alertMessage = alertMsgPrefix + "<strong>SUCCESS: </strong> "+appSettings[thisCollectionName.toLowerCase()].labelCapsSingular+": '<i>"+resultObj.title+"</i>' was successfully "+thisAction+".";
@@ -28,26 +27,39 @@ globalOnSuccess = function(thisCollectionName, thisAction = 'created', resultObj
 globalOnError = function(thisCollectionName, thisAction = null, error = 'Unknown Error', arg3, arg4) {
 	console.log("globalOnError()",arguments);
 
-	// TODO: Remove all instances of thisObj (where string is used) in favour of thisCollectionName
-	thisCollectionName = thisCollectionName || thisObj || 'unknown';
+	var thisCollectionName = thisCollectionName || 'unknown';
 
 	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
 
-	var msg = alertMsgPrefix + "<strong>Error: </strong><code>"+error.message+"</code>";
+	var alertText = error.reason || error.message || error.details || "Undefined Error";
+
+	var msg = alertMsgPrefix + "<strong>Error: </strong><code>"+alertText+"</code>";
 	sAlert.error(msg, {
 		html: true,
 		timeout: appSettings.sAlert.longTimeout
 	});
 };
 
-globalDelete = function (origin = 'unknown', thisCollectionName, assocObj, userId, goUrl) {
+globalDelete = function (origin = 'unknown', thisCollectionName, assocObj, userId, goUrl, skipUserConfirmation = false) {
 	/* TODO: Based on globalfn_deleteOrg() - below - which should be deprecated  */
 	// event.preventDefault();
-	console.log("globalDelete()");
+	var objTitle = assocObj.title || assocObj.displayName || assocObj.username || assocObj["emails"] && assocObj["emails"][0]["address"] || "No title found";
+
+	console.log("FN globalDelete() - Deletion request for " + appSettings[thisCollectionName.toLowerCase()].labelSingular + " record: '" + objTitle + "' ("+assocObj._id+") by user '" + userId +"'");
+
+	/* Check User has permission to delete */
+	if ( !fn_userHasPermission('canDeleteOrgUsers') ){
+		console.log("LOG: Deletion request from unauthorized user (" + userId +")");
+		return false;
+	}
 
 	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
-	var areYouSure = "Permanently delete "+ appSettings[thisCollectionName.toLowerCase()].labelSingular + " '"+assocObj.title+"'?\n\nThere is no undo!\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
-	if ( confirm(areYouSure) ) {
+	var areYouSure = "Permanently delete "+ appSettings[thisCollectionName.toLowerCase()].labelSingular + " '"+objTitle+"'?\n\nThere is no undo!\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n";
+	if ( skipUserConfirmation == true || confirm(areYouSure) ) {
+
+		if (skipUserConfirmation == true) {
+			console.log("INF: Skipped User Confirmation as <SHIFT> key was down!");
+		}
 
 		console.log("\n\nTODO: BLOCK DELETION TO AVOID ORPHAN KITBAGS OR ITEMS!");
 
@@ -55,13 +67,14 @@ globalDelete = function (origin = 'unknown', thisCollectionName, assocObj, userI
 			console.log("error: " + error + "\n" + "result: " + result);
 			// TODO: Get message prefix from appSettings!
 			if (!error && true === result){
-				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>"+appSettings[thisCollectionName.toLowerCase()].labelCapsSingular+": <i>'"+assocObj.title+"'</i> was successfully deleted.",
+				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>"+appSettings[thisCollectionName.toLowerCase()].labelCapsSingular+": <i>'"+objTitle+"'</i> was successfully deleted.",
 					{
 						html: true
 					}
 				);
+				console.log("FN globalDelete() - Deletion completed successfully");
 			} else {
-				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete "+appSettings[thisCollectionName.toLowerCase()].labelSingular+": '<strong>"+assocObj.title+"</strong>' with error: <code>"+error+"</code>",
+				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete "+appSettings[thisCollectionName.toLowerCase()].labelSingular+": '<strong>"+objTitle+"</strong>' with error: <code>"+error+"</code>",
 					{
 						html: true,
 						timeout: appSettings.sAlert.longTimeout
@@ -73,24 +86,25 @@ globalDelete = function (origin = 'unknown', thisCollectionName, assocObj, userI
 			FlowRouter.go(goUrl);
 		}
 	} else {
+		console.log("FN globalDelete() - Deletion request aborted by user (" + userId +")");
 		return false;
 	}
 };
 
 // globalTrashed("TrashedByUser", "Kitbags", this, Meteor.userId(), "#");
 
-globalTrash = function (origin = 'unknown', thisObj, assocObj, userId, goUrl) {
+globalTrash = function (origin = 'unknown', collectionName, assocObj, userId, goUrl) {
 	console.log("globalTrash()", arguments);
 
-	var areYouSure = "Trash "+appSettings[thisObj.toLowerCase()].labelSingular+" '"+assocObj.title+"'?\n(ID: "+assocObj._id+")";
+	var areYouSure = "Trash "+appSettings[collectionName.toLowerCase()].labelSingular+" '"+assocObj.title+"'?\n(ID: "+assocObj._id+")";
 	if ( confirm(areYouSure) ) {
-		Meteor.call("setDocStatus", thisObj, assocObj._id, "Trashed");
+		Meteor.call("setDocStatus", collectionName, assocObj._id, "Trashed");
 	} else {
 		return false;
 	}
 };
 
-globalDuplicate = function(thisObj,objPrefix) {
+globalDuplicate = function(collectionName,objPrefix) {
 	console.log("globalDuplicate()",arguments);
 
 	var oldId = $("input[name='_id']").val();
@@ -121,9 +135,76 @@ getUsername = function (userId, showMe) {
 	if (userId === Meteor.userId() && showMe){
 		return "me";
 	} else {
-		return userFound.profile.displayName || userFound.username;
+		return userFound.displayName || userFound.username;
 	}
 };
+
+fn_userHasPermission = function (permissionRequired, userObject = Meteor.user()) {
+	// console.log(' ----> fn_userHasPermission', permissionRequired, JSON.stringify(userObject));
+	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
+	if ( !permissionRequired ) { return false }
+	if ( !jQuery.isPlainObject(thisUser) ) { return false }
+	var userType = (thisUser && typeof thisUser.type == "string") ? thisUser.type.toLowerCase() : "";
+	var permittedUserTypesLc = appSettings.permissions[permissionRequired] && appSettings.permissions[permissionRequired].map(function(elem) { return elem.toLowerCase(); });
+	if ( !permittedUserTypesLc ) {
+		console.log("ALERT: permissionRequired '"+permissionRequired+"' not found in appSettings.permissions[] so returning 'approved' ");
+		return true;
+	}
+	if ( jQuery.inArray(userType, permittedUserTypesLc) > -1 ){
+		return true;
+	} else {
+		console.log("ALERT: Page/Element/Action blocked! Required permission '"+permissionRequired+"'. User '"+thisUser.username+"' has type '"+userType+"' ");
+		return false;
+	}
+};
+
+fn_userIsSuperAdmin = function(userObject){
+	/* Should be deprecated in favour of userHasPermission() e.g.
+	{{#if userHasPermission 'isSuperAdmin'}}
+	would have the same functionality as...
+	{{#if glb_userIsSuperAdmin}}
+	*/
+	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
+	if ( !jQuery.isPlainObject(thisUser) ) { return false }
+	if ( thisUser && jQuery.isPlainObject(thisUser) && typeof thisUser.type == "string" && thisUser.type.toLowerCase() == "superadmin" ){
+		return true;
+	}
+	return false;
+};
+// fn_userIsAnAdmin = function(userObject){
+// 	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
+// 	if ( !jQuery.isPlainObject(thisUser) ) { return false }
+// 	var userType = (thisUser && typeof thisUser.type == "string") ? thisUser.type.toLowerCase() : "";
+// 	userAdminTypesLc = appSettings.users.adminTypes.map(function(elem) { return elem.toLowerCase(); });
+// 	if ( jQuery.inArray(userType, userAdminTypesLc) > -1 ){
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// };
+// fn_userIsOrgManager = function(userObject){
+// 	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
+// 	if ( !jQuery.isPlainObject(thisUser) ) { return false }
+// 	var userType = (thisUser && typeof thisUser.type == "string") ? thisUser.type.toLowerCase() : "";
+// 	userAdminTypesLc = appSettings.users.managerTypes.map(function(elem) { return elem.toLowerCase(); });
+// 	if ( jQuery.inArray(userType, userAdminTypesLc) > -1 ){
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// };
+// fn_userIsStandardUser = function(userObject){
+// 	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
+// 	if ( !jQuery.isPlainObject(thisUser) ) { return false }
+// 	var userType = (thisUser && typeof thisUser.type == "string") ? thisUser.type.toLowerCase() : "";
+// 	userAdminTypesLc = appSettings.users.nonAdminTypes.map(function(elem) { return elem.toLowerCase(); });
+// 	if ( jQuery.inArray(userType, userAdminTypesLc) > -1 ){
+// 		return true;
+// 	} else {
+// 		return false;
+// 	}
+// };
+
 
 
 /* END - GLOBAL GENERICS */
@@ -151,15 +232,15 @@ generatePassword = function(len) {
 };
 
 lookupFieldFromEitherId = function(userId,requiredField){
-	// Takes a UserID and returns the value of the requested field for that User e.g. lookupNameFromUserId(profile.userId,'username');
-	// if 'requiredField' is omitted - will return profile.displayName
+	// Takes a UserID and returns the value of the requested field for that User e.g. lookupNameFromUserId(userId,'username');
+	// if 'requiredField' is omitted - will return displayName
 
 	// console.log("lookupFieldFromEitherId()",userId,requiredField);
 
-	var requiredField = requiredField || "profile.displayName";
+	var requiredField = requiredField || "displayName";
 
 	/* First query with UserId*/
-	var thisUser = Meteor.users.findOne({"profile.userId": userId});
+	var thisUser = Meteor.users.findOne({"_id": userId});
 
 	// console.log(thisUser, jQuery.isPlainObject(thisUser));
 
@@ -170,13 +251,13 @@ lookupFieldFromEitherId = function(userId,requiredField){
 
 	/* Return on second failure */
 	if ( jQuery.isPlainObject(thisUser) == false ){
-		// console.log("Error: userId did not match '_id' or 'profile.userId'", userId);
+		// console.log("Error: userId did not match '_id'", userId);
 		return false;
 	};
 
 	/* Assuming we now have a Meteor.user object - set the parameter required */
 	if (jQuery.isPlainObject(thisUser)){
-		returnName = thisUser[requiredField] || thisUser["profile"][requiredField.replace("profile.","")] || thisUser["username"] || thisUser["emails"][0]["address"];
+		returnName = thisUser[requiredField] || thisUser["username"] || thisUser["emails"][0]["address"];
 		return returnName;
 	} else {
 		return false;
@@ -212,7 +293,7 @@ forceUserPasswordChange = function (db_id,newpassword) {
 	/* mizzao:bootboxjs */
 	/* See: http://bootboxjs.com/examples.html#bb-alert-dialog */
 
-	var uDisplayName = lookupFieldFromEitherId(db_id, "profile.displayName");
+	var uDisplayName = lookupFieldFromEitherId(db_id, "displayName");
 	var uUsername = lookupFieldFromEitherId(db_id, "username");
 
 	var box = bootbox.confirm({
@@ -305,32 +386,32 @@ forceUserPasswordChange = function (db_id,newpassword) {
 	}
 };
 
-globalfn_deleteOrg = function (orgObj, userId, goUrl) {
-	// event.preventDefault();
-	var areYouSure = "_Are you sure you want to permanently delete org '"+orgObj.title+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
-	if ( confirm(areYouSure) ) {
-		Meteor.call("deleteOrg", orgObj._id, userId, function(error, result) {
-			console.log("error: " + error + "\n" + "result: " + result);
-			var alertMsgPrefix = "<i class='fa fa-building fa-lg'></i>&nbsp;&nbsp;";
-			if (!error && true === result){
-				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>Org: <i>'"+orgObj.title+"'</i> was successfully deleted.",
-					{
-						html: true
-					}
-				);
-			} else {
-				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete org: '<strong>"+orgObj.title+"</strong>' with error: <code>"+error+"</code>",
-					{
-						html: true,
-						timeout: appSettings.sAlert.longTimeout
-					}
-				);
-			}
-		});
-		if (typeof goUrl == "string" && goUrl != "") {
-			FlowRouter.go(goUrl);
-		}
-	} else {
-		return false;
-	}
-};
+// globalfn_deleteOrg = function (orgObj, userId, goUrl) {
+// 	// event.preventDefault();
+// 	var areYouSure = "_Are you sure you want to permanently delete org '"+orgObj.title+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
+// 	if ( confirm(areYouSure) ) {
+// 		Meteor.call("deleteOrg", orgObj._id, userId, function(error, result) {
+// 			console.log("error: " + error + "\n" + "result: " + result);
+// 			var alertMsgPrefix = "<i class='fa fa-building fa-lg'></i>&nbsp;&nbsp;";
+// 			if (!error && true === result){
+// 				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>Org: <i>'"+orgObj.title+"'</i> was successfully deleted.",
+// 					{
+// 						html: true
+// 					}
+// 				);
+// 			} else {
+// 				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete org: '<strong>"+orgObj.title+"</strong>' with error: <code>"+error+"</code>",
+// 					{
+// 						html: true,
+// 						timeout: appSettings.sAlert.longTimeout
+// 					}
+// 				);
+// 			}
+// 		});
+// 		if (typeof goUrl == "string" && goUrl != "") {
+// 			FlowRouter.go(goUrl);
+// 		}
+// 	} else {
+// 		return false;
+// 	}
+// };

@@ -8,62 +8,128 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 // import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 // import { _ } from 'meteor/underscore';
 
-// import { Users } from '/imports/startup/both/item-schema.js';
-// import { Items } from './items.js';
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-import { UserList } from '/imports/startup/both/schema-user.js';
+import { kb } from "/imports/startup/both/sharedConstants.js";
 
 import { check } from 'meteor/check';
+
+/* METHODS */
+var thisCollectionName = "Users";
+
+/* Will trigger on Accounts.createUser() - required to add custom fields */
+/* https://guide.meteor.com/accounts.html#adding-fields-on-registration */
+Accounts.onCreateUser(function(options, user) {
+	console.log("\n\n\n","-".repeat(24),"FN: Accounts.onCreateUser()",arguments,"-".repeat(24),"\n\n\n");
+	/* Copy all custom fields into default object */
+	// jQuery.extend(user,options);
+	Object.assign(user,options);
+	/* Custom field values */
+	user._id = options.assocOrgId + "-" + user._id;
+	user.displayName = options.displayName || user.username || user["emails"][0]["address"];
+	return user;
+});
+
 
 Meteor.methods({
 	// TODO: Should be createUser/createItem etc NOT addUser/addItem as there maybe a legit scenario (in the future) to add a user to a group
 	// (or something else) which would be a legitimate 'add' but not a 'create'
 
 	addUser: function(userObj) {
-		console.log('fn Meteor.methods.createUser()',userObj);
+		console.log('FN: Meteor.methods.addUser()', userObj);
 		if(typeof userObj != "object" || userObj == false){
 			console.log('ERROR: No userObj received in request. DB insert action cancelled. [error code: 910]');
 			return false;
 		};
-
+		/* Check for duplicate and abort if non-unique */
+		if ( !globalIsThisObjectUnique(userObj._id, thisCollectionName) ){
+			throw new Meteor.Error("Duplicate found for User ID (_id): "+userObj._id+". Aborting new user creation.");
+			return false;
+		}
 
 		/* Set Displayname (if not set by user) to be equal to username or email if available */
-		userObj.profile.displayName = userObj.profile.displayName || userObj.username || userObj["emails"][0]["address"];
+		// userObj.displayName = userObj.displayName || userObj.username || userObj["emails"][0]["address"];
 
+		/* CHECK() */
+		// console.log("\n\n", "check(userObj, kb_reference_only.schemas.UserSchema);", "\n\n\n");
 		// 'userObj' will contains the field that are in the 'Schema.User'
-		check(userObj, Schema.User);
+		// var checkResult = check(userObj, kb.schemas.UserSchema);
+		// console.log("\n\n", checkResult, userObj, "\n\n\n");
+
+		/* IMPORTANT! */
+		/* 
+		The following create user functionality triggers TWO hooks:
+			1. HOOK: BEFORE METEOR.USERS.INSERT
+			before Accounts.createUser();
+			2. HOOK: BEFORE METEOR.USERS.UPDATE
+			before Accounts.addEmail();
+		*/
+
+		console.log("\n\n","----> userObj: ",userObj,"----|\n\n\n");
 
 		/* The following 'Accounts.createUser' will trigger the 'beforeUserInsert' hook   */
 		var newUser = Accounts.createUser(userObj);
+		// var newUser = kb.collections[thisCollectionName].insert(userObj);
+
+		console.log("\n\n","----> newUser: ",newUser,"----|\n\n\n");
 
 		// Meteor.users.update(newUser, /* set the extra information, like status */);
 		var newEmailAddress = userObj.emails[0].address;
 
 		/* The following 'Accounts.addEmail' will trigger the 'beforeUserUpdate' hook   */
 		var addEmailStatus = Accounts.addEmail(newUser, newEmailAddress);
+		/*
+		returnObj{} will be passed to AutoForm.hooks.<formName>.onSuccess
+		and then to globalSuccess() as resultObj{}
+		*/
+		var returnObj = {
+			"id": newUser,
+			"obj": userObj,
+			"thisAction": "insert",
+			"thisCollectionName": thisCollectionName,
+			"title": userObj.displayName
+		};		
+		console.log('OK!: addUser() added User: ', userObj.displayName, userObj._id, "\n", returnObj);
+		return returnObj;
 
-		return { "userId": userObj.profile.userId, "dbId": newUser, "userObj": userObj, "addEmailStatus": addEmailStatus };
+		// return {
+		// 	"userId": userObj.userId,
+		// 	"dbId": newUser,
+		// 	"userObj": userObj,
+		// 	"addEmailStatus": addEmailStatus
+		// };
 	},
-	updateUserMethod: function(updatedObj,documentId){
-		console.log("fn updateUser()",updatedObj, documentId);
+	deleteUser: function(userDocId){
+		console.log("FN deleteUser() *** DEPRECATED - USE globalDelete() INSTEAD ***");
+		/* DEPRECATED - USE globalDelete() INSTEAD */
+			// var selectedDoc = kb.collections[thisCollectionName].findOne(userDocId);
+			// if (selectedDoc) {
+			// 	kb.collections[thisCollectionName].remove(userDocId);
+			// }
+	},
+	updateUserMethod: function(updatedObj, documentId){
+		console.log("FN updateUser() *** DEPRECATED - USE updateDoc() INSTEAD ***");
+		/* DEPRECATED - USE updateDoc() INSTEAD */
 
-		var editId,dbObj;
-		if( updatedObj._id ){
-			editId = updatedObj._id;
-		}else{
-			dbObj = Meteor.users.findOne({itemId:updatedObj.itemId});
-		}
+			/* Dynamic Field - Count Kitbags */
+			// updatedObj.$set["assocKitbagCount"] = (typeof updatedObj.$set["assocKitbagIds"] == "object") ? updatedObj.$set["assocKitbagIds"].length : 0;
 
-		/* Dynamic Field - Count Kitbags */
-		// updatedObj.$set["profile.userKitbagCount"] = (typeof updatedObj.$set["profile.userKitbags"] == "object") ? updatedObj.$set["profile.userKitbags"].length : 0;
+			// var updateSuccess = Meteor.users.update( documentId, updatedObj );
 
-		var updateSuccess = Meteor.users.update( documentId, updatedObj );
+			// var updatedUserId = updatedObj.$set["userId"];
+			// return { updatedUserId };
 
-		// var updatedUserId = Meteor.users.findOne({_id:documentId},{ getUserId:1 })["getUserId"];
-
-		var updatedUserId = updatedObj.$set["profile.userId"];
-
-		return { updatedUserId };
+			/*
+			returnObj{} will be passed to AutoForm.hooks.<formName>.onSuccess
+			and then to globalSuccess() as resultObj{}
+			*/
+			// var returnObj = {
+			// 	"id": documentId,
+			// 	"obj": updatedObj,
+			// 	"thisAction": "update",
+			// 	"thisCollectionName": thisCollectionName,
+			// 	"title": updatedObj.title || updatedObj.$set["title"]
+			// };		
+			// console.log('OK!: updateUserMethod() updated User '+returnObj.title+' with this returnObj{}\n', returnObj);
+			// return returnObj;
 	},
 	forceUserPasswordChangeServer: function(dbUserId, password, forceLogout) {
 		// http://stackoverflow.com/questions/36368457
@@ -75,7 +141,7 @@ Meteor.methods({
 
 		// if (!loggedInUser ||
 		// 	!(Roles.userIsInRole(loggedInUser, ['admin'], 'default_group')) || (loggedInUser._id == dbUserId) ) {
-		if (!loggedInUser || !(loggedInUser.profile.userType.toLowerCase()  == 'superadmin' )) {
+		if (!loggedInUser || !(loggedInUser.type.toLowerCase()  == 'superadmin' )) {
 			throw new Meteor.Error(403, "Access denied. Insuffient permissions.");
 			return false;
 		}
@@ -104,7 +170,6 @@ Meteor.methods({
 
 		return pwchange;
 	},
-
 	// https://forums.meteor.com/t/how-can-i-disconnect-a-user-from-server-side-code/12606/8
 	// forceLogout: function () {
 	// 	if (this.userId) {
@@ -112,15 +177,10 @@ Meteor.methods({
 	// 		Accounts._server.method_handlers.logoutOtherClients ();
 	// 		}
 	// },
-
-
-
-
-
-/* http://stackoverflow.com/questions/17923290/picking-up-meteor-js-user-logout */
-// Meteor.methods({
+	/* http://stackoverflow.com/questions/17923290/picking-up-meteor-js-user-logout */
     checkUserIsLoggedIn:function(userId){
-        console.log("____>>____ checkUserIsLoggedIn",userId,typeof userId);
+		var prefix = "USER: ";
+        console.log(prefix + "checkUserIsLoggedIn()", userId, typeof userId);
 
         try {
 
@@ -129,10 +189,10 @@ Meteor.methods({
 	        var user = Meteor.users.findOne(userId);
 
 			if (typeof user == "object"){
-				console.log("___>>_____ "+userId+" is connected!");
+				console.log(prefix + "CONNECTED! user: '"+userId+"' is connected! (checkUserIsLoggedIn)");
 				return "userFound";
 			} else if (typeof user == "undefined"){
-				console.log("__>>______ "+userId+" was not found in Meteor.users");
+				console.log(prefix + "WARNING! user: '"+userId+"' was not found in Meteor.users (checkUserIsLoggedIn)");
 				return "userNotFound";
 			} else {
        			return "noResponse";
@@ -141,10 +201,7 @@ Meteor.methods({
        	} catch (err) {
        		return "Error: "+err;
        	}
-
     },
-
-
 	setUserStatus: function(id,newStatus){
 		var res = Meteor.user.findOne(id);
 		console.log("setStatus("+id,newStatus+")");
@@ -153,10 +210,8 @@ Meteor.methods({
 		// if (res.owner !== Meteor.userId()){
 		// 	throw new Meteor.Error('ERROR: You are not authorized to change status for items owned by other users [error code: 34.7]');
 		// }else{
-		Meteor.users.update(id, { $set: {"profile.userStatus": newStatus}});
-		console.log("userStatus set: ",Meteor.users.findOne(id));
+		Meteor.users.update(id, { $set: {"status": newStatus}});
+		console.log("userStatus set: ", Meteor.users.findOne(id));
 		// }
 	}
-
-
 });

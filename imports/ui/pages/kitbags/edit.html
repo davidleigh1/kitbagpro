@@ -1,5 +1,7 @@
 <template name="kitbagEdit">
 
+{{#if userHasPermission 'canEditOrgKitbags'}}
+
 	<h1>Edit Kitbag</h1>
 
 	<div class="screen-wrapper">
@@ -24,5 +26,9 @@
 	{{/if}}
 
 	</div>
+
+{{else}}
+	{{>accessRestricted}}
+{{/if}}
 
 </template>

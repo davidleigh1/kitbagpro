@@ -1,0 +1,214 @@
+<template name="userLine">
+
+{{#with thisUser}}
+	<tr data-sortusername="{{global_toLower username}}" data-sortcallsign="{{global_toLower callsign}}" data-sortdisplayname="{{global_toLower displayName}}" data-sortcreated="{{createdAt}}" data-sortupdated="{{createdAt}}" data-sortorg="{{global_toLower (lookupFieldFromOrg userAssocOrg 'title') }}"	class="{{#if isCurrentUser}}currentUser{{/if}}" id="{{_id}}">
+
+		<!-- Small screens only! -->
+		<td class="visible-xs col-xs-3">
+			<!-- Top line -->
+			<a href="/users/{{_id}}/view">
+			<div>
+				{{#unless username}}
+					<span class="resNote">Username not found (_id: {{itemId}})</span>
+				{{else}}
+					<a href="/users/{{_id}}/view">{{highlight username filterVar suppressHightlight}}</a>
+				{{/unless}}
+			</div>
+			<!-- /Top line -->
+			<!-- Bottom line -->
+			<div>
+				<!-- {{#if itemAssocKitbagCount }}
+						<span class="itemlistSubtitle">{{plural itemAssocKitbagCount "kitbag" "kitbags"}}</span>
+				{{/if}} -->
+			</div>
+			<!-- /Bottom line -->
+			</a>
+		</td>
+		<!-- /Small screens only! -->
+
+		<td class="hidden-xs userProfileNameCol">
+			{{#unless getDisplayName}}
+				<span class="cursor-help" title="'displayName' not found">
+					{{#if isCurrentUser}}[Current User]{{else}}-{{/if}}
+				</span>
+			{{else}}
+				<a href="/users/{{_id}}/view">
+					{{highlight getDisplayName filterVar suppressHightlight}}
+					{{#if isCurrentUser}} [Current User]{{/if}}
+				</a>
+			{{/unless}}
+		</td>
+
+		<!-- User Status Tag -->
+		<td class="hidden-xs userStatusCol">
+			<!-- {{#unless userStatus}} -->
+				<!-- <span class="cursor-help" title="'userStatus' not found">-</span> -->
+			<!-- {{else}} -->
+				<span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span>
+			<!-- {{/unless}} -->
+		</td>
+
+		<td class="hidden-xs callsignCol">
+			{{#unless callsign}}
+				<span class="cursor-help" title="'callsign' not found">-</span>
+			{{else}}
+				<a href="/users/{{_id}}/view">{{highlight callsign filterVar suppressHightlight}}</a>
+			{{/unless}}
+		</td>
+
+		<td class="hidden-xs divisionCol">
+			{{#unless division}}
+				<span class="cursor-help" title="'division' not found">-</span>
+			{{else}}
+				{{division}}
+			{{/unless}}
+		</td>
+
+		<td class="hidden-xs teamCol">
+			{{#unless team}}
+				<span class="cursor-help" title="'team' not found">-</span>
+			{{else}}
+				{{team}}
+			{{/unless}}
+		</td>
+
+		<td class="hidden-xs userKitbagCountCol">
+			{{#unless assocKitbagCount}}
+				<span class="cursor-help" title="'assocKitbagCount' not found">-</span>
+			{{else}}
+				{{assocKitbagCount}}
+			{{/unless}}
+		</td>
+
+		<td class="hidden-xs userSuperAdminCol">
+			{{#unless getType.value}}
+				<span class="cursor-help" title="User 'type' attribute not found">-</span>
+			{{else}}
+				{{getType.value}}
+			{{/unless}}
+		</td>
+
+		
+		{{#if glb_userIsSuperAdmin}}
+			{{#unless isOrgUsersList}}
+				<!-- User Organisation -->
+				<!-- NOTE: User Search/Filter also includes Associated Org ID - but not at this point, not the Org Title -->
+				<td class="hidden-xs hidden-sm userOrgCol adminOnly">
+					{{#unless assocOrgId}}
+						<span class="cursor-help" title="'assocOrgId' not found">-</span>
+					{{else}}
+						<a href="/orgs/{{assocOrgId}}/view">
+						{{highlight (lookupFieldFromOrg assocOrgId 'title') filterVar suppressHightlight}}</a><br><small>({{highlight assocOrgId filterVar suppressHightlight}})</small>
+					{{/unless}}
+				</td>
+			{{/unless}}
+		{{/if}}
+
+		<!-- Username -->
+		<td class="hidden-xs userNameCol">
+			{{#unless username}}
+				<span class="cursor-help" title="'username' not found">-</span>
+			{{else}}
+				<a href="/users/{{_id}}/view">{{highlight username filterVar suppressHightlight}}</a>
+			{{/unless}}
+		</td>
+
+
+		<!-- User Email -->
+		<td class="hidden-xs hidden-sm userEmailCol">
+			{{#unless getEmail}}
+				<span class="cursor-help" title="'userEmail' not found">-</span>
+			{{else}}
+				{{highlight getEmail filterVar suppressHightlight}}
+			{{/unless}}
+		</td>
+
+		<!-- User ID -->
+		{{#if glb_userIsSuperAdmin}}
+			{{#unless isOrgUsersList}}
+				<td class="hidden-xs userIdCol adminOnly">
+					<!-- {{#unless getUserId}}
+						<span class="cursor-help" title="'userId' not found">-</span>
+					{{else}} -->
+						<a href="/users/{{_id}}/view" title="dbid: '{{_id}}'">{{highlight getUserId filterVar suppressHightlight}}</a>
+					<!-- {{/unless}} -->
+				</td>
+			{{/unless}}
+		{{/if}}
+
+		<!-- Account Service -->
+		<!--
+		<td class="hidden-xs hidden-sm hidden-md userServiceCol">
+			{{#unless userGetService 'serviceName'}}
+				<span class="resNote">'serviceName' not found</span>
+			{{else}}
+				{{userGetService 'serviceName'}} ({{userGetService 'serviceUsername'}})
+			{{/unless}}
+		</td>
+		-->
+
+		<td class="hidden-xs hidden-sm hidden-md userCreatedAtCol"><!-- {{formatDate createdAt}} -->
+			{{#unless createdAt}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{formatDate createdAt 'naa!'}}
+			{{/unless}}
+			<!--
+			{{#if createdBy}}
+				<span class="text-muted small adminOnly"><br/>by <a href="/users/{{createdBy}}/view">{{lookupNameFromUserId createdBy}}</a></span>
+			{{/if}}
+			-->
+		</td>
+
+		<!-- CONTROL -->
+		<td class="hidden-xs userActionsCol">
+			<div class="controlWrapper">
+				<button class="view {{#unless getUserId}}disabled{{/unless}}" data-doc="{{_id}}" title="View"><i class="fa fa-fw fa-eye"></i></button>
+				{{#if userHasPermission 'canEditOrgUsers'}}
+				<button class="edit {{#unless getUserId}}disabled{{/unless}}" data-doc="{{_id}}" title="Edit"><i class="fa fa-fw fa-pencil"></i></button>
+				{{/if}}
+				{{#if userHasPermission 'canDeleteOrgUsers'}}
+				<button class="delete" data-doc="{{_id}}" title="Delete"><i class="fa fa-fw fa-trash"></i></button>
+				{{/if}}
+			</div>
+		</td>
+
+	</tr>
+{{/with}}
+
+</template>
+
+<!-- =============================== -->
+	<!-- <div class="userline userentry {{#if isCurrentUser}}currentUser{{/if}} "> -->
+<!-- 		<span class="userProfileName">
+			{{#unless userProfileName}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{userProfileName}}
+			{{/unless}}
+		</span> -->
+<!-- 		<span class="userUsername">
+			{{#unless username}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{username}}
+			{{/unless}}
+		</span> -->
+		<!-- <span class="userId">{{userId}} {{#if isCurrentUser}} [Current User]{{/if}}</span> -->
+<!-- 		<span class="userEmail">
+			{{#unless userEmail}}
+				<span class="resNote">N/A</span>
+			{{else}}
+				{{userEmail}}
+			{{/unless}}
+		</span> -->
+<!-- 		<span class="userService">
+			{{#unless userGetService 'serviceName'}}
+				<span class="resNote">None</span>
+			{{else}}
+				{{userGetService 'serviceName'}} ({{userGetService 'serviceUsername'}})
+			{{/unless}}
+		</span> -->
+<!-- 		<span class="userCreatedAt">{{formatDate createdAt}}</span>
+		<span class="userSuperAdmin">{{glb_userIsSuperAdmin}}</span> -->
+	<!-- </div> -->

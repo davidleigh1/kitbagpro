@@ -40,7 +40,6 @@ Template.kitbagEdit.onCreated(function() {
 
 /* ONRENDERED */
 Template.kitbagEdit.onRendered(function(){
-
 	if ( fn_userIsSuperAdmin() ){
 		console.log("TODO: Check this function... can it be generic too?");
 		$("select[name='assocOrgId']").change(function(){
@@ -110,7 +109,6 @@ AutoForm.hooks({
 
 
 /* EVENTS */
-
 Template.kitbagEdit.events({
 	// NOT USED CURRENTLY BUT COULD BE USEFUL??
 	// 'click .kitbag-row': function () {

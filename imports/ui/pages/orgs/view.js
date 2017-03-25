@@ -12,9 +12,10 @@
 	import '/imports/ui/pages/notFound/noListObjectsFound.js';
 
 
+
 /* IMPORT PROJECT OBJECTS */
 	import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
-	import { Kitbags } from '/imports/api/kitbags/kitbags.js';
+	// import { Kitbags } from '/imports/api/kitbags/kitbags.js';
 
 
 /* PARAMETERS */
@@ -35,12 +36,12 @@ Template.orgView.onRendered(function(){
 
 
 /* UTIL FUNCTIONS */
-displayName = function (user) {
-	console.log("TODO: Is displayName() required?");
-  if (user.profile && user.profile.name)
-    return user.profile.name;
-  return user.emails[0].address;
-};
+// displayName = function (user) {
+// 	console.log("TODO: Is displayName() required?");
+//   if (user.displayName)
+//     return user.displayName;
+//   return user.emails[0].address;
+// };
 
 
 /* HELPERS */
@@ -74,7 +75,7 @@ Template.orgView.helpers({
 		return {"assocOrgId": FlowRouter.getParam(thisUrlId) };
 	},
 	minilistFilter_users: function () {
-		return {"profile.userAssocOrg": FlowRouter.getParam(thisUrlId) };
+		return {"assocOrgId": FlowRouter.getParam(thisUrlId) };
 	},
 	assocKitbagIds: function () {
 		/* Tidies up the assocKitbagIds array */
@@ -87,44 +88,7 @@ Template.orgView.helpers({
 		} else {
 			return Spacebars.SafeString( prefix + arr.join(joiner) + suffix );
 		}
-	},
-	// getOrgStatusTag: function () {
-	// 	var labelClass, labelText;
-
-	// 	switch(this.status.toLowerCase()) {
-	// 		case "active":
-	// 			labelClass = "label-success";
-	// 			labelText = "Active";
-	// 			break;
-	// 		case "hidden":
-	// 			labelClass = "label-warning";
-	// 			labelText = "Hidden";
-	// 			break;
-	// 		case "deleted":
-	// 		case "trashed":
-	// 			labelClass = "label-default";
-	// 			labelText = "Trashed";
-	// 			break;
-	// 		default:
-	// 			labelClass = "label-danger";
-	// 			labelText = "Unknown";
-	// 		break;
-	// 	}
-	// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-	// 	return { 'labelClass': labelClass, 'labelText': labelText };
-	// // },
-	// // userNameLookup: function (userId, paramRequired) {
-	// // 	var myUser = Meteor.users.findOne({_id: userId });
-
-	// // 	var data = {};
-	// // 	data.uname = (myUser && myUser.profile.displayName)?myUser.profile.displayName:"Profile Name not found";
-	// // 	data.dbId  = userId;
-	// // 	data.apiId = (myUser && myUser.profile.userId)?myUser.profile.userId:"API-ID not found";
-	// // 	data.url   = "/users/"+userId+"/view";
-	// // 	data.html  = "<a href='"+data.url+"'>"+data.uname+"</a>";
-
-	// // 	return Spacebars.SafeString( data[paramRequired] );
-	// }
+	}
 });
 
 

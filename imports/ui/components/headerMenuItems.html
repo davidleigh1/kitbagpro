@@ -9,7 +9,7 @@
 				<a href="#">
 					<div class="media">
 						<span class="pull-left">
-							<img class="media-object" src="http://placehold.it/50x50" alt="">
+							<img class="media-object" src="/img/icons/envelope.png" alt="">
 						</span>
 						<div class="media-body">
 							<h5 class="media-heading"><strong>John Smith</strong>
@@ -24,7 +24,7 @@
 				<a href="#">
 					<div class="media">
 						<span class="pull-left">
-							<img class="media-object" src="http://placehold.it/50x50" alt="">
+							<img class="media-object" src="/img/icons/email.png" alt="">
 						</span>
 						<div class="media-body">
 							<h5 class="media-heading"><strong>John Smith</strong>
@@ -39,7 +39,7 @@
 				<a href="#">
 					<div class="media">
 						<span class="pull-left">
-							<img class="media-object" src="http://placehold.it/50x50" alt="">
+							<img class="media-object" src="/img/icons/envelope.png" alt="">
 						</span>
 						<div class="media-body">
 							<h5 class="media-heading"><strong>John Smith</strong>
@@ -90,7 +90,7 @@
 				{{#if glb_userIsAnAdmin}}
 					<span class="adminUserString">{{userType}}</span>
 				{{else}}
-					<span class="userOrgString">{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'title'}}</span>
+					<span class="userOrgString">{{lookupFieldFromOrg currentUser.assocOrgId 'title'}}</span>
 				{{/if}}
 			</div>
 			<i class="fa fa-user-md"></i><b class="caret"></b>
@@ -113,7 +113,7 @@
 						DS: <strong>{{currentUser.getDisplayName}}</strong><br>
 						UN: <strong>{{currentUser.username}}</strong><br>
 						EM: <strong>{{currentUser.getEmail}}</strong><br>
-						OR: <strong>{{lookupFieldFromOrg currentUser.profile.userAssocOrg 'title'}}</strong><br>
+						OR: <strong>{{lookupFieldFromOrg currentUser.assocOrgId 'title'}}</strong><br>
 						TY: <strong>{{currentUser.getType.label}}</strong> ({{currentUser.getType.value}})<br>
 						ID: <strong>{{currentUser.getUserId}}</strong> ({{currentUser._id}})
 					</span>

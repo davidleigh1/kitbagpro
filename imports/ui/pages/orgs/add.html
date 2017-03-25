@@ -1,6 +1,8 @@
 <template name="orgAdd">
 
-	<h1>Insert Org</h1>
+{{#if userHasPermission 'canEditOrgDetails'}}
+
+	<h1>Create New Org</h1>
 
 	<div class="screen-wrapper">
 
@@ -23,5 +25,10 @@
 	{{/if}}
 
 	</div>
+
+
+{{else}}
+	{{>accessRestricted}}
+{{/if}}
 
 </template>

@@ -12,31 +12,31 @@
 	border-bottom: 1px dotted gray;
 }
 
-.userlistProfileName{
+.userProfileName{
 	width: 20%;
 	border-right: 1px dotted gray;
 }
-.userlistId{
+.userId{
 	width: 20%;
 	border-right: 1px dotted gray;
 }
-.userlistEmail{
+.userEmail{
 	width: 10%;
 	border-right: 1px dotted gray;
 }
-.userlistCreatedAt{
+.userCreatedAt{
 	width: 10%;
 	border-right: 1px dotted gray;
 }
-.userlistUsername{
+.userUsername{
 	width: 10%;
 	border-right: 1px dotted gray;
 }
-.userlistService{
+.userService{
 	width: 10%;
 	border-right: 1px dotted gray;
 }
-.userlistSuperAdmin{
+.userSuperAdmin{
 	width: 5%;
 }
 

@@ -1,0 +1,38 @@
+<template name="accessRestricted">
+
+		<div class="screen-wrapper routeNotFound">
+			<!-- Page Heading -->
+			{{> pageHeader
+				pageTitle = titleText
+				pageSubtitle = subTitleText
+				faIcon = "fa fa-exclamation-triangle"
+				}}	
+				<!-- faIcon = "fa fa-meh-o" -->
+
+			<div>
+				<!-- <span class="fa-stack fa-lg">
+					<i class="fa fa-square fa-stack-2x"></i>
+					<i class="fa fa-terminal fa-stack-1x fa-inverse"></i>
+				</span> -->
+				<p>
+					Looks like you don't have permission to access this page - sorry!
+				</p>
+				<p>
+					Please <a href="javascript:history.back()">go back</a> or try again from the <a href="http://app.kitbagpro.com">homepage</a>.
+				</p>
+				<hr>
+				<p>
+					<small>
+						Referrer URL:  <a href="{{referrerUrl}}">{{referrerUrl}}</a><br/>
+						Blocked URL: <a href="{{blockedUrl}}">{{blockedUrl}}</a><br/>
+						Organisation: {{lookupFieldFromOrg currentUser.assocOrgId 'title'}}<br/>
+						uName: {{currentUser.username}} ({{currentUser._id}})<br/>
+						uType: {{currentUser.getType.label}} ({{currentUser.getType.value}})<br/>
+						Agent: {{userAgent}}<br/>
+					</small>
+				</p>
+			</div>	
+
+		</div>
+
+</template>

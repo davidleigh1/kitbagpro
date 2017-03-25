@@ -60,6 +60,7 @@ AutoForm.hooks({
 		},
 		onSuccess: function(formType, resultObj) {
 			// console.log("AutoForm.hooks.insertKitbagForm.onSuccess: ",formType, resultObj);
+			console.log("AutoForm.hooks.insertKitbagForm.onSuccess: ", formType);
 			globalOnSuccess(thisCollectionName, thisAction, resultObj);
 		},
 		onError: function(formType, error, arg3, arg4) {

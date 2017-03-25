@@ -15,8 +15,8 @@ Template.headerMenuItems.helpers({
 	},
 	userType: function () {
 		if ( Meteor.user() ) {
-			if ( jQuery.isPlainObject(Meteor.user().profile) && Meteor.user().profile.userType && Meteor.user().profile.userType != "" ) {
-				return Meteor.user().profile.userType;
+			if ( jQuery.isPlainObject(Meteor.user()) && Meteor.user().type && Meteor.user().type != "" ) {
+				return Meteor.user().type;
 			}
 		} else {
 			return "Unknown";

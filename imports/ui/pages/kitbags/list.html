@@ -1,5 +1,7 @@
 <template name="kitbagList">
 
+{{#if userHasPermission 'canViewKitbagList'}}
+
 	<!-- Page Heading -->
 	{{> pageHeader
 		pageTitle = "Kitbags"
@@ -13,7 +15,6 @@
 			<div class="panel panel-default">
 				<div class="panel-heading kbFilter">
 					<h3 class="panel-title">
-						<!-- <i class="fa fa-medkit fa-fw"></i> -->
 						{{>kitbagLogo}}
 						Kitbags
 					</h3>
@@ -21,10 +22,10 @@
 				<div class="panel-body">
 					<!-- Filtered list of kitbags -->
 					{{> listFilter
-						obj="kitbag"
-						Obj="Kitbag"
-						full="kitbag"
-						Full="Kitbag"
+						thisCollectionLc="kitbag"
+						thisCollectionUc="Kitbag"
+						thisCollectionFullLc="kitbag"
+						thisCollectionFullUc="Kitbag"
 						}}
 
 				</div>
@@ -46,9 +47,8 @@
 							<th class="hidden-xs">Status</th>
 							<th class="hidden-xs text-center todo">Items</th>
 							<th class="hidden-xs text-center todo">Users</th>
-							<th class="hidden-xs hidden-sm">Bag ID</th>
 							{{#if glb_userIsSuperAdmin}}
-								<th class="hidden-xs adminOnly">DB ID</th>
+								<th class="hidden-xs adminOnly">DBID</th>
 							{{/if}}
 							<th class="visible-lg">Created</th>
 							<!-- <th class="hidden-xs hidden-sm hidden-md">Owner</th> -->
@@ -58,7 +58,6 @@
 					<tbody>
 
 						{{#if Template.subscriptionsReady}}
-							<!-- Show 'noListObjectsFound' template if none found -->
 							{{#if objectsFiltered "Kitbags" filterVar}}
 								{{#each objectsFiltered "Kitbags" filterVar}}
 									{{ >kitbagLine thisKitbag=this listType="kitbagList" }}
@@ -76,5 +75,10 @@
 		</div>
 	</div>
 	<!-- /.row -->
-<!-- </div> -->
+	<!-- </div> -->
+
+{{else}}
+	{{>accessRestricted}}
+{{/if}}
+
 </template>

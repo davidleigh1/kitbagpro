@@ -3,16 +3,9 @@ import './mainLayout.html';
 import { Meteor } from 'meteor/meteor';
 // import { ReactiveVar } from 'meteor/reactive-var';
 // import { ReactiveDict } from 'meteor/reactive-dict';
-// import { Orgs } from '/imports/api/orgs/orgs.js';
 
 import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
-// import { Orgs } from '/imports/startup/both/schema-org.js';
-// import { Kitbags } from '/imports/startup/both/schema-kitbag.js';
-import { Items } from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/schema-user.js';
-// import { Items } from '/imports/api/items/items.js';
-// import { Items } from '/both/newItems.js';
 import { Template } from 'meteor/templating';
 import { ActiveRoute } from 'meteor/zimme:active-route';
 import { FlowRouter } from 'meteor/kadira:flow-router';

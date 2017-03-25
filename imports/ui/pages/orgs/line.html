@@ -100,10 +100,14 @@
 					{{/if}}
 				</button>
 			{{/if}} -->
-			<button class="delete" data-org="{{_id}}" title="Trash"><i class="fa fa-fw fa-trash"></i></button>
-			<button class="edit" data-org="{{_id}}" title="Edit"><i class="fa fa-fw fa-pencil"></i></button>
-			<button class="view" data-org="{{_id}}" title="View"><i class="fa fa-fw fa-eye"></i></button>
-			<button class="addKitbag" data-org="{{_id}}" title="Add Kitbag"><i class="fa fa-fw fa-medkit"></i></button>
+			<button class="view" data-org="{{_id}}" title="View this Organisation"><i class="fa fa-fw {{global_getfontAwesomeIcon 'view'}}"></i></button>
+			<button class="edit" data-org="{{_id}}" title="Edit this Organisation"><i class="fa fa-fw {{global_getfontAwesomeIcon 'edit'}}"></i></button>
+			<!-- MOVING TRASH/DELETE TO CONTROL MENU ONLY
+			<button class="trash" data-org="{{_id}}" title="Trash this Organisation"><i class="fa fa-fw {{global_getfontAwesomeIcon 'trash'}}"></i></button>
+			<button class="delete" data-org="{{_id}}" title="Delete this Organisation"><i class="fa fa-fw {{global_getfontAwesomeIcon 'delete'}}"></i></button>
+			-->
+			<button class="createKitbag" data-org="{{_id}}" title="Create an Organisational Kitbag"><i class="fa fa-fw {{global_getfontAwesomeIcon 'kitbags'}}"></i></button>
+			<button class="createUser" data-org="{{_id}}" title="Create an Organisational User"><i class="fa fa-fw {{global_getfontAwesomeIcon 'user'}}"></i></button>
 		</div>
 	</td>
 
@@ -120,36 +124,43 @@
 				<ul class="dropdown-menu pull-right" role="menu">
 					<!-- Small screens only! -->
 					<li class="visible-xs">
-						<a class="viewOrgDetails" data-action="showOrgDetails" data-org="{{_id}}" href="#"><i class='fa fa-fw fa-list'></i> View Details</a>
+						<a class="viewOrgDetails" data-action="showOrgDetails" data-org="{{_id}}" href="#" title="View this Organisation">
+							<i class="fa fa-fw {{global_getfontAwesomeIcon 'view'}}"></i> View Details
+						</a>
 					</li>
 					<li class="visible-xs divider"></li>
 					<!-- /Small screens only! -->
+
 					<li>
-						<a class="edit" data-action="editOrgDetails" data-org="{{_id}}" href="#"><i class="fa fa-fw fa-pencil"></i> Edit</a>
-					</li>
-					<li>
-						<a class="addKitbag" data-action="addKitbag" data-org="{{_id}}" href="#"><i class="fa fa-fw fa-medkit"></i> Add Kitbag</a>
-					</li>
-					<!-- {{#if glb_userIsSuperAdmin}} -->
-					<li>
-						<a class="toggleStatus" data-action="toggleStatus" data-org="{{_id}}" href="#"><i class='fa fa-fw fa-{{changeOrgStatus.icon}}'></i>
-							{{> changeOrgStatus}}
+						<a class="edit" data-action="editOrgDetails" data-org="{{_id}}" href="#" title="Edit this Organisation">
+							<i class="fa fa-fw {{global_getfontAwesomeIcon 'edit'}}"></i> Edit
 						</a>
 					</li>
-					<!-- {{/if}} -->
-					<!-- {{#if glb_userIsSuperAdmin}} -->
-						<!-- <li class="divider"></li> -->
-						<li>
-							<a class="trash" data-action="trashOrg" data-org="{{_id}}" href="#" title="Available to Owners only"><i class="fa fa-fw fa-trash"></i> Trash</a>
-						</li>
-					<!-- {{/if}} -->
-					<!-- {{#if glb_userIsSuperAdmin}} -->
-						<!-- <li class="divider"></li> -->
-						<li>
-							<a class="delete" data-action="delete" data-org="{{_id}}" href="#" title="Available to SuperAdmins only"><i class="fa fa-fw fa-ban"></i> Delete</a>
-						</li>
-					<!-- {{/if}} -->
-
+					<li>
+						<a class="createKitbag" data-action="createKitbag" data-org="{{_id}}" href="#" title="Create an Organisational Kitbag">
+							<i class="fa fa-fw {{global_getfontAwesomeIcon 'kitbags'}}"></i> Create Kitbag
+						</a>
+					</li>
+					<li>
+						<a class="createUser" data-action="createUser" data-org="{{_id}}" href="#" title="Create an Organisational User">
+							<i class="fa fa-fw {{global_getfontAwesomeIcon 'addUser'}}"></i> Create User
+						</a>
+					</li>
+					<li>
+						<a class="toggleStatus" data-action="toggleStatus" data-org="{{_id}}" href="#">
+							<i class='fa fa-fw fa-{{changeOrgStatus.icon}}'></i> {{> changeOrgStatus}}
+						</a>
+					</li>
+					<li>
+						<a class="trash" data-action="trashOrg" data-org="{{_id}}" href="#" title="{{trashOrActive 'title'}}">
+							<i class="fa fa-fw {{global_getfontAwesomeIcon 'trash'}}"></i> {{trashOrActive 'label'}}
+						</a>
+					</li>
+					<li>
+						<a class="delete" data-action="delete" data-org="{{_id}}" href="#" title="Delete this Organisation">
+							<i class="fa fa-fw {{global_getfontAwesomeIcon 'delete'}}"></i> Delete
+						</a>
+					</li>
 				</ul>
 				<!-- /dropdown menu -->
 			</div>
@@ -186,7 +197,7 @@
 createdAt : Wed Mar 16 2016 02:08:27 GMT+0200 (Jerusalem Standard Time)
 contactEmail : "contactus@icrc.org"
 contactPerson : "Redman Crossy"
-desc : "The official mission statement says that: "The International Committee of the Red Cross (ICRC) is an impartial, neutral, and independent organization whose exclusively humanitarian mission is to protect the lives and dignity of victims of war and internal violence and to provide them with assistance."
+desc : "The official mission statement says that: "The International Committee of the Red Cross (ICRC) is an impartial, neutral, and independent Organisation whose exclusively humanitarian mission is to protect the lives and dignity of victims of war and internal violence and to provide them with assistance."
 imgLarge : "https://www.icrc.org/sites/default/themes/icrc_theme/images/who-we-are/mandate-and-mission.jpg"
 imgSmall : "https://www.icrc.org/sites/default/themes/icrc_theme/images/en/icon-128.png"
 title : "International Red Cross"

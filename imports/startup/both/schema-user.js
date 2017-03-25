@@ -2,7 +2,7 @@ console.log("RUN: 'schema-user.js' at '/imports/startup/both'");
 
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+import { kb, appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
 /* https://forums.meteor.com/t/config-accounts-createuser-to-have-only-one-email/943/3 */
@@ -13,16 +13,13 @@ Meteor.users._transform = function(user) {
 		return thisEmail;
 	},
 	user.getDisplayName = function(){
-		// return this.profile.displayName;
-		return ( typeof this.profile == "object" ) ? this.profile.displayName : "";
+		return this.displayName || "";
 	},
 	user.getUserId = function(){
-		// return this.profile.userId;
-		console.log("TODO: Using user.getUserId - should use _id instead ------------------");
-		return ( typeof this.profile == "object" ) ? this.userId : "";
+		return this._id || "";
 	},
 	user.getType = function(){
-		var typeValue = ( typeof this.profile == "object" ) ? this.profile.userType : "";
+		var typeValue = ( typeof this.type == "string" ) ? this.type : "";
 		var typeLabel = jQuery.isPlainObject(appSettings.users.allUserTypes2[typeValue]) ? appSettings.users.allUserTypes2[typeValue].label : "";
 		var typeObj = { "value": typeValue, "label": typeLabel };
 		// console.log("typeObj: ",typeObj);
@@ -45,14 +42,92 @@ Meteor.users._transform = function(user) {
 /* 																		*/
 /* ==================================================================== */
 
-console.log("DEF: 'Users' Collection");
-export const UserList = new Mongo.Collection("userlist");
+	// console.log("DEF: 'Users' Collection");
+	// export const UserList = new Mongo.Collection("userlist");
+	// Schema = {};
 
-Schema = {};
+console.log("NEW: Extended Users Collection at '/imports/startup/both/schema-user.js'");
 
-Schema.UserProfile = new SimpleSchema({
+// const UserList = new Mongo.Collection("userlist");
 
- //    // See: https://github.com/aldeed/meteor-autoform/issues/111
+// https://atmospherejs.com/aldeed/simple-schema
+
+kb.schemas.UserSchema = new SimpleSchema({
+	"_id": {		// Formerly: 'userId'
+		type: String,
+		optional: false,
+		max: 33,
+		defaultValue: function () {
+			if (this.isSet == true && this.value != ""){
+				return this.value;
+			} else {
+				return GlobalHelpers.idGenerator(uniqueIds.userPrefix);
+			}
+		},
+		label: "User DBID"
+	},
+	"displayName": {
+		type: String,
+		optional: true,
+		label: "Display Name"
+	},	
+    "username": {
+        type: String,
+		// For accounts-password, either emails or username is required,
+		// but not both. It is OK to make this optional here because the
+		// accounts-password package does its own validation.
+		// Third-party login packages may not require either. 
+		// Adjust this schema as necessary for your usage.
+        optional: false,
+        label: "Username/Login"
+    },
+    "emails": {
+        type: Array,
+		// For accounts-password, either emails or username is required,
+		// but not both. It is OK to make this optional here because the
+		// accounts-password package does its own validation.
+		// Third-party login packages may not require either. 
+		// Adjust this schema as necessary for your usage.
+        optional: true,
+        label: "Email"
+    },
+    "emails.$": {
+        type: Object
+    },
+    "emails.$.address": {
+        type: String,
+        regEx: SimpleSchema.RegEx.Email,
+        label: "Email"
+    },
+    "emails.$.verified": {
+        type: Boolean,
+		autoform: {
+			leftLabel: true
+		},
+        label: "Email Verified"
+    },
+	"createdAt": { // DUPLICATE?????
+		type: Date,
+		optional: true,
+		label: "Created on"
+	},
+	// "profile": {
+	// 	type: Schema.UserProfile,
+	// 	optional: true
+	// },
+	"services": {
+		type: Object,
+		optional: true,
+		blackbox: true
+	},
+	// });
+	
+	
+	// let UserListSchema = new SimpleSchema({
+
+	// Schema.UserProfile = new SimpleSchema({
+
+    // See: https://github.com/aldeed/meteor-autoform/issues/111
 	// "adminResetPassword": {
 	// 	type: String,
 	// 	min: 8,
@@ -62,30 +137,18 @@ Schema.UserProfile = new SimpleSchema({
 	// 	},
 	// 	label: "Password (8-25 in length)",
 	// },
-	"userId": {
-		type: String,
-		optional: true,
-		max: 33,
-		label: "External User ID",
-		defaultValue: function () {
-			if (this.isSet == true && this.value != ""){
-				return this.value;
-			} else {
-				return GlobalHelpers.idGenerator(uniqueIds.userPrefix);
-			}
-		}
-	},
-	"displayName": {
-		type: String,
-		optional: true,
-		label: "Display Name"
-	},
-	"userCallsign": {
+
+	// "displayName": {
+	// 	type: String,
+	// 	optional: true,
+	// 	label: "Display Name"
+	// },
+	"callsign": {
 		type: String,
 		optional: true,
 		label: "Call Sign"
 	},
-	"userStatus": {
+	"status": {
 		type: String,
 		optional: true,
 		allowedValues: appSettings.users.statuses,
@@ -97,7 +160,7 @@ Schema.UserProfile = new SimpleSchema({
 		},
 		label: "User Status"
 	},
-	"userType": {
+	"type": {
 		type: String,
 		optional: true,
 		defaultValue: "User",
@@ -112,20 +175,21 @@ Schema.UserProfile = new SimpleSchema({
 		},
 		label: "User Role"
 	},
-	"userAssocOrg": {				/* Associated Org is also set for SuperAdmin Users */
+	"assocOrgId": {				
+		/* NOTE: assocOrgId is also set for SuperAdmin Users */
 		type: String,
-		optional: false,
+		optional: true,
 		autoform: {
 			options: function () {
 				return GlobalHelpers.getOrgSelectList();
 			}
 		},
-		label: "Organisation"
+		label: "Associated Organisation ID"
 	},
-	"userAssocOrg.$": {
-		type: String
-	},
-	"userDivision": {		/* None or One */
+	// "assocOrg.$": {
+	// 	type: String
+	// },
+	"division": {		/* None or One */
 		type: String,
 		optional: true,
 		allowedValues: appSettings.orgs.divisions,
@@ -139,7 +203,7 @@ Schema.UserProfile = new SimpleSchema({
 		// }
 		label: "Division"
 	},
-	"userTeam": {			/* None or More */
+	"team": {			/* None or More */
 		type: String,
 		optional: true,
 		allowedValues: appSettings.orgs.teams,
@@ -166,34 +230,36 @@ Schema.UserProfile = new SimpleSchema({
 		optional: true,
 		label: "Profile Photo or Avatar"
 	},
-	"userNotes": {
+	"notes": {
 		type: String,
 		optional: true,
 		label: "Notes"
 	},
 
-	/* KITBAGS */
+	/* ASSOCIATED KITBAGS */
 
-	"userKitbags": {			/* None or More */
-		type: Array,
-		// type: select-checkbox,
-		// minCount: 1,
-		// maxCount: 5,
-		optional: true,
-		autoform: {
-			options: function () {
-				return GlobalHelpers.getFilteredListKitbags();
-			}
-		},
-		label: "Assigned kitbags"
-	},
-	"userKitbags.$": {
-		type: String
-	},
-	"userKitbagCount": {
+	"assocKitbagCount": {
 		type: Number,
 		optional: true,
-		label: "Kitbags count" /* This should be equal to length of 'active' kitbags in userKitbags array */
+		defaultValue: 0,
+		label: "Kitbags count"
+		/*
+		This should be equal to length of 
+		'active' kitbags in assocKitbagIds array 
+		*/
+	},
+	"assocKitbagIds": {			/* None or More */
+		type: Array,
+		optional: true,
+		// autoform: {
+		// 	options: function () {
+		// 		return GlobalHelpers.getFilteredListKitbags();
+		// 	}
+		// },
+		label: "List of Assigned kitbags"
+	},
+	"assocKitbagIds.$": {
+		type: String
 	},
 
 
@@ -214,7 +280,6 @@ Schema.UserProfile = new SimpleSchema({
 	"createdBy": {
 		type: String,
 		optional: true,
-		// autoValue: function(){ return Meteor.user().profile.userId },
 		autoform: {
 			// hidden: true,
 			// label: false
@@ -229,7 +294,6 @@ Schema.UserProfile = new SimpleSchema({
 	"updatedBy": {
 		type: String,
 		optional: true,
-		// autoValue: function(){ return Meteor.user().profile.userId },
 		autoform: {
 			// hidden: true,
 			// label: false
@@ -246,76 +310,11 @@ Schema.UserProfile = new SimpleSchema({
 		defaultValue: "Users",
 		label: "Collection"
 	}
-
-
-
-
 });
 
-Schema.User = new SimpleSchema({
-    username: {
-        type: String,
-        // For accounts-password, either emails or username is required, but not both. It is OK to make this
-        // optional here because the accounts-password package does its own validation.
-        // Third-party login packages may not require either. Adjust this schema as necessary for your usage.
-        optional: false,
-        label: "Username/Login"
-    },
-  //   password: {
-  //   	type: String,
-  //       optional: true,
-		// defaultValue: function () {
-		// 	if (this.isSet == true && this.value != ""){
-		// 		return this.value;
-		// 	} else {
-		// 		return generatePassword(12);
-		// 	}
-		// }
-  //   },
-    emails: {
-        type: Array,
-        // For accounts-password, either emails or username is required, but not both. It is OK to make this
-        // optional here because the accounts-password package does its own validation.
-        // Third-party login packages may not require either. Adjust this schema as necessary for your usage.
-        optional: true,
-        label: "Email"
-    },
-    "emails.$": {
-        type: Object
-    },
-    "emails.$.address": {
-        type: String,
-        regEx: SimpleSchema.RegEx.Email,
-        label: "Email"
-    },
-    "emails.$.verified": {
-        type: Boolean,
-		autoform: {
-			leftLabel: true
-		},
-        label: "Email Verified"
-    },
-	"createdAt": { // DUPLICATE?????
-		type: Date,
-		optional: true,
-		label: "Created on"
-	},
-	"profile": {
-		type: Schema.UserProfile,
-		optional: true
-	},
-	"services": {
-		type: Object,
-		optional: true,
-		blackbox: true
-	}
-});
 
 // UserList.attachSchema(User);
-Meteor.users.attachSchema(Schema.User);
+Meteor.users.attachSchema(kb.schemas.UserSchema);
 
-
-
-// console.log(UserSchema);
-// Items.attachSchema(ItemSchema);
-
+// Assign to Global namespace
+kb.collections.Users = Meteor.users;

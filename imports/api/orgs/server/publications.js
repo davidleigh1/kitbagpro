@@ -5,51 +5,38 @@ import { Admin } from '/imports/api/admin/admin.js';
 
 
 /* PARAMETERS */
-
-var console_prefix = "publish 'orgs' : ";
+	var console_prefix = "PUB: 'orgs' - ";
 
 /* PUBLISH */
-
 Meteor.publish("orgs",function() {
-	// console.log('Publishing "orgs" from apis > orgs > server > publications.js!');
-	console.log(console_prefix + "-----------------------------------------------------");
-	console.log(console_prefix + "Meteor.publish('orgs')");
+	console.log(console_prefix + "Meteor.publish('orgs') ---------------------------");
 	if (this.userId) {
-
 		var searchObj;
-
-		var orgObj = Meteor.users.findOne({_id: this.userId}, {fields: {"profile.userAssocOrg": 1, "profile.userType": 1}});
-
-		console.log("***** orgObj *****",orgObj);
-
-
-		if (typeof orgObj == "object" && typeof orgObj.profile == "object") {
-			var orgId = orgObj.profile.userAssocOrg;
-			console.log(console_prefix + "User's Associated Org: ", orgId);
+		var orgObj = Meteor.users.findOne({_id: this.userId}, {fields: {"assocOrgId": 1, "type": 1}});
+		if (typeof orgObj == "object") {
 			
-			if (orgObj.profile.userType.toLowerCase() == "superadmin") {
-				console.log(console_prefix + "User is SuperAdmin!!!!!!");
+			if (orgObj.type && orgObj.type.toLowerCase() == "superadmin") {
+				console.log(console_prefix + "SuperAdmin found");
 				searchObj = {};
 			} else {
+				var orgId = orgObj.assocOrgId;
 				searchObj = orgId;
 			}
-
 		} else {
-			console.log(console_prefix + "Meteor.publish('org') - no org object or obj.profile object found");
+			console.log(console_prefix + "Error - No org object found");
 			return null;
 		}
-
 	} else {
-		console.log(console_prefix + "Meteor.publish('org') - no userId found");
+		console.log(console_prefix + "Error - No userId found");
 		return null;
 	}
-	console.log(console_prefix + "searchObj is '"+searchObj+"'");
+	updateGlobalOrgCountsObj("onOrgsPublished");
 	return kb.collections.Orgs.find(searchObj);
 });
 
 /* For Meteor Collection Hooks (https://atmospherejs.com/matb33/collection-hooks) */
 
-updateOrgCountsObj = function (requestor,userId, doc, fieldNames, modifier){
+updateGlobalOrgCountsObj = function (requestor,userId, doc, fieldNames, modifier){
 	/* Combined function replacing ALL+ACTIVE+HIDDEN */
 	var countAll     = kb.collections.Orgs.find( { status: { $in: appSettings.orgs.statusesIncludedInAllCount } 	}).count();
 	var countActive  = kb.collections.Orgs.find( { status: { $in: appSettings.orgs.statusesIncludedInActiveCount } 	}).count();
@@ -99,21 +86,23 @@ kb.collections.Orgs.before.update(function (userId, doc, fieldNames, modifier, o
 kb.collections.Orgs.after.insert(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ORGS.INSERT");
 	/* Recalculate when new Org is added */
-	updateOrgCountsObj("onOrgInserted",doc.title);
+	updateGlobalOrgCountsObj("onOrgInserted",doc.title);
 });
 kb.collections.Orgs.after.remove(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ORGS.REMOVE", "\n", userId, "\n", doc, "\n", fieldNames, "\n", modifier);
 	serverlog("User X deleted Org Y");
 	/* Recalculate when existing Org is deleted */
-	updateOrgCountsObj("onOrgRemoved",doc.title);
+	updateGlobalOrgCountsObj("onOrgRemoved",doc.title);
 });
 kb.collections.Orgs.after.update(function (userId, doc, fieldNames, modifier) {
 	console.log("AFTER ORGS.UPDATE");
 	/* Recalculate when new existing Org changes status - which could well render it outside of the count criteria */
-	updateOrgCountsObj("onOrgUpdate",doc.title);
+	updateGlobalOrgCountsObj("onOrgUpdate",doc.title);
 
-	if (doc.title !== this.previous.title) {
-		console.log("\n\n=== SERVER SIDE ==================\nNow updating all Kitbags associated with OrgId '"+doc._id+"'\nto reflect change in 'assocOrgIdTitle' from '"+this.previous.title+"' to '"+doc.title+"'\n===================================\n\n");
+
+
+	// if (doc.title !== this.previous.title) {
+	// 	console.log("\n\n=== SERVER SIDE ==================\nNow updating all Kitbags associated with OrgId '"+doc._id+"'\nto reflect change in 'assocOrgIdTitle' from '"+this.previous.title+"' to '"+doc.title+"'\n===================================\n\n");
 
 		// TODO - Log name change to the logging table
 
@@ -127,19 +116,19 @@ kb.collections.Orgs.after.update(function (userId, doc, fieldNames, modifier) {
 		 */
 
 		// TODO - Log successful update + name change AGAINST EACH KITBAG to the logging table
-		kb.collections.Kitbags.update(
-			{ assocOrg: doc._id },
-			{ $set: {assocOrgTitle: doc.title } },
-			{ multi:true },
-			function( error, result) {
-    			if ( error ) console.log ( error ); //info about what went wrong
-    			if ( result ) console.log ( "Successful update to records: ", result ); //the _id of new object if successful
-  			}
-  		);
+	// 	kb.collections.Kitbags.update(
+	// 		{ assocOrg: doc._id },
+	// 		{ $set: {assocOrgTitle: doc.title } },
+	// 		{ multi:true },
+	// 		function( error, result) {
+ //    			if ( error ) console.log ( error ); //info about what went wrong
+ //    			if ( result ) console.log ( "Successful update to records: ", result ); //the _id of new object if successful
+ //  			}
+ //  		);
 
-	}else{
-		console.log("\n\n=== SERVER SIDE ==================\ntitle not updated!\n===================================\n\n");
-	}
+	// }else{
+	// 	console.log("\n\n=== SERVER SIDE ==================\ntitle not updated!\n===================================\n\n");
+	// }
 });
 
 

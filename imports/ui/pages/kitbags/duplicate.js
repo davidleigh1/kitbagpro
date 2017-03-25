@@ -69,7 +69,7 @@ AutoForm.hooks({
 		},
 		onError: function(formType, error, arg3, arg4) {
 			// console.log("AutoForm.hooks.insertKitbagForm.onError: ", formType, error, arg3, arg4);
-			globalOnError(thisCollectionName, error, arg3, arg4);
+			globalOnError(thisCollectionName, thisAction, error, arg3, arg4);
 		}
   }
 });

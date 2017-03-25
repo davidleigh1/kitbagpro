@@ -5,42 +5,29 @@ import { Admin } from '/imports/api/admin/admin.js';
 
 
 /* PARAMETERS */
-
-var console_prefix = "publish 'kitbags' : ";
+	var console_prefix = "PUB: 'kitbags' - ";
 
 /* PUBLISH */
-
-Meteor.publish("kitbags",function() {
-	// console.log('Publishing "kitbags" from apis > kitbags > server > publications.js!');
-	console.log(console_prefix + "-----------------------------------------------------");
-	console.log(console_prefix + "Meteor.publish('kitbags')");
+Meteor.publish("kitbags", function() {
+	console.log(console_prefix + "Meteor.publish('kitbags') ---------------------------");
 	if (this.userId) {
-
 		var searchObj;
+		var orgObj = Meteor.users.findOne({_id: this.userId}, {fields: {"assocOrgId": 1, "type": 1}});
+		if (typeof orgObj == "object") {
 
-		var orgObj = Meteor.users.findOne({_id: this.userId}, {fields: {"profile.userAssocOrg": 1, "profile.userType": 1}});
-
-		if (typeof orgObj == "object" && typeof orgObj.profile == "object") {
-
-			if (orgObj.profile.userType.toLowerCase() == "superadmin") {
-				console.log("====> orgId ('userAssocOrg'): ", orgId);
-				console.log("====>");
-				console.log("====> SuperAdmin FOUND!!!!!!");
-				console.log("====>");
+			if (orgObj.type && orgObj.type.toLowerCase() == "superadmin") {
+				console.log(console_prefix + "SuperAdmin found");
 				searchObj = {};
 			} else {
-				var orgId = orgObj.profile.userAssocOrg;
-				console.log("====> orgId ('userAssocOrg'): ", orgId);
+				var orgId = orgObj.assocOrgId;
 				searchObj = { "assocOrgId" : orgId };
 			}
-
 		} else {
-			console.log("Meteor.publish('kitbags') - no org object or obj.profile object found");
+			console.log(console_prefix + "Error - No org object found");
 			return null;
 		}
-
 	} else {
-		console.log("Meteor.publish('kitbags') - no userId found");
+		console.log(console_prefix + "Error - No userId found");
 		return null;
 	}
 	updateGlobalKitbagCountsObj("onKitbagsPublished");
@@ -51,7 +38,6 @@ Meteor.publish("kitbags",function() {
 
 updateGlobalKitbagCountsObj = function (requestor,userId, doc, fieldNames, modifier){
 	/* Combined function replacing ALL+ACTIVE+HIDDEN */
-
 	var countAll     = kb.collections.Kitbags.find( { status: { $in: appSettings.kitbags.statusesIncludedInAllCount } 	    }).count();
 	var countActive  = kb.collections.Kitbags.find( { status: { $in: appSettings.kitbags.statusesIncludedInActiveCount } 	}).count();
 	var countHidden  = kb.collections.Kitbags.find( { status: { $in: appSettings.kitbags.statusesIncludedInHiddenCount } 	}).count();
@@ -89,19 +75,40 @@ kb.collections.Kitbags.after.insert(function (userId = "unknown", doc, fieldName
 
 	/* Update Kitbag List for associated Org */
 	/* Use of .direct avoids the update hooks firing for this Org update */
-		var pushed = kb.collections["Orgs"].direct.update(
+		var insertSuccess = kb.collections["Orgs"].direct.update(
 			{ _id: doc.assocOrgId },
 			{ $push: { assocKitbagIds: doc._id } }
 		);
 		/* TODO: Better error handling if push fails */
-		console.log("EVT: user: ", userId, "successfully associated new kitbag: ", doc._id, "with org: ", doc.assocOrgId);
+
+		if (insertSuccess) {
+			console.log("EVT: User '", userId, "' successfully associated a new kitbag '", doc.title, "' (", doc._id, ") with org '", doc.assocOrgId, "'");
+		} else {
+			var errorText = "Error: User '"+ userId+ "' unsuccessfully attempted to add new kitbag '"+ doc.title+ "' ("+ doc._id+ ") associated with org '"+ doc.assocOrgId+ "'. Server error at 'Kitbags.after.insert' hook";
+			var errorId = " [Error 940]";
+			console.log("ERROR: ", errorText + errorId)
+			throw new Meteor.Error(940, "Unable to add new kitbag");
+		}
 
 	/* Update Kitbag Count for associated Org */
-		var updateCount = kb.collections["Orgs"].direct.update(
+		var updateCountSuccess = kb.collections["Orgs"].direct.update(
 			{ _id: doc.assocOrgId },
 			{ $inc: { assocKitbagCount: 1 } }
 		);
-		console.log("UPD: org: ", doc.assocOrgId, " updated assocKitbagCount to: ",kb.collections["Orgs"].findOne(doc.assocOrgId).assocKitbagCount );
+
+		if (updateCountSuccess) {
+			console.log("UPD: org: "+ doc.assocOrgId+ " updated assocKitbagCount to: "+kb.collections["Orgs"].findOne(doc.assocOrgId).assocKitbagCount);
+		} else {
+			var errorText2 = "Error: Unable to increment 'assocKitbagCount'. Server error at 'Kitbags.after.insert' hook";
+			var errorId2 = " [Error 941]";
+			console.log(errorText2 + errorId2);
+			// throw new Meteor.Error(941, errorText2);
+			/* TODO - Should be a global function for sAlerts! */
+			// sAlert.warning(errorText2 + errorId2, {
+			// 	html: true,
+			// 	timeout: appSettings.sAlert.longTimeout
+			// });
+		}
 
 	/* Recalculate when new Kitbag is added */
 		updateGlobalKitbagCountsObj("onKitbagInserted",doc.title);
@@ -119,11 +126,26 @@ kb.collections.Kitbags.after.remove(function (userId, doc, fieldNames, modifier)
 		console.log("EVT: user: ", userId, "successfully removed kitbag: ", doc._id, "from org: ", doc.assocOrgId);
 
 	/* Update Kitbag Count for associated Org */
-		var updateCount = kb.collections["Orgs"].direct.update(
+		var updateCountSuccess = kb.collections["Orgs"].direct.update(
 			{ _id: doc.assocOrgId },
 			{ $inc: { assocKitbagCount: -1 } }
 		);
-		console.log("UPD: org: ", doc.assocOrgId, " updated assocKitbagCount to: ",kb.collections["Orgs"].findOne(doc.assocOrgId).assocKitbagCount );
+
+		if (updateCountSuccess) {
+			console.log("UPD: org: ", doc.assocOrgId, " updated assocKitbagCount to: ",kb.collections["Orgs"].findOne(doc.assocOrgId).assocKitbagCount);
+		} else {
+			var errorText2 = "Error: Unable to increment 'assocKitbagCount'. Server error at 'Kitbags.after.remove' hook";
+			var errorId2 = " [Error 1033]";
+			console.log(errorText2 + errorId2);
+			// throw new Meteor.Error(1033, errorText2);
+			/* TODO - Should be a global function for sAlerts! */
+			// sAlert.warning(errorText2 + errorId2, {
+			// 	html: true,
+			// 	timeout: appSettings.sAlert.longTimeout
+			// });
+
+
+		}
 
 	/* Recalculate when new Kitbag is added */
 		updateGlobalKitbagCountsObj("onKitbagRemoved",userId, doc, fieldNames, modifier);

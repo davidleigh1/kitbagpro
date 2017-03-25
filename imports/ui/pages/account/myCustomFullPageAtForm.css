@@ -77,6 +77,26 @@ body {
 	height: 100vh;
 	width: 100vw;
 }
+.img-relief-worker {
+	background: url(wallpaper/relief-worker-madi-robson-113926.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
+.img-police-line {
+	background: url(wallpaper/police-line-nico-beard-119428.jpg) no-repeat center center fixed;
+	background-position: center center;
+	background-repeat:  no-repeat;
+	background-attachment: fixed;
+	background-size:  cover;
+	background-color: #999;
+	height: 100vh;
+	width: 100vw;
+}
 
 
 

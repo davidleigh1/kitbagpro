@@ -37,7 +37,7 @@ import './register-api.js';
 /* GLOBAL FUNCTIONS */
 
 globalIsThisObjectUnique = function (objId, objectType) {
-	console.log("globalIsThisObjectUnique()", objId, objectType);
+	console.log("FN: globalIsThisObjectUnique()", objId, objectType);
 	/*
 	TODO: Previously the following switch used 'objectType.toLowerCase'
 	Please confirm calling functions use the correct obj name + case!
@@ -96,18 +96,19 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 			delete modifier.$unset["updatedBy"];
 		}
 
-		modifier.$set.itemAssocKitbagCount = (typeof modifier.$set.assocKitbags == "object") ? modifier.$set.assocKitbags.length : 0;
+		// modifier.$set.itemAssocKitbagCount = (typeof modifier.$set.assocKitbags == "object") ? modifier.$set.assocKitbags.length : 0;
 		// modifier.$set.itemAssocKitbagCount = (typeof modifier.$set.assocKitbags == "object") ? modifier.$set.assocKitbags.count() : 0;
-		console.log(typeof modifier.$set.assocKitbags, modifier.$set.assocKitbags, modifier.$set.assocKitbags.length );
+		// console.log(typeof modifier.$set.assocKitbags, modifier.$set.assocKitbags, modifier.$set.assocKitbags.length );
 	} else {
 		console.log("globalBeforeInsertHook() in /startup/server/index.js - No modifier found.")
 	}
 
 	if (requestor == "beforeItemInsert" && typeof doc == "object") {
-		doc._id = doc.itemAssocOrg + "-" + doc.itemId;
+		doc._id = doc.assocOrgId + "-" + doc._id;
 		doc.createdAt = doc.createdAt || new Date();
 		doc.createdBy = userId || Meteor.userId() || "Unknown User";
-		doc.itemAssocKitbagCount = (typeof doc.assocKitbags == "object") ? doc.assocKitbags.length : 0;
+		console.log("\nTODO: globalBeforeInsertHook() - Is this count required here???  See reference to 'itemAssocKitbagCount' above! \n");
+		doc.assocKitbagCount = (typeof doc.assocKitbagsArray == "object") ? doc.assocKitbagsArray.length : 0;
 	}
 
 	if (requestor == "beforeOrgInsert" && typeof doc == "object") {
@@ -117,9 +118,32 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 	}
 
 	if (requestor == "beforeKitbagInsert" && typeof doc == "object") {
+		console.log("\n\n-------- IN beforeKitbagInsert --------\n", doc, "\n----------------\n");
+ 		// var orgId = FlowRouter.getParam('_orgId');
+      	// doc.assocOrgId = orgId;
+		// doc._id = "xxxx" + doc.assocOrgId + "-" + doc._id;
 		doc._id = doc.assocOrgId + "-" + doc._id;
 		doc.createdAt = doc.createdAt || new Date();
 		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		console.log("\n\n-------- OUT beforeKitbagInsert --------\n", doc, "\n----------------\n");
+      	return doc;
+	}
+
+	if (requestor == "beforeUserInsert" && typeof doc == "object") {
+		console.log("\n\n-------- IN beforeUserInsert --------\n", doc, "\n----------------\n");
+		doc.createdAt = doc.createdAt || new Date();
+		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		console.log("\n\n-------- OUT beforeUserInsert --------\n", doc, "\n----------------\n");
+	}
+	
+	if (requestor == "beforeUserUpdate" && typeof doc == "object") {
+		console.log("\n\n-------- IN beforeUserUpdate --------\n", doc, "\n----------------\n");
+		// doc._id = tempDocId;
+		// doc._id = doc.assocOrgId + "-" + doc._id;
+		doc.createdAt = doc.createdAt || new Date();
+		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		doc.assocKitbagCount = (typeof doc.assocKitbagIds == "object") ? doc.assocKitbagIds.length : 0;
+		console.log("\n\n-------- OUT beforeUserUpdate --------\n", doc, "\n----------------\n");
 	}
 };
 globalBeforeUpdateHook = function (requestor, userId, doc, fieldNames, modifier, options) {
@@ -155,10 +179,11 @@ globalBeforeUpdateHook = function (requestor, userId, doc, fieldNames, modifier,
 			delete modifier.$unset["updatedBy"];
 		}
 
-		if (doc.itemAssocKitbagCount) {
-			modifier.$set.itemAssocKitbagCount = (typeof modifier.$set.assocKitbags == "object") ? modifier.$set.assocKitbags.length : 0;
-			// modifier.$set.itemAssocKitbagCount = (typeof modifier.$set.assocKitbags == "object") ? modifier.$set.assocKitbags.count() : 0;
-			console.log(typeof modifier.$set.assocKitbags, modifier.$set.assocKitbags, modifier.$set.assocKitbags.length );
+		/* Update Kitbag Count if assocKitbagsArray field exists */
+		if (doc.assocKitbagsArray) {
+			modifier.$set.assocKitbagCount = (typeof modifier.$set.assocKitbagsArray == "object") ? modifier.$set.assocKitbagsArray.length : 0;
+			console.log("\n\n\n","modifier.$set.assocKitbagCount",modifier.$set.assocKitbagCount,"\n\n\n");
+			// console.log(typeof modifier.$set.assocKitbags, modifier.$set.assocKitbags, modifier.$set.assocKitbags.length );
 		}
 	} else {
 		console.log("globalBeforeUpdateHook() in /startup/server/index.js - No modifier found.")
@@ -178,28 +203,28 @@ Meteor.methods({
 		if (success) {
 			var updatedDoc = kb.collections[thisCollectionName].findOne( objId );			
 			var returnObj = {
+				"id": objId,
+				"obj": updatedDoc,
 				"thisAction": "update",
 				"thisCollectionName": thisCollectionName,
-				"obj": updatedDoc,
-				"title": updatedDoc.title,
-				"id": objId
+				"title": updatedDoc.title || updatedDoc.displayName
 			};
-			console.log("generic.update() updated "+returnObj.thisObj+": ",returnObj);
+			console.log("generic.update() - updated "+thisCollectionName+" '"+returnObj.title+"' with this returnObj{}\n", returnObj);
 			return returnObj;
 		} else {
-			console.log("ERROR: generic.update(>> "+thisObj+" <<) failed.");
+			console.log("ERROR: generic.update(>> "+thisCollectionName+" <<) failed.");
 		}
 	},
-	deleteDoc: function(requestor, thisObj, assocObj = {}, userId){
+	deleteDoc: function(requestor, collectionName, assocObj = {}, userId){
 		console.log("FN: -GENERIC- deleteDoc()",arguments);
 		// var res = MyCollections["Orgs"].findOne(id);
-		var res = kb.collections[thisObj].findOne(assocObj._id);
+		var res = kb.collections[collectionName].findOne(assocObj._id);
 
 		serverlog({
 			actor: userId,
 			subject: "deleteDoc()",
-			object: thisObj,
-			message: "User '"+userId+"' requested to delete "+thisObj+": '"+assocObj._id+"'"
+			object: collectionName,
+			message: "User '"+userId+"' requested to delete "+collectionName+": '"+assocObj._id+"'"
 		});
 
 		// if ( !fn_userIsSuperAdmin && res.owner !== Meteor.userId()){
@@ -215,12 +240,12 @@ Meteor.methods({
 		// 	});
 		// 	return false;
 		// } else {
-			kb.collections[thisObj].remove(assocObj._id);
+			kb.collections[collectionName].remove(assocObj._id);
 			serverlog({
 				actor: userId,
 				subject: "deleteDoc()",
-				object: thisObj,
-				message: "User '"+userId+"' successfully deleted "+thisObj+": '"+assocObj._id+"'"
+				object: collectionName,
+				message: "User '"+userId+"' successfully deleted "+collectionName+": '"+assocObj._id+"'"
 			});
 			return true;
 		// }

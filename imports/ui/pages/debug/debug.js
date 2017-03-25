@@ -5,34 +5,20 @@
 
 
 /* IMPORT METEOR PACKAGES */
-
-// import { Session } from 'meteor/session'
-
-
+	// import { Session } from 'meteor/session'
 
 
 /* IMPORT PAGE COMPONENTS */
-
-import './debug.html';
-import './debug.css';
-
-
+	import './debug.html';
+	import './debug.css';
 
 
 /* IMPORT SHARED TEMPLATES + COMPONENTS */
-
-// import '/imports/ui/pages/kitbags/kitbagLine.js';
-
-
+	// import '/imports/ui/pages/kitbags/kitbagLine.js';
 
 
 /* IMPORT PROJECT OBJECTS */
-
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-// import { Kitbags } from '/imports/api/kitbags/kitbags.js';
-// import { Items } from '/imports/startup/both/item-schema.js';
-// import { UserList } from '/imports/startup/both/schema-user.js';
-import { appSettings } from '/imports/startup/both/sharedConstants.js';
+	import { appSettings } from '/imports/startup/both/sharedConstants.js';
 
 
 

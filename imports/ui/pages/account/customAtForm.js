@@ -1,39 +1,24 @@
 /* IMPORT METEOR PACKAGES */
-
-// import { Session } from 'meteor/session'
-
-
+	// import { Session } from 'meteor/session'
 
 
 /* IMPORT PAGE COMPONENTS */
-
-import './customAtForm.html';
-import './customAtForm.css';
-
-
+	import './customAtForm.html';
+	import './customAtForm.css';
 
 
 /* IMPORT SHARED TEMPLATES + COMPONENTS */
-
-// import '/imports/ui/pages/kitbags/kitbagLine.js';
-
-
+	// Empty
 
 
 /* IMPORT PROJECT OBJECTS */
-
-// import { Orgs } from '/imports/api/orgs/orgs.js';
-// import { Kitbags } from '/imports/api/kitbags/kitbags.js';
-// import { Items } from '/imports/api/items/items.js';
-// import { Items } from '/imports/startup/both/item-schema.js';
-// import { UserList } from '/imports/startup/both/schema-user.js';
-// import { appSettings } from '/imports/startup/both/sharedConstants.js';
+	// Empty
 
 
 /* THIS TEMPLATE OVERRIDES THE STANDARD >ATFORM TEMPLATE */
-// See: https://github.com/meteor-useraccounts/core/issues/300
-// Other templates: https://github.com/meteor-useraccounts/bootstrap/tree/master/lib
-// .replaces() is dependent on  aldeed:template-extension  see: https://github.com/meteor-useraccounts/core/issues/212#issuecomment-67810815
+	// See: https://github.com/meteor-useraccounts/core/issues/300
+	// Other templates: https://github.com/meteor-useraccounts/bootstrap/tree/master/lib
+	// .replaces() is dependent on  aldeed:template-extension  see: https://github.com/meteor-useraccounts/core/issues/212#issuecomment-67810815
 
 // Template.customAtForm.replaces("atForm");
 

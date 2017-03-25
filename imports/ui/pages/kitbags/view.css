@@ -46,6 +46,7 @@ span.label.disabled, span.checkmark.disabled {
     -webkit-box-shadow: 3px 3px 5px 6px #ccc;
     -moz-box-shadow: 3px 3px 5px 6px #ccc;
     box-shadow: 7px 7px 10px 0px #aaa;
+    background-color: #ffffff;
 }
 .hover_img_text {
 	font-size: 0.8em;

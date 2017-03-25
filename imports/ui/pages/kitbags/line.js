@@ -18,7 +18,7 @@
 	import { kb } from "/imports/startup/both/sharedConstants.js";
 
 /* PARAMETERS */
-	var thisObj = "Kitbags";
+	var thisCollectionName = "Kitbags";
 
 
 /* ONCREATED */
@@ -30,7 +30,7 @@ Template.kitbagLine.created = function(){
 /* UTIL FUNCTIONS */
 trashKitbag = function (clickObj) {
 	// Required - Called from Action Menu
-	globalTrash("TrashedByUser", "Kitbags", clickObj.kitbagObj, Meteor.userId(), "#");
+	globalTrash("TrashedByUser", thisCollectionName, clickObj.kitbagObj, Meteor.userId(), "#");
 };
 
 
@@ -64,25 +64,13 @@ Template.kitbagLine.helpers({
 });
 
 Template.kitbagLine.events({
+	/* See: http://stackoverflow.com/questions/22962386/ for use of 'event.currentTarget' */
 	'click .showDetail': function(event) {
-		// et = event.target;
-		// console.log(et);
-		// $( et.parentElement.parentElement ).children( '.kitbagDetails' ).toggle();
-		var o = $(event.target).data("kitbag");
-		FlowRouter.go("/kitbags/"+o+"/view");
-		// $(".objView-"+o).toggle();
+		var o = $(event.currentTarget).data("kitbag");
+		FlowRouter.go("/"+ thisCollectionName.toLowerCase() +"/"+o+"/view");
 	},
 	'click .edit': function(event) {
-		// TODO: Don't set in global scope!
-		// et = event.target;
-		// console.log(et);
-		// TODO: Replace this show/hide/toggle bit with a global view controller!
-		// $('.screen-wrapper').hide();
-		// $('.kitbagAddEdit').toggle();
-		// var findOne = {kitbagId:event.target.dataset.kitbag};
-		// var formId = "add-edit-kitbag";
-		FlowRouter.go("/kitbags/"+event.target.dataset.kitbag+"/edit");
-		// editKitbag(findOne,formId);
+		FlowRouter.go("/"+ thisCollectionName.toLowerCase() +"/"+event.currentTarget.dataset.kitbag+"/edit");
 	},
 	'click .toggle-checked': function(event) {
 		var checked = event.target.checked;
@@ -90,7 +78,12 @@ Template.kitbagLine.events({
 	},
 	'click .delete': function(event) {
 		event.preventDefault();
-		globalDelete("DeletedByUser", "Kitbags", this, Meteor.userId(), "/kitbags/list");
+		var skipUserConfirmation;
+			if (event.shiftKey) {
+				console.log("shift key was down!!!");
+				skipUserConfirmation = true;
+			}
+		globalDelete("DeletedByUser", "Kitbags", this, Meteor.userId(), "/kitbags/list", skipUserConfirmation);
 	},
 	'click .toggle-private': function(event){
 		Meteor.call("setPrivateKitbag",this._id, !this.private);
@@ -106,7 +99,7 @@ Template.kitbagLine.events({
 		if (typeof clickObj.action == "string" && typeof window[clickObj.action] == "function" ){
 			window[$(event.target).data('action')](clickObj);
 		} else {
-			console.log("Error: 'action' function was not found (code: 0147)");
+			console.log("Alert: 'action' function was not found (code: 0147)");
 		};
 	}
 });

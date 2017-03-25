@@ -1,9 +1,5 @@
 /* IMPORT PROJECT OBJECTS */
-
-import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
-
-import { Items } 	from '/imports/startup/both/item-schema.js';
-import { UserList } from '/imports/startup/both/schema-user.js';
+	import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
 
 /* NEW GENERIC HELPERS */
@@ -86,7 +82,7 @@ Template.registerHelper('isOwner', function(doc) {
 });
 
 Template.registerHelper('global_isDocTrashed', function(docId) {
-	if (this.status.toLowerCase() == "trashed"){
+	if (this.status && this.status.toLowerCase() == "trashed"){
 		return true;
 	} else {
 		return false;
@@ -98,9 +94,11 @@ Template.registerHelper('global_getDocStatusTag', function(docId) {
 	var labelClass, labelText;
 
 	// TODO: Add check for profile to generically support users too!
-	var checkMe = (typeof this.profile == "object" && typeof this.profile.userStatus == "string") ? this.profile.userStatus.toLowerCase() : "";
+	// var checkMe = (typeof this.status == "string") ? this.status.toLowerCase() : "";
 
-	switch(this.status.toLowerCase()) {
+	// console.log(docId, this.status, this);
+
+	switch(this.status && this.status.toLowerCase()) {
 		case "active":
 			labelClass = "label-success";
 			labelText = "Active";
@@ -123,7 +121,7 @@ Template.registerHelper('global_getDocStatusTag', function(docId) {
 			labelText = "Unknown";
 		break;
 	}
-	return { 'labelClass': labelClass, 'labelText': "*"+labelText };
+	return { 'labelClass': labelClass, 'labelText': labelText };
 });
 
 Template.registerHelper('global_joinTextInList', function(t1="",t2="",t3="",t4="",t5="") {
@@ -132,9 +130,13 @@ Template.registerHelper('global_joinTextInList', function(t1="",t2="",t3="",t4="
 	return Spacebars.SafeString(newText);
 });
 
-Template.registerHelper('global_getfontAwesomeIcon', function(docType) {
-	// console.log("\n\ngetThisfontAwesomeIcon\n\n",docType,appSettings[docType.toLowerCase()].fontAwesomeIcon);
-	return appSettings[docType.toLowerCase()].fontAwesomeIcon || "fa-question-circle-o";
+Template.registerHelper('global_getfontAwesomeIcon', function(iconName) {
+	return appSettings.fontAwesomeIcon[iconName.toLowerCase()] || "fa-question-circle-o";
+});
+
+
+Template.registerHelper('copyright', function() {
+	return "jumpbagapp.com " + new Date().getFullYear();
 });
 
 Template.registerHelper('global_toLower', function(str) {
@@ -142,11 +144,6 @@ Template.registerHelper('global_toLower', function(str) {
 		return str.toLowerCase();
 });
 
-// Template.registerHelper('global_thisDoc', function(docId) {
-// 	console.log('\n\nGLOBAL thisDoc\n\n',docId,this,Template.parentData(),Template.parentData().thisUrlId);
-// 	var docFound = kb.collections[Template.parentData().thisObj].findOne( FlowRouter.getParam(Template.parentData().thisUrlId) || docId );
-// 	return docFound;
-// });
 
 /* OLD GENERIC HELPERS */
 
@@ -242,7 +239,7 @@ Template.registerHelper('lookupFieldFromKb',function(kitbag_id,requiredField){
 });
 
 Template.registerHelper('lookupFieldFromOrg',function(orgId,requiredField){
-	// Takes an OrgID and responds with the value of the requested field for that Org e.g. {{lookupFieldFromOrg profile.userAssocOrg 'title'}}
+	// Takes an OrgID and responds with the value of the requested field for that Org e.g. {{lookupFieldFromOrg assocOrgId 'title'}}
 
 	// var localOrg = kb.collections.Orgs.findOne(orgId);
 	var localOrg = kb.collections.Orgs.findOne( orgId );
@@ -255,12 +252,12 @@ Template.registerHelper('lookupFieldFromOrg',function(orgId,requiredField){
 });
 
 Template.registerHelper('lookupNameFromUserId',function(userId,requiredField){
-	// Takes a UserID and responds with the value of the requested field for that User e.g. {{lookupNameFromUserId profile.userId 'username'}}
-	// if 'requiredField' is omitted - will return profile.displayName
+	// Takes a UserID and responds with the value of the requested field for that User e.g. {{lookupNameFromUserId _id 'username'}}
+	// if 'requiredField' is omitted - will return displayName
 
-	var requiredField = requiredField || "profile.displayName";
+	var requiredField = requiredField || "displayName";
 
-	var thisUser = Meteor.users.findOne({"profile.userId": userId});
+	var thisUser = Meteor.users.findOne({userId});
 	if (jQuery.isPlainObject(thisUser)){
 		returnName = thisUser[requiredField] || thisUser["username"] || thisUser["emails"][0]["address"];
 		return returnName;
@@ -273,20 +270,25 @@ Template.registerHelper('lookupNameFromUserId',function(userId,requiredField){
 
 /* ITEM HELPERS */
 
-Template.registerHelper('getOrgDataForThisItem',function(itemId,orgFieldRequired){
-		orgFieldRequired = orgFieldRequired || "assocOrgTitle";
-		var myItem = localItems.findOne({"itemId":itemId});
-		if (typeof myItem.assocKitbags != "object" || typeof myItem.assocKitbags[0] != "string"){
-			return "No Org";
-		}
-		var itemKitbag = myItem.assocKitbags[0];
-		console.log("TODO: DEPRECATE THIS FUNCTION! (getOrgDataForThisItem)");
-		var myKitbag = localKitbags.findOne({_id:itemKitbag});
-		if (typeof myKitbag != "object"){
-			return "Org ("+itemKitbag+") not found!";
-		}
-		var kitbagOrgData = myKitbag[orgFieldRequired];
-		return kitbagOrgData;
+Template.registerHelper('getOrgDataForThisItem',function(itemOrOrgId, orgFieldRequired){
+		orgFieldRequired = orgFieldRequired || "title";
+
+		return kb.collections.Orgs.findOne( itemOrOrgId.split('-')[0] )[ orgFieldRequired ];
+
+		// var myItem = localItems.findOne({"itemId":itemId});
+		// var myItem = kb.collections.Orgs.findOne( orgId );
+
+		// if (typeof myItem.assocKitbags != "object" || typeof myItem.assocKitbags[0] != "string"){
+		// 	return "No Org";
+		// }
+		// var itemKitbag = myItem.assocKitbags[0];
+		// console.log("TODO: DEPRECATE THIS FUNCTION! (getOrgDataForThisItem)");
+		// var myKitbag = localKitbags.findOne({_id:itemKitbag});
+		// if (typeof myKitbag != "object"){
+		// 	return "Org ("+itemKitbag+") not found!";
+		// }
+		// var kitbagOrgData = myKitbag[orgFieldRequired];
+		// return kitbagOrgData;
 });
 
 
@@ -395,6 +397,16 @@ Template.registerHelper('get_orgUsersFound',function(){
 	return int_orgUsersFound.get();
 });
 
+Template.registerHelper('get_kitbagUsersFound',function(){
+	/* Users with this Kitbag */
+	return int_kitbagUsersFound.get();
+});
+
+Template.registerHelper('get_userKitbagsFound',function(){
+	/* Kitbags assigned to this user */
+	return int_userKitbagsFound.get();
+});
+
 
 
 
@@ -405,182 +417,39 @@ Template.registerHelper('getMyOrgId',function(userObject){
 	return (typeof thisOrg != "undefined") ? thisOrg : "unknown_org";
 });
 
-// fn_userIsSuperAdmin = function(userObject){
-// 	/* Shuld be moved to globalFunctions.js */
-// 	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
-// 	if ( !jQuery.isPlainObject(thisUser) ) { return false }
-// 	// console.log("glb_userIsSuperAdmin() ", thisUser );
-// 	if ( thisUser && jQuery.isPlainObject(thisUser.profile) && typeof thisUser.profile.userType == "string" && thisUser.profile.userType.toLowerCase() == "superadmin" ){
-// 		// console.log("glb_userIsSuperAdmin() --- USER IS A SUPERADMIN!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-// 		return true;
-// 	}
-// 	return false;
-// };
+
+/* USER ACCESS HELPERS */
+
+Template.registerHelper('userHasPermission',function(permissionRequired, userObject){
+	return fn_userHasPermission(permissionRequired, userObject);
+});
 
 Template.registerHelper('glb_userIsSuperAdmin',function(userObject){
-
-	/* Using the common Function in order to avoid duplication */
+	/* Should be deprecated in favour of userHasPermission() e.g.
+	{{#if userHasPermission 'isSuperAdmin'}}
+	would have the same functionality as...
+	{{#if glb_userIsSuperAdmin}}
+	*/
 	return fn_userIsSuperAdmin(userObject);
-
-	// var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
-	// if ( !jQuery.isPlainObject(thisUser) ) { return false }
-	// if ( thisUser && jQuery.isPlainObject(thisUser.profile) && typeof thisUser.profile.userType == "string" && thisUser.profile.userType.toLowerCase() == "superadmin" ){
-	// 	return true;
-	// }
-	// return false;
 });
 
-Template.registerHelper('glb_userIsAnAdmin',function(userObject){
-	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
-	if ( !jQuery.isPlainObject(thisUser) ) { return false }
-	var userType = (thisUser && jQuery.isPlainObject(thisUser.profile) && typeof thisUser.profile.userType == "string" && thisUser.profile.userType) ? thisUser.profile.userType.toLowerCase() : "";
-	userAdminTypesLc = appSettings.users.userAdminTypes.map(function(elem) { return elem.toLowerCase(); });
-	//console.log("glb_userIsAnAdmin() ", userType, userAdminTypesLc, jQuery.inArray(userType, userAdminTypesLc) );
-	if ( jQuery.inArray(userType, userAdminTypesLc) > -1 ){
-		return true;
-	}
-	return false;
-});
-
-Template.registerHelper('glb_userIsOrgAdmin',function(){
-	console.log("TODO -- Apply user profile detection!!");
-	return true;
-});
-
-Template.registerHelper('glb_userIsStoreManager',function(){
-	console.log("TODO -- Apply user profile detection!!");
-	return true;
-});
-
-/* USER HELPERS */
-
-// Template.registerHelper('getUserStatusTag',function(){
-
-// 	var labelClass, labelText;
-
-// 	var checkMe = (typeof this.profile == "object" && typeof this.profile.userStatus == "string") ? this.profile.userStatus.toLowerCase() : "";
-
-// 	switch(checkMe) {
-// 		case "active":
-// 			labelClass = "label-success";
-// 			labelText = "Active";
-// 			break;
-// 		case "hidden":
-// 			labelClass = "label-warning";
-// 			labelText = "Hidden";
-// 			break;
-// 		case "trashed":
-// 			labelClass = "label-default";
-// 			labelText = "Trashed";
-// 			break;
-// 		default:
-// 			labelClass = "label-danger";
-// 			labelText = "Unknown";
-// 		break;
-// 	}
-// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-// 	return { 'labelClass': labelClass, 'labelText': labelText };
+// Template.registerHelper('glb_userIsOrgAdmin',function(userObject){
+// 	return fn_userIsAnAdmin(userObject);
 // });
 
-
-// Template.registerHelper('gOrgStatusTag',function(){
-
-// 	var labelClass, labelText;
-
-// 	switch(this.status.toLowerCase()) {
-// 		case "active":
-// 			labelClass = "label-success";
-// 			labelText = "Active";
-// 			break;
-// 		case "hidden":
-// 			labelClass = "label-warning";
-// 			labelText = "Hidden";
-// 			break;
-// 		case "trashed":
-// 			labelClass = "label-default";
-// 			labelText = "Trashed";
-// 			break;
-// 		default:
-// 			labelClass = "label-danger";
-// 			labelText = "Unknown";
-// 		break;
-// 	}
-// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-// 	return { 'labelClass': labelClass, 'labelText': labelText };
+// Template.registerHelper('glb_userIsOrgManager',function(){
+// 	return fn_userIsOrgManager(userObject);
 // });
 
-// Template.registerHelper('gKitbagStatusTag',function(textStatus){
-// 	var kbstatus = (typeof textStatus != "undefined" && textStatus != "") ? textStatus : this.status;
-// 	if (!kbstatus) return;
-// 	var labelClass, labelText;
-// 	// console.log("kbstatus: ",textStatus,kbstatus);
-// 	switch( kbstatus.toLowerCase() ) {
-// 		case "active":
-// 			labelClass = "label-success";
-// 			labelText = "Active";
-// 			break;
-// 		case "hidden":
-// 			labelClass = "label-warning";
-// 			labelText = "Hidden";
-// 			break;
-// 		case "retired":
-// 			labelClass = "label-retired";
-// 			labelText = "Retired";
-// 			break;
-// 		case "deleted":
-// 		case "trashed":
-// 			labelClass = "label-default";
-// 			labelText = "Trashed";
-// 			break;
-// 		default:
-// 			labelClass = "label-danger";
-// 			labelText = "Unknown";
-// 		break;
-// 	}
-// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-// 	return { 'labelClass': labelClass, 'labelText': labelText };
+// Template.registerHelper('glb_userIsStoreManager',function(){
+// 	console.log("TODO -- Apply user profile detection!!");
+// 	return true;
 // });
-
-// Template.registerHelper('gItemStatusTag',function(){
-
-// 	var labelClass, labelText;
-
-// 	switch(this.itemStatus.toLowerCase()) {
-// 		case "active":
-// 			labelClass = "label-success";
-// 			labelText = "Active";
-// 			break;
-// 		case "hidden":
-// 			labelClass = "label-warning";
-// 			labelText = "Hidden";
-// 			break;
-// 		case "retired":
-// 			labelClass = "label-retired";
-// 			labelText = "Retired";
-// 			break;
-// 		case "deleted":
-// 		case "trashed":
-// 			labelClass = "label-default";
-// 			labelText = "Trashed";
-// 			break;
-// 		default:
-// 			labelClass = "label-danger";
-// 			labelText = "Unknown";
-// 		break;
-// 	}
-// 	//var tag = '<span class="label '+labelClass+'">'+labelText+'</span>';
-// 	return { 'labelClass': labelClass, 'labelText': labelText };
-// });
-
 
 /* ============================================================================================*/
 
 Template.registerHelper('objectsFiltered',function( str_CollectionName , str_userFilter , obj_listFilter ){
-	// console.log("objectsFiltered(arg1) str_CollectionName: ", str_CollectionName);
-	// console.log("objectsFiltered(arg3) obj_listFilter: ", obj_listFilter , JSON.stringify(obj_listFilter) , typeof obj_listFilter );
-	// console.log("objectsFiltered(var) obj_defineDataset: ", JSON.stringify(obj_defineDataset) , typeof obj_defineDataset );
-
-	// console.log("objectsFiltered()", arguments);
+	console.log("objectsFiltered():\n", arguments);
 
 	/* str_CollectionName is required - will determine what we listing! */
 	if ( typeof str_CollectionName == 'undefined' ) return;
@@ -594,32 +463,31 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 	/* What we are doing here is defining the SELECT e.g. ALL ACTIVE ORGS, ALL BAGS RELATING TO ORG X - within which, the user can filter  */
 	/* The most common use for this SELECT will be drilldown from the dashboard, selecting related objects (e.g. users and bags) to be shown in minilists within associated profile page */
 	/* We want to be able to support filters via template parameters too (which would be passes as an object argument) but in most case we will SELECT the data via the obj_defineDataset which can also originate from the URL query string parameters  */
-	listSelect = ( jQuery.isPlainObject(obj_listFilter) && !jQuery.isEmptyObject(obj_listFilter) ) ? obj_listFilter : FlowRouter.current().queryParams;
+
+	/* Using JSON.parse(JSON.stringify(obj_listFilter)) in order to clone obj_listFilter as without this, changes to the listSelect will impact use of the original obj_listFilter argument (see 'kitbagsContainingThisItem' below)
+	See http://stackoverflow.com/questions/122102/ */
+
+	listSelect = ( jQuery.isPlainObject(obj_listFilter) && !jQuery.isEmptyObject(obj_listFilter) ) ? JSON.parse(JSON.stringify(obj_listFilter)) : FlowRouter.current().queryParams;
 
 	// TODO: I don't think we actually use 'obj_defineDataset' except for debugging/printing the current select criteria
 	obj_defineDataset.set(listSelect);
 
-	//console.log(">>>> ",obj_defineDataset,obj_defineDataset.get(),listSelect);
-
 	/* List all parameters we are willing to accept.  These will be checked against the keys in listSelect shortly. */
 	var validList = [
 		"_id",
-		"assocOrgId",
-		"assocOrgTitle",
+		"assockitbagid",
+		"assockitbagsarray",
+		"assockitbagtitle",
+		"assocorgid",
+		// "assocorgtitle",
 		"emails",
-		"itemassockitbagid",
-		"itemassockitbagtitle",
-		"itemassocorgid",
-		"itemassocorgtitle",
-		"itemstatus",
-		"itemtitle",
 		"owner",
 		"sku",
 		"status",
 		"title",
+		"title",
 		"username"
 	];
-
 
 
 
@@ -675,7 +543,7 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 		}
 	});
 
-	// console.log("listSelect: ",listSelect);
+
 
 	if (str_CollectionName == "Orgs"){
 		//console.log("Orgs",listSelect,userFilter);
@@ -748,7 +616,8 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 		//console.log("AssocKitbagsFromArray",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
 
-		var queryObject = {_id: listSelect.kitbagid};
+		// var queryObject = {_id: listSelect.kitbagid};
+		var queryObject = obj_listFilter;
 
 		var bagsFound = kb.collections.Kitbags.find( queryObject ).fetch();
 
@@ -765,22 +634,22 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	if (str_CollectionName == "Items"){
 
-		//console.log("Items",listSelect,userFilter);
+		console.log("Items", listSelect, userFilter);
 
-		var itemsFound = Items.find(
+		var itemsFound = kb.collections.Items.find(
 			{
 				$and: [
 					/* Match listSelect */
-					{itemTitle: 	{ $regex: new RegExp(listSelect.itemtitle, "i") }},
-					{itemId: 		{ $regex: new RegExp(listSelect.itemid, "i") }},
-					{itemStatus:	{ $regex: new RegExp(listSelect.itemstatus, "i") }},
+					{title: 		{ $regex: new RegExp(listSelect.title, "i") }},
+					{_id: 			{ $regex: new RegExp(listSelect._id, "i") }},
+					{status:		{ $regex: new RegExp(listSelect.status, "i") }},
 					/* TODO: Restore limit view - but for now, does not need to be filtered by owner */
 					/* {owner: 		{ $regex: new RegExp(listSelect.owner, "i") }}, */
 					/* AND match the User's Filter String */
 					{
 						$or: [
-								{itemTitle: 	{ $regex: new RegExp(userFilter, "i") }},
-								{itemId: 		{ $regex: new RegExp(userFilter, "i") }}
+								{title: 	{ $regex: new RegExp(userFilter, "i") }},
+								{_id: 		{ $regex: new RegExp(userFilter, "i") }}
 						]
 					}
 				]
@@ -796,9 +665,24 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 		return itemsFound;
 	};
 
-	if (str_CollectionName == "UserList"){
+	if (str_CollectionName == "itemsInThisKitbag"){
 
-		// console.log("objectsFiltered() --- Users",listSelect,userFilter);
+		// console.log("itemsInThisKitbag: ", obj_listFilter );
+		var queryObject = obj_listFilter;
+		var itemsFound = kb.collections.Items.find( queryObject ).fetch();
+
+		console.log("itemsInThisKitbag: ", queryObject, itemsFound.length, itemsFound);
+		if( typeof int_itemBagsFound != "undefined" ){
+			int_itemBagsFound.set(itemsFound.length);
+		}else{
+			console.log("ERROR - var 'int_itemBagsFound' was not found!");
+		}
+		return itemsFound;
+	};
+
+	if (str_CollectionName == "Users"){
+
+		console.log("objectsFiltered() --- Users", listSelect, userFilter);
 
 		var queryObject = {
 			$and: [
@@ -810,14 +694,13 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 				{
 					$or: [
 							{"_id":						{ $regex: new RegExp(userFilter, "i") }}, // This line ensures we get ALL users
-							{"profile.userId":			{ $regex: new RegExp(userFilter, "i") }},
 							{"username": 				{ $regex: new RegExp(userFilter, "i") }},
 							{"emails.address":			{ $regex: new RegExp(userFilter, "i") }},
-							{"profile.displayName": 	{ $regex: new RegExp(userFilter, "i") }},
-							{"profile.userCallsign": 	{ $regex: new RegExp(userFilter, "i") }},
-							{"profile.userAssocOrg": 	{ $regex: new RegExp(userFilter, "i") }},
-							{"profile.userDivision": 	{ $regex: new RegExp(userFilter, "i") }},
-							{"profile.userTeam": 		{ $regex: new RegExp(userFilter, "i") }},
+							{"displayName": 		    { $regex: new RegExp(userFilter, "i") }},
+							{"callsign": 				{ $regex: new RegExp(userFilter, "i") }},
+							{"assocOrgId": 				{ $regex: new RegExp(userFilter, "i") }},
+							{"division": 				{ $regex: new RegExp(userFilter, "i") }},
+							{"team": 					{ $regex: new RegExp(userFilter, "i") }},
 							{"getType.value": 			{ $regex: new RegExp(userFilter, "i") }},
 							{"getType.label": 			{ $regex: new RegExp(userFilter, "i") }},
 					]
@@ -827,8 +710,8 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 		var usersFound = Meteor.users.find( queryObject ).fetch();
 
-		// console.log("queryObject: ",queryObject);
-		// console.log("usersFound: ", usersFound.length, usersFound);
+		console.log("queryObject: ",queryObject);
+		console.log("usersFound: ", usersFound.length, usersFound);
 
 		if( typeof int_usersFound != "undefined" ){
 			int_usersFound.set(usersFound.length);
@@ -844,7 +727,7 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 		// console.log("objectsFiltered('UsersInThisOrg') --- Users",listSelect,userFilter);
 		//console.log("AssocKitbagsFromArray",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
 
-		var queryObject = { "profile.userAssocOrg" : FlowRouter.getParam('_orgId') };
+		var queryObject = { "assocOrgId" : FlowRouter.getParam('_orgId') };
 
 		var usersFound = Meteor.users.find( queryObject ).fetch();
 
@@ -859,6 +742,34 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 		return usersFound;
 	};
 
+	if (str_CollectionName == "KitbagUsers"){
+		/* Users with this Kitbag */
+		console.log("objectsFiltered('KitbagUsers')", listSelect, userFilter);
+		// kb_reference_only.collections.Users.find({assocKitbagIds:"1221b9ebbb451487-2470bcecc16a9211"}).fetch()
+		var queryObject = obj_listFilter;
+		var kitbagUsersFound = kb.collections.Users.find( queryObject ).fetch();
+		if( typeof int_kitbagUsersFound != "undefined" ){
+			int_kitbagUsersFound.set(kitbagUsersFound.length);
+		}else{
+			console.log("ERROR - var 'int_kitbagUsersFound' was undefined!");
+		}
+		return kitbagUsersFound;
+	};
+
+	if (str_CollectionName == "kitbagsAssignedToThisUser"){
+		/* Minilist of "Kitbags assigned to this user" on USER VIEW page */
+		console.log("kitbagsAssignedToThisUser",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
+
+		var queryObject = obj_listFilter;
+		var bagsFound = kb.collections.Kitbags.find( queryObject ).fetch();
+
+		if( typeof int_userKitbagsFound != "undefined" ){
+			int_userKitbagsFound.set(bagsFound.length);
+		}else{
+			console.log("ERROR - var 'int_userKitbagsFound' was not found!");
+		}
+		return bagsFound;
+	};
 
 });
 
@@ -866,9 +777,9 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 
 GlobalHelpers = {
-	getThisfontAwesomeIcon: function(thisObj) {
-		// console.log("\n\ngetThisfontAwesomeIcon\n\n",thisObj,this);
-		return appSettings[thisObj.toLowerCase()].fontAwesomeIcon || "fa-question-circle-o";
+	getThisfontAwesomeIcon: function(collectionName) {
+		// console.log("\n\ngetThisfontAwesomeIcon\n\n",collectionName,this);
+		return appSettings[collectionName.toLowerCase()].fontAwesomeIcon || "fa-question-circle-o";
 	},
 	// Random number generator for object IDs (to avoid using the Mongo doc Id)
 	// http://stackoverflow.com/questions/105034/
@@ -961,7 +872,7 @@ GlobalHelpers = {
 				console.log(message);
 				return message;
 			}
-			var uname = jQuery.isEmptyObject(userObj.profile) ? (typeof userObj.username == "string" ? userObj.username : "Unknown") : (typeof userObj.profile.name == "string" ? userObj.profile.name : "Unknown");
+			var uname = typeof userObj.username == "string" ? userObj.username : "Unknown";
 			return uname;
 		}
 		// TODO - RETURN SERVICE TOO!
@@ -1041,21 +952,32 @@ GlobalHelpers = {
 		// console.log(orgArray);
 		return orgArray;
 	},
-	getFilteredListKitbags: function (contxt) {
-		// console.log("filterKitbags() ", contxt);
-		var listOfBagsFetch = kb.collections.Kitbags.find({}, {fields: { _id: 1, title: 1, assocOrgTitle: 1 }}).fetch();
+	getFilteredListKitbags: function ( assocOrgId ) {
+		console.log("filterKitbags()", assocOrgId);
+
+		if (!assocOrgId){
+			console.log("No 'assocOrgId' so returning empty array");
+			return [];
+		}
+
+		var searchObj = assocOrgId ? { "assocOrgId" : assocOrgId } : {};
+		var listOfBagsFetch = kb.collections.Kitbags.find( searchObj , {fields: { _id: 1, title: 1 }}).fetch();
 
 		// TODO - Can we make this bagArray a global counter (in adminCollection?) so that we dont need to find each time?
 		bagObj = {}, bagArray = [];
-		$.each(listOfBagsFetch, function( index, obj ) {
+		$.each(listOfBagsFetch, function( index, kitbagObj ) {
 
+			console.log(index, kitbagObj);
 			/* SuperAdmins see orgs too as they see lists with all kitbags from all orgs! */
-			var orgLabel = ((obj.assocOrgTitle)?obj.assocOrgTitle:" <unknown org>") + ": " + obj.title;
-			var bagLabel = obj.title;
+			var doc = kb.collections.Orgs.findOne( assocOrgId );
+			// var orgName = kb.collections.Orgs.findOne( kitbagObj._id.split('-')[0] ).title || "<unknown org>";
+			// var orgLabel = orgName + " : " + kitbagObj.title;
+			var orgLabel = ((doc && doc.title) || "Unknown Org") + " : " + kitbagObj.title;
+			var bagLabel = kitbagObj.title;
 
 			bagObj = {
 				label: ( fn_userIsSuperAdmin() ) ? orgLabel : bagLabel,
-				value: obj._id
+				value: kitbagObj._id
 			};
 			bagArray.push(bagObj);
 

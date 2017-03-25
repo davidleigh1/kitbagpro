@@ -7,14 +7,18 @@ import './globalFunctions.js';
 import './schema-org.js';
 import './schema-kitbag.js';
 import './schema-user.js';
-import './item-schema.js';
+import './schema-item.js';
 
 Accounts.onLogin(function() {
-  console.log('$ ********** Login complete 2! (both)');
+	var prefix = "USER: ";
+	console.log(prefix + "LOGIN SUCCESS! user: '" + Meteor.userId() + "' has logged IN successfully (Accounts.onLogin)");
+	// console.log('$ ********** Login complete 2! (both)');
 });
 
 Accounts.onLogout(function() {
-  console.log('$ ********** Logout complete 2! (both)');
+	var prefix = "USER: ";
+	console.log(prefix + "LOGOUT SUCCESS! user: '" + Meteor.userId() + "' has logged OUT successfully (Accounts.onLogout)");
+	// console.log('$ ********** Logout complete 2! (both)');
 });
 
 Meteor.startup(function() {
@@ -24,18 +28,6 @@ Meteor.startup(function() {
 	console.log("==========================================================");
 
 });
-
-fn_userIsSuperAdmin = function(userObject){
-	/* Shuld be moved to globalFunctions.js */
-	var thisUser = jQuery.isPlainObject(userObject) ? userObject : Meteor.user();
-	if ( !jQuery.isPlainObject(thisUser) ) { return false }
-	// console.log("glb_userIsSuperAdmin() ", thisUser );
-	if ( thisUser && jQuery.isPlainObject(thisUser.profile) && typeof thisUser.profile.userType == "string" && thisUser.profile.userType.toLowerCase() == "superadmin" ){
-		// console.log("glb_userIsSuperAdmin() --- USER IS A SUPERADMIN!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-		return true;
-	}
-	return false;
-};
 
 serverlog = function(msg){
 	if (typeof msg == "object") {

@@ -14,15 +14,18 @@ var thisCollectionName = "Kitbags";
 
 Meteor.methods({
 	/* -- KITBAG METHODS -- */
+	// TODO: Should be createUser/createItem etc NOT addUser/addItem as there maybe a legit scenario (in the future) to add a user to a group
+	// (or something else) which would be a legitimate 'add' but not a 'create'	
 	addKitbag: function(kitbagObj){
-		console.log('FN: Meteor.methods.addKitbag()(>>'+thisCollectionName+'<<)',kitbagObj);
+		// console.log('FN: Meteor.methods.addKitbag()(>>'+thisCollectionName+'<<)',kitbagObj);
+		console.log('FN: Meteor.methods.addKitbag()(>>'+thisCollectionName+'<<)');
 		if(typeof kitbagObj != "object" || kitbagObj == false){
-			console.log('ERROR: No kitbagObj received in request. DB insert action cancelled. [error code: 322]');
-			return "false";
+			throw new Meteor.Error('ERROR: No kitbagObj received in request. DB insert action cancelled. [error code: 322]');
+			return false;
 		}
 		/* Check for duplicate and abort if non-unique */
-		if ( !globalIsThisObjectUnique(kitbagObj.id,"Kitbags") ){
-			throw new Meteor.Error("Duplicate found for Kitbag: "+kitbagObj.id+". Aborting new org creation.");
+		if ( !globalIsThisObjectUnique(kitbagObj.id, thisCollectionName) ){
+			throw new Meteor.Error("Duplicate found for Kitbag: "+kitbagObj.id+". Aborting new kitbag creation.");
 			return false;
 		}		
 
@@ -45,15 +48,18 @@ Meteor.methods({
 			// console.log("\n\n\n\n\n\n",kitbagObj.assocOrgId," / pushed:\n",pushed,"\n\n",updatedOrgObj,"\n\n\n\n\n\n");
 
 		// db.orgs.update({ _id: "ByA4SG4ceRakkGPkN" },{ $push: { assocKitbagIds: "newbag3" } })		
-
+		/*
+		returnObj{} will be passed to AutoForm.hooks.<formName>.onSuccess
+		and then to globalSuccess() as resultObj{}
+		*/
 		var returnObj = {
+			"id": dbNewKB,
+			"obj": kitbagObj,
 			"thisAction": "insert",
 			"thisCollectionName": thisCollectionName,
-			"obj": kitbagObj,
-			"title": kitbagObj.title,
-			"id": dbNewKB
+			"title": kitbagObj.title
 		};		
-		console.log('addKitbag() added Kitbag: ',kitbagObj.title,kitbagObj._id,"\n",returnObj);
+		console.log('addKitbag() added Kitbag: "'+kitbagObj.title+'" ('+kitbagObj._id+') \n', returnObj);
 		return returnObj;
 	},
 	updateKitbagField: function(dbId,field,newValue){

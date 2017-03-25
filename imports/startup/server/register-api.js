@@ -1,9 +1,10 @@
 console.log("RUN: register-api.js");
 
+console.log("\nTODO:ARE THESE IMPORTS REQUIRED??? (2131) \n");
+
 import { Orgs } from '/imports/startup/both/schema-org.js';
 import { Kitbags } from '/imports/startup/both/schema-kitbag.js';
-import { Items } from '/imports/startup/both/item-schema.js';
-// import { UserList } from '/imports/startup/both/item-user.js';
+import { Items } from '/imports/startup/both/schema-item.js';
 
 /* ADMIN */
 	import '/imports/api/admin/methods.js';
