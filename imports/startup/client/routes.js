@@ -335,7 +335,18 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 		}
 	});
 
-
+	import '/imports/ui/pages/items/duplicate.js';
+	FlowRouter.route("/items/:_itemId/duplicate", {
+		name: "itemDuplicate",
+		action: function(params, queryParams) {
+			/*console.log("Route: Equipment > N/A (Item Edit)", params, queryParams);*/
+			BlazeLayout.render("mainLayout", {
+				main: "itemDuplicate",
+				nav: "navigation",
+				footer: "globalFooter"
+			});
+		}
+	});
 
 
 
@@ -448,7 +459,18 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 			});
 		}
 	});
-
+	import '/imports/ui/pages/users/duplicate.js';
+	FlowRouter.route("/users/:_userId/duplicate", {
+		name: "userDuplicate",
+		action: function(params, queryParams) {
+			/*console.log("Route: Equipment > N/A (Item Edit)", params, queryParams);*/
+			BlazeLayout.render("mainLayout", {
+				main: "userDuplicate",
+				nav: "navigation",
+				footer: "globalFooter"
+			});
+		}
+	});
 
 /*---------------------------------------*/
 /*-------------  PHASE TWO  -------------*/

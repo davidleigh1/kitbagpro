@@ -106,14 +106,14 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 	if (requestor == "beforeItemInsert" && typeof doc == "object") {
 		doc._id = doc.assocOrgId + "-" + doc._id;
 		doc.createdAt = doc.createdAt || new Date();
-		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		doc.createdBy = doc.createdBy || userId || Meteor.userId() || "Unknown User";
 		console.log("\nTODO: globalBeforeInsertHook() - Is this count required here???  See reference to 'itemAssocKitbagCount' above! \n");
 		doc.assocKitbagCount = (typeof doc.assocKitbagsArray == "object") ? doc.assocKitbagsArray.length : 0;
 	}
 
 	if (requestor == "beforeOrgInsert" && typeof doc == "object") {
 		doc.createdAt = doc.createdAt || new Date();
-		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		doc.createdBy = doc.createdBy || userId || Meteor.userId() || "Unknown User";
 		// doc.assocKitbagCount = (typeof doc.assocKitbags == "object") ? doc.assocKitbags.length : 0;
 	}
 
@@ -124,7 +124,7 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 		// doc._id = "xxxx" + doc.assocOrgId + "-" + doc._id;
 		doc._id = doc.assocOrgId + "-" + doc._id;
 		doc.createdAt = doc.createdAt || new Date();
-		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		doc.createdBy = doc.createdBy || userId || Meteor.userId() || "Unknown User";
 		console.log("\n\n-------- OUT beforeKitbagInsert --------\n", doc, "\n----------------\n");
       	return doc;
 	}
@@ -132,7 +132,7 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 	if (requestor == "beforeUserInsert" && typeof doc == "object") {
 		console.log("\n\n-------- IN beforeUserInsert --------\n", doc, "\n----------------\n");
 		doc.createdAt = doc.createdAt || new Date();
-		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		doc.createdBy = doc.createdBy || userId || Meteor.userId() || "Unknown User";
 		console.log("\n\n-------- OUT beforeUserInsert --------\n", doc, "\n----------------\n");
 	}
 	
@@ -141,7 +141,7 @@ globalBeforeInsertHook = function (requestor, userId, doc, fieldNames, modifier,
 		// doc._id = tempDocId;
 		// doc._id = doc.assocOrgId + "-" + doc._id;
 		doc.createdAt = doc.createdAt || new Date();
-		doc.createdBy = userId || Meteor.userId() || "Unknown User";
+		doc.createdBy = doc.createdBy || userId || Meteor.userId() || "Unknown User";
 		doc.assocKitbagCount = (typeof doc.assocKitbagIds == "object") ? doc.assocKitbagIds.length : 0;
 		console.log("\n\n-------- OUT beforeUserUpdate --------\n", doc, "\n----------------\n");
 	}

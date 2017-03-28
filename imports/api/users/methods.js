@@ -133,15 +133,13 @@ Meteor.methods({
 	},
 	forceUserPasswordChangeServer: function(dbUserId, password, forceLogout) {
 		// http://stackoverflow.com/questions/36368457
-		// updateUserPassword: function(userId, password) {
 		console.log("forceUserPasswordChangeServer", dbUserId, password);
 		var forceLogout = (typeof forceLogout == "boolean") ? forceLogout : true;
-		// var forceLogout = true;
 		var loggedInUser = Meteor.user();
+		var loggedInSuperAdmin = loggedInUser && loggedInUser.type.toLowerCase()  == 'superadmin';
+		var defaultSuperAdmin = Meteor.users.find().count() === 1 && dbUserId == "1221aaabbbccc123-5530aaabbbccc123";
 
-		// if (!loggedInUser ||
-		// 	!(Roles.userIsInRole(loggedInUser, ['admin'], 'default_group')) || (loggedInUser._id == dbUserId) ) {
-		if (!loggedInUser || !(loggedInUser.type.toLowerCase()  == 'superadmin' )) {
+		if ( !defaultSuperAdmin && ( !loggedInUser || !loggedInSuperAdmin ) ) {
 			throw new Meteor.Error(403, "Access denied. Insuffient permissions.");
 			return false;
 		}
@@ -150,24 +148,11 @@ Meteor.methods({
 
 		if (forceLogout == true) {
 			console.log("-------- LOGGING OUT USER '"+dbUserId+"' --------");
-		// 	// closeAllUserSessions(dbUserId);
-		// 	// https://forums.meteor.com/t/how-can-i-disconnect-a-user-from-server-side-code/12606/8
-		// 	// if (this.userId) {
-		// 	// 	Accounts._server.method_handlers.logout ();
-		// 	// 	Accounts._server.method_handlers.logoutOtherClients ();
-		// 	// }
 			Meteor.users.direct.update({"_id" : dbUserId},{ $unset: {'services.resume.loginTokens.0': 1} });
 			Meteor.users.direct.update({"_id" : dbUserId},{ $pull: {'services.resume.loginTokens': null} });
-
-
-
-
-
 		} else {
 			console.log("-------- DID NOT LOGOUT USER '"+dbUserId+"' --------");
 		}
-
-
 		return pwchange;
 	},
 	// https://forums.meteor.com/t/how-can-i-disconnect-a-user-from-server-side-code/12606/8

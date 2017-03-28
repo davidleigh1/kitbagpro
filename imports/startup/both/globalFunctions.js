@@ -108,7 +108,7 @@ globalDuplicate = function(collectionName,objPrefix) {
 	console.log("globalDuplicate()",arguments);
 
 	var oldId = $("input[name='_id']").val();
-	var oldTitle = $("input[name='title']").val();
+	var oldTitle = $("input[name='title']").val() || $("input[name='username']").val();
 	var oldDesc = $("input[name='desc']").val();
 	/* New ID - the old ID is still visible in the URL */
 	$("input[name='_id']").val( GlobalHelpers.idGenerator(uniqueIds[objPrefix]) );

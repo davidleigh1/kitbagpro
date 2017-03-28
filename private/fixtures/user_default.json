@@ -1,0 +1,26 @@
+{
+	"_id": "5530aaabbbccc123",
+	"createdAt": "2017-01-01T11:11:11.111Z",
+	"services": {},
+	"username": "admin",
+	"password": "admin",
+	"displayName": "Default Admin (DELETE ME!)",
+	"emails": [
+		{
+			"address": "admin@admin.com",
+			"verified": false
+		}
+	],
+	"status": "Active",
+	"type": "SuperAdmin",
+	"assocOrgId": "1221aaabbbccc123",
+	"assocKitbagCount": 1,
+	"collection": "Users",
+	"createdVia": "FixtureData",
+	"createdBy": "1221aaabbbccc123-5530aaabbbccc123",
+	"updatedAt": "2017-01-01T22:22:22.222Z",
+	"updatedBy": "1221aaabbbccc123-5530aaabbbccc123",
+	"assocKitbagIds": [
+	"1221aaabbbccc123-2470aaabbbccc123"
+	]
+}

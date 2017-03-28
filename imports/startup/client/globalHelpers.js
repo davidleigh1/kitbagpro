@@ -449,7 +449,7 @@ Template.registerHelper('glb_userIsSuperAdmin',function(userObject){
 /* ============================================================================================*/
 
 Template.registerHelper('objectsFiltered',function( str_CollectionName , str_userFilter , obj_listFilter ){
-	console.log("objectsFiltered():\n", arguments);
+	// console.log("objectsFiltered():\n", arguments);
 
 	/* str_CollectionName is required - will determine what we listing! */
 	if ( typeof str_CollectionName == 'undefined' ) return;
@@ -634,7 +634,7 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	if (str_CollectionName == "Items"){
 
-		console.log("Items", listSelect, userFilter);
+		// console.log("Items", listSelect, userFilter);
 
 		var itemsFound = kb.collections.Items.find(
 			{
@@ -682,7 +682,7 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	if (str_CollectionName == "Users"){
 
-		console.log("objectsFiltered() --- Users", listSelect, userFilter);
+		// console.log("objectsFiltered() --- Users", listSelect, userFilter);
 
 		var queryObject = {
 			$and: [
@@ -710,8 +710,8 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 		var usersFound = Meteor.users.find( queryObject ).fetch();
 
-		console.log("queryObject: ",queryObject);
-		console.log("usersFound: ", usersFound.length, usersFound);
+		// console.log("queryObject: ",queryObject);
+		// console.log("usersFound: ", usersFound.length, usersFound);
 
 		if( typeof int_usersFound != "undefined" ){
 			int_usersFound.set(usersFound.length);
@@ -744,7 +744,7 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	if (str_CollectionName == "KitbagUsers"){
 		/* Users with this Kitbag */
-		console.log("objectsFiltered('KitbagUsers')", listSelect, userFilter);
+		// console.log("objectsFiltered('KitbagUsers')", listSelect, userFilter);
 		// kb_reference_only.collections.Users.find({assocKitbagIds:"1221b9ebbb451487-2470bcecc16a9211"}).fetch()
 		var queryObject = obj_listFilter;
 		var kitbagUsersFound = kb.collections.Users.find( queryObject ).fetch();
@@ -758,7 +758,7 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 	if (str_CollectionName == "kitbagsAssignedToThisUser"){
 		/* Minilist of "Kitbags assigned to this user" on USER VIEW page */
-		console.log("kitbagsAssignedToThisUser",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
+		// console.log("kitbagsAssignedToThisUser",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
 
 		var queryObject = obj_listFilter;
 		var bagsFound = kb.collections.Kitbags.find( queryObject ).fetch();

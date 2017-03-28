@@ -56,7 +56,7 @@ kb.schemas.UserSchema = new SimpleSchema({
 	"_id": {		// Formerly: 'userId'
 		type: String,
 		optional: false,
-		max: 33,
+		max: 50,
 		defaultValue: function () {
 			if (this.isSet == true && this.value != ""){
 				return this.value;
@@ -230,7 +230,7 @@ kb.schemas.UserSchema = new SimpleSchema({
 		optional: true,
 		label: "Profile Photo or Avatar"
 	},
-	"notes": {
+	"desc": {
 		type: String,
 		optional: true,
 		label: "Notes"

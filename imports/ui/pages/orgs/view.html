@@ -301,16 +301,19 @@
 												<td><code>{{_id}}</code></td>
 											</tr>
 											<tr>
-												<th>Last Updated</th>
-												<td>{{updatedAt}}</td>
+												<th>Created</th>
+												<td>{{getCreatedString}}</td>
+												<!-- <td>{{createdAt}}</td> -->
 											</tr>
 											<tr>
-												<th>Created</th>
-												<td>{{createdAt}}</td>
+												<th>Last Updated</th>
+												<td>{{getLastUpdatedString}}</td>
+												<!-- <td>{{updatedAt}}</td> -->
 											</tr>
 											<tr>
 												<th>Created Via</th>
-												<td><code>{{createdVia}}</code> by <code>{{createdBy}}</code></td>
+												<td>{{#if createdVia}}<code>{{createdVia}}</code>{{else}}Unknown{{/if}}</td>
+												<!-- <td><code>{{createdVia}}</code> by <code>{{createdBy}}</code></td> -->
 											</tr>
 										</tbody>
 									</table>

@@ -42,7 +42,7 @@
 										<a href="./edit#itemAssocKitbags" class="btn btn-primary">
 											<i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i> Assign to Kitbag
 										</a>
-										<a href="/items/duplicate/{{_id}}" class="btn btn-primary">
+										<a href="./duplicate" class="btn btn-primary">
 											<i class="fa fa-fw fa-files-o"></i> Duplicate
 										</a>
 										{{#if glb_userIsSuperAdmin}}
@@ -321,14 +321,16 @@
 											<tr>
 												<th>DBID</th>
 												<td><code>{{_id}}</code></td>
-											</tr>
+											</tr>										
 											<tr>
 												<th>Created</th>
-												<td>{{createdAt}} by {{#if createdBy}}<code>{{createdBy}}</code>{{else}}Unknown{{/if}}</td>
+												<td>{{getCreatedString}}</td>
+												<!-- <td>{{createdAt}} by {{#if createdBy}}<code>{{createdBy}}</code>{{else}}Unknown{{/if}}</td> -->
 											</tr>
 											<tr>
 												<th>Last Updated</th>
-												<td>{{updatedAt}} by {{#if updatedBy}}<code>{{updatedBy}}</code>{{else}}Unknown{{/if}}</td>
+												<td>{{getLastUpdatedString}}</td>
+												<!-- <td>{{updatedAt}} by {{#if updatedBy}}<code>{{updatedBy}}</code>{{else}}Unknown{{/if}}</td> -->
 											</tr>
 											<tr>
 												<th>Created Via</th>

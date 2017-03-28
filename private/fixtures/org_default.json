@@ -2,10 +2,10 @@
   "_id": "1221aaabbbccc123",
   "title": "Default KitbagPro Organisation",
   "status": "Active",
-  "isOfficial": false,
+  "isOfficial": true,
   "createdVia": "FixtureData",
-  "createdBy": "NEED_DEFAULT_USER_ID",
-  "updatedBy": "Unknown",
+  "createdBy": "1221aaabbbccc123-5530aaabbbccc123",
+  "updatedBy": "1221aaabbbccc123-5530aaabbbccc123",
   "assocKitbagCount": 0,
-  "createdAt": "2017-01-21T20:50:07.322Z"
+  "createdAt": "2017-01-01T21:21:21.211Z"
 }

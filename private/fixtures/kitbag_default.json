@@ -1,11 +1,11 @@
 {
-  "_id": "1221aaabbbccc123-2470aaabbbccc123",
+  "_id": "2470aaabbbccc123",
   "title": "Default KitbagPro Kitbag",
   "status": "Active",
   "desc": "Default Kitbag created by fixtures.js",
   "createdVia": "FixtureData",
-  "createdBy": "NEED_DEFAULT_USER_ID",
+  "createdBy": "1221aaabbbccc123-5530aaabbbccc123",
   "updatedBy": "Unknown",
   "assocOrgId": "1221aaabbbccc123",
-  "createdAt": "2017-01-21T20:50:07.322Z"
+  "createdAt": "2017-01-01T13:13:13.133Z"
 }

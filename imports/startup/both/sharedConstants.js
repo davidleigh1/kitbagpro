@@ -40,7 +40,13 @@ export const appSettings = {
 		longTimeout						: 10000
 	},
 	userInventory: {
-		itemInventoryStatus 			: ["Available","Deficient/Unavailable","On Loan","In Repair"]
+		// Update this list based on wiki 'check-out' use cases
+		itemInventoryStatus 			: [	"1 (Available)",				// OK
+											"2 (Unavailable)",				// Assigned (e.g. checked out by store) but unavailable (e.g. not yet checked in)
+											"3 (On Loan)",					// Assigned but not in possession
+											"4 (In Repair)",				// Temporarily not in possession
+											"5 (Expired)"					// Passed expiry date
+											]
 	},
 	fontAwesomeIcon: {
 		orgs   : "fa-hospital-o",
