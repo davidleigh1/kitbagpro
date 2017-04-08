@@ -38,38 +38,38 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 							<div class="col-lg-12 tableControlPanel">
 								<!-- Control Buttons -->
 								<!-- fa-fw  makes the icons 'fixed width' -->
-								<a href="./edit" class="btn btn-primary">
-									<i class="fa fa-fw fa-edit"></i> Edit Kitbag
+								<a href="./edit" class="btn btn-primary" title="Edit Kitbag">
+									<i class="fa fa-fw fa-edit"></i><span class="btn-text"> Edit Kitbag</span>
 								</a>
 								<!-- 
 								<a href="./edit#kitbagAssocKitbags" class="btn btn-primary">
 									<i class="fa fa-fw fa-medkit"></i> Assign to Kitbag
 								</a>
 								-->
-								<a href="./duplicate" class="btn btn-primary">
-									<i class="fa fa-fw fa-files-o"></i> Duplicate
+								<a href="./duplicate" class="btn btn-primary" title="Duplicate">
+									<i class="fa fa-fw fa-files-o"></i><span class="btn-text"> Duplicate</span>
 								</a>
-								<a href="/items/create/{{_id}}" class="btn btn-primary">
-									<i class="fa fa-fw {{global_getfontAwesomeIcon 'Items'}}"></i> Add Item
+								<a href="/items/create/{{_id}}" class="btn btn-primary" title="Add Item">
+									<i class="fa fa-fw {{global_getfontAwesomeIcon 'Items'}}"></i><span class="btn-text"> Add Item</span>
 								</a>
 								{{#if glb_userIsSuperAdmin}}
-									<a href="#" class="btn btn-danger delete">
-										<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
+									<a href="#" class="btn btn-danger delete" title="Delete">
+										<i class="fa fa-fw fa-exclamation-triangle"></i><span class="btn-text"> Delete</span>
 									</a>
 								{{/if}}
 								{{#if userHasPermission 'canEditOrgKitbags'}}
-									<a href="#" class="btn btn-label-default trash {{#if global_isDocTrashed}}disabled{{/if}}">
-										<i class="fa fa-fw fa-trash"></i> Trash
+									<a href="#" class="btn btn-label-default trash {{#if global_isDocTrashed}}disabled{{/if}}" title="Trash">
+										<i class="fa fa-fw fa-trash"></i><span class="btn-text"> Trash</span>
 									</a>
 								{{/if}}
-								<a href="/dashboard" class="btn btn-info">
-									<i class="fa fa-fw fa-dashboard"></i> Analytics
+								<a href="/dashboard" class="btn btn-info" title="Analytics">
+									<i class="fa fa-fw fa-dashboard"></i><span class="btn-text"> Analytics</span>
 								</a>
-								<a href="/items/list?kitbag={{_id}}" class="btn btn-info">
-									<i class="fa fa-fw fa-users"></i> View Inventory
+								<a href="/items/list?kitbag={{_id}}" class="btn btn-info" title="View Inventory">
+									<i class="fa fa-fw fa-users"></i><span class="btn-text"> View Inventory</span>
 								</a>
-								<a href="/users/list?org={{assocOrgId}}" class="btn btn-info">
-									<i class="fa fa-fw fa-users"></i> User List
+								<a href="/users/list?org={{assocOrgId}}" class="btn btn-info" title="User List">
+									<i class="fa fa-fw fa-users"></i><span class="btn-text"> User List</span>
 								</a>
 							</div>
 						</div>
@@ -190,6 +190,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 										<th class="hidden-xs">Model</th>
 										<th class="hidden-xs">Req'd</th>
 										<th class="hidden-xs">qMn/qR/qMx</th>
+										<th class="hidden-xs inventory">qAvail/qAssign</th>
 										{{#if glb_userIsSuperAdmin}}
 											<th class="hidden-xs adminOnly">AssocOrg</th>
 										{{/if}}
@@ -252,7 +253,7 @@ http://bootstrap.snipplicious.com/snippets/preview/19?name=edit-profile-page
 										{{#if glb_userIsSuperAdmin}}
 										<th class="hidden-xs hidden-sm 				assocOrgId adminOnly">Organisation</th>
 										{{/if}}
-										<th class="									username">Username</th>
+										<th class="hidden-xs 						username">Username</th>
 										<th class="hidden-xs hidden-sm 				userEmail">Email</th>
 										{{#if glb_userIsSuperAdmin}}
 										<th class="hidden-xs hidden-sm hidden-md 	userDbId adminOnly">DBID</th>

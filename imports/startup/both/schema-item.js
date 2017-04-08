@@ -94,7 +94,7 @@ let ItemSchema = new SimpleSchema({
 			label: "Item Name 2"
 		},
 
-	/* ASSOCIATED ORG + KITBAGS */
+	/* ASSOCIATED ORG + DISTRIBUTION ACROSS ASSOCIATED KITBAGS */
 
 		"assocOrgId": {		// Formerly "itemAssocOrg"
 			type: String,
@@ -138,9 +138,24 @@ let ItemSchema = new SimpleSchema({
 			label: "Number of ACTIVE kitbags containing this item"
 			/* Equal to count of 'active' kitbags in assocKitbags array */
 		},
+		"distributionToKitbags": {
+			type: Object,
+			// type: kb.schemas.distributionToKitbagsSchema
+			optional: true,
+			blackbox: true
+		},
 
 	/* DETAILED SPECIFICATIONS */
 
+		"isUnique": {
+			type: Boolean,
+			optional: true,
+			defaultValue: false,
+			autoform: {
+				leftLabel: true
+			},
+			label: "Item is uniquely trackable"
+		},
 		"size": {
 			type: String,
 			optional: true,

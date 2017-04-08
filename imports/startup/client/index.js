@@ -261,7 +261,7 @@ Template.body.helpers({
 Template.body.events({
 	'change .hide-finished': function(event) {
 		Session.set('hideFinished', event.target.checked);
-	} //ends 'submit .hide-finished';
+	}
 }); //ends Template.body.events
 
 Accounts.ui.config({

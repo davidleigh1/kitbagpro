@@ -405,6 +405,41 @@ FlowRouter.triggers.enter([AccountsTemplates.ensureSignedIn]);
 
 
 
+/*-----------------------------------------------*/
+/*-------------  I N V E N T O R Y  -------------*/
+/*-----------------------------------------------*/
+
+	/* BASIC INVENTORY LIST */
+
+	import '/imports/ui/pages/inventory/list.js';
+	FlowRouter.route("/inventory/list", {
+		name:"inventoryList",
+		action: function(params, queryParams) {
+			BlazeLayout.render("mainLayout", {
+				main: "inventoryList",
+				nav: "navigation",
+				footer: "globalFooter"
+			});
+		}
+	});
+	import '/imports/ui/pages/inventory/view.js';
+	FlowRouter.route("/inventory/:_inventoryId/view", {
+		name:"inventoryView",
+		action: function(params, queryParams) {
+			BlazeLayout.render("mainLayout", {
+			main: "inventoryView",
+			nav: "navigation",
+			footer: "globalFooter"
+			});
+		}
+	});
+
+
+
+
+
+
+
 /*---------------------------------------*/
 /*-------------  U S E R S  -------------*/
 /*---------------------------------------*/

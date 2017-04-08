@@ -115,15 +115,13 @@ Template.userView.events({
 	'click .btn.delete': function(event,a,b) {
 		event.preventDefault();
 		globalDelete("DeletedByUser", thisCollectionName, this, Meteor.userId(), "/"+ thisCollectionName.toLowerCase() +"/list");
-
-		// var areYouSure = "Are you sure you want to permanently delete user '"+this.username+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
-		// if ( confirm(areYouSure) ) {
-		// 	Meteor.call("deleteUser",this._id);
-		// 	// history.go(-1);
-		// 	FlowRouter.go("/users/list");
-		// } else {
-		// 	return false;
-		// }
-
-	}
+	},
+	// 'click .phoneLinkConfirm': function(event) {
+	// 	event.preventDefault();
+	// 	confirmOpenPhone(event);
+	// },
+	// 'click .smsLinkConfirm': function(event) {
+	// 	event.preventDefault();
+	// 	confirmOpenSMS(event);
+	// }
 });

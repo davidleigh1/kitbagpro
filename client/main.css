@@ -35,14 +35,19 @@ span.detailVal
 
 .adminOnly {
 	/* background-color: rgba(154, 205, 50, 0.1) !important; */
-    /* border-color: rgba(154, 205, 50, 0.1) !important; */
-    /* border-width: 2px !important; */
-    /* border-style: dotted !important; */
-    /* margin: 5px 0 !important; */
-    /* padding: 5px 10px; */
-    /* border-radius: 4px; */
-    color: #5cb85c;
-    background-color: rgba(0,128,0,0.05);
+	/* border-color: rgba(154, 205, 50, 0.1) !important; */
+	/* border-width: 2px !important; */
+	/* border-style: dotted !important; */
+	/* margin: 5px 0 !important; */
+	/* padding: 5px 10px; */
+	/* border-radius: 4px; */
+	color: #5cb85c;
+	background-color: rgba(0,128,0,0.05);
+}
+
+.inventory {
+    color: #3F51B5;
+    background-color: rgba(88, 111, 236, 0.08);
 }
 
 button.delete {
@@ -214,6 +219,20 @@ span.label {
     text-transform: uppercase !important;
     font-size: 0.7em !important;
 }
+
+/*  USERS  */
+
+td.userActionsCol {
+	text-align: right;
+}
+
+.userSubtitle {
+    /*text-transform: uppercase;*/
+    color: gray;
+    font-size: 0.8em;
+    font-family: monospace;
+}
+
 
 /* New Org */
 

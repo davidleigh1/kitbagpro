@@ -13,6 +13,15 @@
 			<a href="/dashboard"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
 		</li>
 
+		<!-- INVENTORY -->
+		<li class="{{ isActiveRoute 'inventoryList' }}">
+			<a href="/inventory/list"><i class="fa fa-fw {{global_getfontAwesomeIcon 'inventory'}}"></i> My Inventory</a>
+		</li>
+		<!-- <li class="adminOnly sub-item {{ isActiveRoute 'orgAdd' }}">
+			<a href="/orgs/create"><i class="fa fa-fw fa-plus"></i> Add Organisation</a>
+		</li> -->
+		<!-- /INVENTORY -->
+
 		<!-- ORGANISATIONS -->
 		{{#if glb_userIsSuperAdmin}}
 			<li class="adminOnly {{ isActiveRoute 'orgList' }}">

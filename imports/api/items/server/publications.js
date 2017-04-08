@@ -106,6 +106,22 @@ updateGlobalItemCountsObj = function (requestor,userId, doc, fieldNames, modifie
 
 kb.collections.Items.before.insert(function (userId, doc, fieldNames, modifier, options) {
 	console.log("HOOK: BEFORE ITEMS.INSERT");
+
+	if (doc && !doc.distributionToKitbags && doc.assocKitbagsArray.length > 0 && !modifier) {
+
+		/* Add distributionToKitbags Object */
+		console.log("Adding distributionToKitbags Object");
+		doc.distributionToKitbags = {};
+		doc.assocKitbagsArray.forEach(function (kitbagId, key) {
+		// jQuery.each(doc.assocKitbagsArray, function(index, kitbagId) {
+			doc.distributionToKitbags[ kitbagId ] = {
+				"qInitialAssign": doc.qRecommended || kb.collections.Kitbags.findOne(kitbagId)["qRecommended"]
+			}
+			console.log("Added 'qInitialAssign' of "+doc.distributionToKitbags[ kitbagId ].qInitialAssign+" to kitbag: "+kitbagId);
+		});
+
+	}
+
 	/* Update associated Kitbag Count */
 	globalBeforeInsertHook("beforeItemInsert", userId, doc, fieldNames, modifier, options);
 });

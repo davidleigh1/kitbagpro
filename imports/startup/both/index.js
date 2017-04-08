@@ -8,6 +8,9 @@ import './schema-org.js';
 import './schema-kitbag.js';
 import './schema-user.js';
 import './schema-item.js';
+import './schema-item-inventory.js';
+import './schema-inventory.js';
+import './schema-log.js';
 
 Accounts.onLogin(function() {
 	var prefix = "USER: ";

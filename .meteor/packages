@@ -40,3 +40,4 @@ mizzao:bootboxjs				# Programmatic dialog boxes using Twitter's bootstrap modals
 juliancwirko:s-alert			# Simple and fancy user notifications (https://github.com/juliancwirko/meteor-s-alert)
 juliancwirko:s-alert-genie		# Genie (pop) effect for juliancwirko:s-alert
 juliancwirko:s-alert-stackslide # StackSlide effect for s-alert
+meteorhacks:kadira

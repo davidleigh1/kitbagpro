@@ -26,34 +26,34 @@
 								<!-- Control Buttons -->
 								<!-- fa-fw  makes the icons 'fixed width' -->
 								<a href="./edit" class="btn btn-primary">
-									<i class="fa fa-fw fa-edit"></i> Edit User
+									<i class="fa fa-fw fa-edit"></i> <span class="btn-text"> Edit User</span>
 								</a>
 								<a href="./duplicate" class="btn btn-primary">
-									<i class="fa fa-fw fa-files-o"></i> Duplicate
+									<i class="fa fa-fw fa-files-o"></i> <span class="btn-text"> Duplicate</span>
 								</a>
 								{{#if glb_userIsSuperAdmin}}
 										<a href="#" class="btn btn-primary forcePasswordChange">
-										<i class="fa fa-fw fa-key"></i> Set Password
+										<i class="fa fa-fw fa-key"></i> <span class="btn-text"> Set Password</span>
 									</a>
 								{{/if}}
 								{{#if glb_userIsSuperAdmin}}
 									<a href="#" class="btn btn-danger delete">
-										<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
+										<i class="fa fa-fw fa-exclamation-triangle"></i> <span class="btn-text"> Delete</span>
 									</a>
 								{{/if}}
 								{{#if userHasPermission 'canEditOrgUsers'}}
 									<a href="#" class="btn btn-label-default trash {{#if global_isDocTrashed}}disabled{{/if}}">
-										<i class="fa fa-fw fa-trash"></i> Trash
+										<i class="fa fa-fw fa-trash"></i> <span class="btn-text"> Trash</span>
 									</a>
 								{{/if}}
 								<a href="/dashboard" class="btn btn-info">
-									<i class="fa fa-fw fa-dashboard"></i> Analytics
+									<i class="fa fa-fw fa-dashboard"></i> <span class="btn-text"> Analytics</span>
 								</a>
 								<a href="#userKitbagListPanel" class="btn btn-info">
-									<i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i> Kitbag List
+									<i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i> <span class="btn-text"> Kitbag List</span>
 								</a>
 								<a href="#userItemsListPanel" class="btn btn-info">
-									<i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i> View Inventory
+									<i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i> <span class="btn-text"> View Inventory</span>
 								</a>
 							</div>
 						</div>
@@ -125,12 +125,18 @@
 
 									<tr>
 										<th>Phone Number</th>
-										<td>{{phoneNumber}}</td>
+										<!-- NOTE: Uses global click handler via 'mainLayout.events' in '/imports/ui/layouts/mainLayout.js' -->
+										<td>{{phoneNumber}} {{#if phoneNumber}}
+										<a class="phoneLinkConfirm" data-phone="{{phoneNumber}}" href="tel:{{phoneNumber}}"><i class="fa fa-phone"></i></a> 
+										<a class="smsLinkConfirm" data-sms="{{phoneNumber}}" href="sms:{{phoneNumber}}"><i class="fa fa-commenting-o"></i></a>
+										<a class="whatsappMsgLinkConfirm contactIcon" data-sms="{{phoneNumber}}" href="whatsapp://send?text={{getDefaultWhatsappText}}&phone={{phoneNumber}}"><i class="fa fa-whatsapp"></i></a>
+										{{/if}}
+										</td>
 									</tr>
 
 									<tr>
 										<th>Email</th>
-										<td>{{getEmail}}</td>
+										<td>{{getEmail}} {{#if getEmail}}<a class="emailLinkConfirm contactIcon" data-email="{{getEmail}}" href="mailto:{{getEmail}}"><i class="fa fa-envelope"></i></a>{{/if}}</td>
 									</tr>
 
 
@@ -218,10 +224,10 @@
 					</div>
 					<div class="panel-body">
 						<!-- <h2>Bordered with Striped Rows</h2> -->
-
+	
 						<div class="table-responsive">
 							<table class="table table-bordered-XXX table-hover table-striped-XXX table-condensed">
-								<thead>
+								<thead class="hidden-xs">
 									<tr>
 										<th class="hidden-xs">Kitbag</th>
 										{{#if glb_userIsSuperAdmin}}
@@ -229,11 +235,13 @@
 										{{/if}}
 										<th class="hidden-xs">Status</th>
 										<th class="hidden-xs text-center todo">Items</th>
-										<!-- <th class="hidden-xs text-center todo">Users</th> -->
+										{{#unless isItemView}}
+											<th class="hidden-xs text-center todo">Users</th>
+										{{/unless}}	
 										<th class="hidden-xs hidden-sm">Bag ID</th>
 										<th class="visible-lg">Created</th>
 										<!-- <th class="hidden-xs hidden-sm hidden-md">Owner</th> -->
-										<th class="text-right">Actions</th>
+										<th class="hidden-xs text-right">Actions</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -265,7 +273,7 @@
 			<!-- /col-12 -->
 			</div>
 
-
+			<!-- SYSTEM INFO -->
 			<div class="col-lg-12">
 				<div class="panel panel-info" id="systemInfo">
 					<div class="panel-heading">
@@ -308,14 +316,12 @@
 		<!-- /row -->
 		</div>
 		{{/with}}
-
 	</div>
 	<!-- /screen-wrapper -->
 
 	{{else}}
 		{{>loading}}
 	{{/if}}
-
 {{else}}
 	{{>accessRestricted}}
 {{/if}}

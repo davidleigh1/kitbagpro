@@ -1,4 +1,4 @@
-<template name="itemView">
+<template name="inventoryView">
 
 {{#if userHasPermission 'canViewItem'}}
 
@@ -13,18 +13,18 @@
 
 		{{#unless thisItem}}
 		<div>
-			<h2>Error: This item is undefined</h2>
+			<h2>Error: This inventory is undefined</h2>
 		</div>
 		{{/unless}}
 
-		<div class="screen-wrapper objAddEdit itemView">
+		<div class="screen-wrapper objAddEdit inventoryView">
 			{{#with thisItem}}
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="panel panel-default">
 							<div class="panel-heading">
 								<h3 class="">
-									{{>itemLogo}}
+									{{>inventoryLogo}}
 									{{title}}
 									<small>{{pageSubtitle}}</small>
 								</h3>
@@ -39,7 +39,7 @@
 										<a href="./edit" class="btn btn-primary" title="Edit Item">
 											<i class="fa fa-fw fa-edit"></i><span class="btn-text"> Edit Item</span>
 										</a>
-										<a href="./edit#itemAssocKitbags" class="btn btn-primary" title="Assign to Kitbag">
+										<a href="./edit#inventoryAssocKitbags" class="btn btn-primary" title="Assign to Kitbag">
 											<i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i><span class="btn-text"> Assign to Kitbag</span>
 										</a>
 										<a href="./duplicate" class="btn btn-primary" title="Duplicate">
@@ -58,16 +58,16 @@
 										<a href="/dashboard" class="btn btn-info" title="Analytics">
 											<i class="fa fa-fw fa-dashboard"></i><span class="btn-text"> Analytics</span>
 										</a>
-										<a href="#itemKitbagListPanel" class="btn btn-info" title="Kitbag List">
+										<a href="#inventoryKitbagListPanel" class="btn btn-info" title="Kitbag List">
 											<i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i><span class="btn-text"> Kitbag List</span>
 										</a>
-										<a href="/users/list?item=thisItemId" class="btn btn-info" title="View Inventory">
+										<a href="/users/list?inventory=thisItemId" class="btn btn-info" title="View Inventory">
 											<i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i><span class="btn-text"> View Inventory</span>
 										</a>
 									</div>
 								</div>
 								<!-- <h2>Bordered with Striped Rows</h2> -->
-								<!--{{#if itemDesc}}
+								<!--{{#if inventoryDesc}}
 									<div class="well">
 										{{desc}}
 									</div>
@@ -114,7 +114,7 @@
 											</tr>
 											<tr>
 												<th>Each has a unique ID</th>
-												<td>{{#if isUnique}}<i class="fa fa-check text-muted" aria-hidden="true"></i>&nbsp;<a href="#itemUserListPanel" class="noLink smallCaps showSerialNumberList">Show List</a>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td>
+												<td>{{#if isUnique}}<i class="fa fa-check text-muted" aria-hidden="true"></i>&nbsp;<a href="#inventoryUserListPanel" class="noLink smallCaps showSerialNumberList">Show List</a>{{else}}<i class="fa fa-times text-muted" aria-hidden="true"></i>{{/if}}</td>
 											</tr>
 											<tr>
 												<th>Age Group</th>
@@ -214,8 +214,8 @@
 
 													{{>urlImagePreviewRollover
 														imageUrl = imgLarge
-														imagePreviewText = (global_joinTextInList "Photo of '<b>" itemTitle "</b>'. Click to open in a new tab." )
-														imageAltText = (global_joinTextInList "Photo of '" itemTitle "'. Click or mouseover to view." )
+														imagePreviewText = (global_joinTextInList "Photo of '<b>" inventoryTitle "</b>'. Click to open in a new tab." )
+														imageAltText = (global_joinTextInList "Photo of '" inventoryTitle "'. Click or mouseover to view." )
 														imagePreviewHeight = "50%"
 													}}
 
@@ -250,9 +250,9 @@
 
 					<!-- ITEMS MINILIST (listing 'assocKitbags') -->
 					<div class="col-lg-12">
-						<div class="panel panel-default" id="itemKitbagListPanel">
+						<div class="panel panel-default" id="inventoryKitbagListPanel">
 							<div class="panel-heading">
-								<h3 class="panel-title"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i> Kitbags Containing This Item ({{get_itemBagsFound}})</h3>
+								<h3 class="panel-title"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Kitbags'}}"></i> Kitbags Containing This Item ({{get_inventoryBagsFound}})</h3>
 							</div>
 							<div class="panel-body">
 								<!-- <h2>Bordered with Striped Rows</h2> -->
@@ -288,11 +288,11 @@
 														{{ >kitbagLine 
 															thisKitbag = this
 															thisItemId = thisItemId
-															listType = "itemView"
+															listType = "inventoryView"
 														}}
 													{{/each}}
 												{{else}}
-													{{ >noListObjectsFound objectName="kitbags containing this item were" }}
+													{{ >noListObjectsFound objectName="kitbags containing this inventory were" }}
 												{{/if}}
 											{{else}}
 												loading...
@@ -312,9 +312,9 @@
 
 					<!-- USERS MINILIST -->
 					<div class="col-lg-12">
-						<div class="panel panel-default" id="itemUserListPanel">
+						<div class="panel panel-default" id="inventoryUserListPanel">
 							<div class="panel-heading">
-								<h3 class="panel-title"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i> Users with this Item ({{get_itemUsersFound}})</h3>
+								<h3 class="panel-title"><i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i> Users with this Item ({{get_inventoryUsersFound}})</h3>
 							</div>
 							<div class="panel-body">
 								<!-- <h2>Bordered with Striped Rows</h2> -->
@@ -344,8 +344,8 @@
 												<!-- Show 'noListObjectsFound' template if none found -->
 												{{#if objectsFiltered "ItemUsers" noFilter minilistFilter_kitbag_users}}
 													<!-- Select subset of user docs based on user/template filters-->
-													{{#each objectsFiltered "ItemUsers" noFilter minilistFilter_item_users}}
-														{{ >userLine thisUser=this listType="itemUsers" }}
+													{{#each objectsFiltered "ItemUsers" noFilter minilistFilter_inventory_users}}
+														{{ >userLine thisUser=this listType="inventoryUsers" }}
 													{{/each}}
 												{{else}}
 													{{ >noListObjectsFound objectName="Item Users" }}

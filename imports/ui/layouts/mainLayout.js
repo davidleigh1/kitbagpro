@@ -25,15 +25,45 @@ import '/imports/ui/components/navigation.js';
 
 
 Template.mainLayout.onCreated(function(){
-  	var that = this;
-  		that.subscribe('kitbags');
-  		that.subscribe('orgs');
-  		that.subscribe('items');
-  		// that.subscribe('workjournals');
-  	that.autorun(function(){
-    		if (/*libProfilesHandle.ready() &&*/ that.subscriptionsReady()) {
-      //init data structures
-      console.log(" =========== READY NOW ================== ");
-    }
-  });
+	var that = this;
+	console.log("TODO: Are these subscribe() required in 'mainLayout.onCreated'???");
+	that.subscribe('kitbags');
+	that.subscribe('orgs');
+	that.subscribe('items');
+	// that.subscribe('workjournals');
+	that.autorun(function(){
+		if ( that.subscriptionsReady() ) {
+			console.log(" =========== READY NOW ================== ");
+		}
+	});
+});
+
+
+/* EVENTS */
+Template.mainLayout.events({
+	'click .emailLinkConfirm': function(event) {
+		console.log("Global click handler for '.emailLinkConfirm' in 'startup\\client\\index.js'");
+		event.preventDefault();
+		confirmOpenEmail(event);
+	},  
+	'click .phoneLinkConfirm': function(event) {
+		console.log("Global click handler for '.phoneLinkConfirm' in 'startup\\client\\index.js'");
+		event.preventDefault();
+		confirmOpenPhone(event);
+	},  
+	'click .smsLinkConfirm': function(event) {
+		console.log("Global click handler for '.smsLinkConfirm' in 'startup\\client\\index.js'");
+		event.preventDefault();
+		confirmOpenSMS(event);
+	},
+	'click .whatsappMsgLinkConfirm': function(event) {
+		console.log("Global click handler for '.whatsappMsgLinkConfirm' in 'startup\\client\\index.js'");
+		event.preventDefault();
+		confirmOpenWhatsappMsg(event);
+	},
+	'click .whatsappCallLinkConfirm': function(event) {
+		console.log("Global click handler for '.whatsappCallLinkConfirm' in 'startup\\client\\index.js'");
+		event.preventDefault();
+		confirmOpenWhatsappCall(event);
+	}
 });

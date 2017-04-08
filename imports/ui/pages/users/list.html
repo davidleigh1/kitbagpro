@@ -4,7 +4,7 @@
 
 	<!-- Page Heading -->
 	{{> pageHeader
-		pageTitle = "Users2"
+		pageTitle = "Users"
 		pageSubtitle = ""
 		faIcon = (global_getfontAwesomeIcon 'Users')
 		}}
@@ -14,27 +14,27 @@
 		<div class="col-lg-12 tableControlPanel">
 			<!-- Control Buttons -->
 			<!-- fa-fw  makes the icons 'fixed width' -->
-			<a href="/users/create/{{getMyOrgId}}" class="btn btn-primary disabled">
-				<i class="fa fa-fw fa-user-plus"></i> Add User
+			<a href="/users/create/{{getMyOrgId}}" class="btn btn-primary disabled" title="Add User">
+				<i class="fa fa-fw fa-user-plus"></i><span class="btn-text"> Add User</span>
 			</a>
-			<a href="#" class="btn btn-primary disabled">
-				<i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i> Add Users
+			<a href="#" class="btn btn-primary disabled" title="Add Users">
+				<i class="fa fa-fw {{global_getfontAwesomeIcon 'Users'}}"></i><span class="btn-text"> Add Users</span>
 			</a>
-			<a href="/items/duplicate/{{itemId}}" class="btn btn-primary disabled">
-				<i class="fa fa-fw fa-pencil-square-o"></i> Edit Users
+			<a href="/items/duplicate/{{itemId}}" class="btn btn-primary disabled" title="Edit Users">
+				<i class="fa fa-fw fa-pencil-square-o"></i><span class="btn-text"> Edit Users</span>
 			</a>
 			{{#if glb_userIsSuperAdmin}}
-				<a href="#" class="btn btn-danger delete disabled">
-					<i class="fa fa-fw fa-exclamation-triangle"></i> Delete
+				<a href="#" class="btn btn-danger delete disabled" title="Delete">
+					<i class="fa fa-fw fa-exclamation-triangle"></i><span class="btn-text"> Delete</span>
 				</a>
 			{{/if}}
 			{{#if userHasPermission 'canEditOrgUsers'}}
-				<a href="#" class="btn btn-label-default trash disabled">
-					<i class="fa fa-fw fa-trash"></i> Trash
+				<a href="#" class="btn btn-label-default trash disabled" title="Trash">
+					<i class="fa fa-fw fa-trash"></i><span class="btn-text"> Trash</span>
 				</a>
 			{{/if}}
-			<a href="#" class="btn btn-info" id="toggleUserFilter">
-				<i class="fa fa-fw fa-filter"></i> Filter List
+			<a href="#" class="btn btn-info" id="toggleUserFilter" title="Filter List">
+				<i class="fa fa-fw fa-filter"></i><span class="btn-text"> Filter List</span>
 			</a>
 		</div>
 	</div>
@@ -82,7 +82,7 @@
 								{{#if glb_userIsSuperAdmin}}
 								<th class="hidden-xs hidden-sm 				assocOrgId adminOnly">Organisation</th>
 								{{/if}}
-								<th class="									username">Username</th>
+								<th class="hidden-xs						username">Username</th>
 								<th class="hidden-xs hidden-sm 				userEmail">Email</th>
 								{{#if glb_userIsSuperAdmin}}
 								<th class="hidden-xs hidden-sm hidden-md 	userDbId adminOnly">DBID</th>

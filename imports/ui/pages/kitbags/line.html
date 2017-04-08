@@ -43,53 +43,40 @@
 			</a>
 		</td>
 
-		<!-- Test of new assocOrgTitle -->
-
+		<!-- Org Name (SuperAdmins only) -->
 		{{#if glb_userIsSuperAdmin}}
 			{{#unless isOrgView}}
 				<td class="hidden-xs kbAssocOrgTitleCol adminOnly">
-					<!-- {{#unless assocOrgTitle}} -->
-						<!--
- 						<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
-							{{highlight getOrgName.short filterVar suppressHightlight}}
-						</a>
-						-->
-
-						<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.title}}">
-							<b>{{getOrgName.full}}</b>{{#if assocOrgId}}<small><span class="light"> ({{assocOrgId}})</span></small>{{/if}}
-						</a>
-
-
-				<!--	{{else}}
-						<a href="/orgs/{{assocOrgId}}/view">
-							{{highlight assocOrgTitle filterVar suppressHightlight}}
-						</a>
-					{{/unless}} -->
+					<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.title}}">
+						<b>{{getOrgName.full}}</b>{{#if assocOrgId}}<small><span class="light"> ({{assocOrgId}})</span></small>{{/if}}
+					</a>
 				</td>
 			{{/unless}}
 		{{/if}}
 
-
-
 		<!-- Status -->
-
 		<td class="hidden-xs kbStatusCol">
 			<span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span>
 		</td>
 
+		<!-- Combined stock volumes -->
+		{{#if isItemView}}
+			<!-- NOTE: The 'thisItemId' var is passed as an argument to >kitbagLine in 'items.view.html' -->
+			<td class="hidden-xs inventory text-center" title="Note: 'qInitial' originates from the 'AssociatedKitbags' field in the 'Item' document">{{qInitialAssign thisItemId _id}}</td>
+
+			<td class="hidden-xs inventory text-center">{{qAvail}} / {{qAssign}}</td>
+		{{/if}}
 
 		<!-- Item Count-->
-
 		<td class="hidden-xs kbItemCountCol text-center todo">
 			{{#if kitbagItemCount}}
-				<a href="/kitbags/{{kitbagId}}/view#kitbagItemListPanel">{{kitbagItemCount}}</a>
+				<a href="/kitbags/{{_id}}/view#kitbagItemListPanel">{{kitbagItemCount}}</a>
 			{{else}}
-				<a href="/kitbags/{{kitbagId}}/view#kitbagItemListPanel">View Items</a>
+				<a href="/kitbags/{{_id}}/view#kitbagItemListPanel">View Items</a>
 			{{/if}}
 		</td>
 
-		<!-- Item Count-->
-
+		<!-- User Count-->
 		{{#unless isItemView}}
 			<td class="hidden-xs kbUsersCountCol text-center todo">
 				{{#if kitbagUserCount}}
@@ -100,25 +87,9 @@
 			</td>
 		{{/unless}}
 
-		<!-- Custom Kitbag ID
-		<td class="hidden-xs hidden-sm kbSkuCol">
-			{{#unless kitbagId}}
-				<span class="resNote">N/A</span>
-			{{else}}
-				{{highlight kitbagId filterVar suppressHightlight}}
-			{{/unless}}
-			{{#unless sku}}
-				<span class="resNote"></span>
-			{{else}}
-				<br><small>({{highlight sku filterVar suppressHightlight}})</small>
-			{{/unless}}
-		</td>
-		-->
-
 		<!-- DB ID -->
-
 		{{#if glb_userIsSuperAdmin}}
-			<td class="visible-lg kbDbId adminOnly">
+			<td class="hidden-xs hidden-sm kbDbId adminOnly">
 				{{_id}}
 			</td>
 		{{/if}}

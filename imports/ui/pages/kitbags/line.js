@@ -50,10 +50,14 @@ Template.kitbagLine.helpers({
 		*/
 		return "itemView"==Template.parentData().listType;
 	},
+	thisItemId: function () {
+		console.log("-- thisItemId",arguments,this,Template.parentData() );
+		return Template.parentData().thisItemId || global_thisObjId("_itemId") || "Undefined [605]";
+	},
 	thisKitbag: function () {
 		//return Template.parentData();
-		return Template.currentData().thisKitbag;
-		console.log("-- thisKitbag",arguments,Template.currentData() );
+		console.log("-- thisKitbag",arguments,this,Template.currentData() );
+		return Template.currentData().thisKitbag || "Undefined [647]";
 	},
 	changeKitbagStatus: function () {
 		var kbs = (this.status == "Active") ? "Hidden" : "Active";

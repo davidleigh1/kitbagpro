@@ -4,6 +4,7 @@
 
 /* IMPORT PROJECT OBJECTS */
 	// import { kb } from '/imports/startup/both/sharedConstants.js';
+	import { appSettings } from "/imports/startup/both/sharedConstants.js";	
 
 
 /* PARAMETERS */
@@ -25,6 +26,13 @@
 			All this, just to find out in what context (kitbagList or OrgView Minilist) we are showing our template
 			*/
 			return "orgUsers"==Template.parentData().listType;
+		},
+		isItemUsersList: function () {
+			/*
+			NOTE - We need to use parentData() in this helper because the {{#with thisKitbag}} used in the template has the effect of setting the Template.currentData() equal to the datacontext returned by thisKitbag() helper -- so... we need to go up a level (to the parent) to get the listType value that we passed in the original {{>kitbagLine}} declaration.
+			All this, just to find out in what context (kitbagList or OrgView Minilist) we are showing our template
+			*/
+			return "itemUsers"==Template.parentData().listType;
 		},
 		log: function() {
 			// console.log(this);
@@ -61,13 +69,10 @@
 		'click .delete': function(event) {
 			event.preventDefault();
 			globalDelete("DeletedByUser", thisCollectionName, this, Meteor.userId(), "/"+ thisCollectionName.toLowerCase() +"/list");
-			// var areYouSure = "Are you sure you want to permanently delete user '"+this.username+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
-			// if ( confirm(areYouSure) ) {
-			// 	Meteor.call("deleteUser",this._id);
-			// 	// history.go(-1);
-			// 	FlowRouter.go("/users/list");
-			// } else {
-			// 	return false;
-			// }
+		},
+		'click .thisUser': function(event) {
+			event.preventDefault();
+			var msg = "This is the current user";
+			sAlert.info(msg,{position:'bottom-right',timeout:appSettings.sAlert.shortTimeout});
 		}
 	});

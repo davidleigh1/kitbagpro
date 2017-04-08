@@ -32,7 +32,8 @@ export const appSettings = {
 		createdViaDefault				: "ManualFormEntry",
 		duplicatedPrefix 				: "Duplicate of ",
 		validObjects     				: ["Orgs","Kitbags","Items","Users"],
-		omitFields       				: "createdVia, createdAt, createdBy, updatedAt, updatedBy, "
+		omitFields       				: "createdVia, createdAt, createdBy, updatedAt, updatedBy, ",
+		defaultWhatsappText				: "Sent from %appName%: %br%"
 	},
 	sAlert: {
 		defaultTimeout					: 1000,
@@ -49,23 +50,38 @@ export const appSettings = {
 											]
 	},
 	fontAwesomeIcon: {
-		orgs   : "fa-hospital-o",
-		kitbags: "fa-medkit",
-		items  : "fa-stethoscope",
-		users  : "fa-users",		// Plural
-		user   : "fa-user",			// Single
-		trash  : "fa-trash",
-		edit   : "fa-pencil",
-		view   : "fa-eye",
-		delete : "fa-ban",
-		addUser: "fa-user-plus"
+		orgs     : "fa-hospital-o",
+		kitbags  : "fa-medkit",
+		items    : "fa-stethoscope",
+		users    : "fa-users",			// Plural
+		user     : "fa-user",			// Single
+		trash    : "fa-trash",
+		edit     : "fa-pencil",
+		view     : "fa-eye",
+		delete   : "fa-ban",
+		inventory: "fa-check-square-o",
+		addUser  : "fa-user-plus"
+	},
+	inventory: {
+		labelSingular                 : "inventory",
+		labelPlural                   : "inventory",
+		labelCapsSingular             : "Inventory",
+		labelCapsPlural               : "Inventory",
+		statuses                      : ["Active","Hidden","Trashed"],
+		statusesIncludedInAllCount    : ["Active","Hidden"],
+		statusesIncludedInActiveCount : ["Active"],
+		statusesIncludedInHiddenCount : ["Hidden"],
+		statusesIncludedInTrashedCount: ["Trashed"],
+		get omitFields () {
+			return appSettings.global.omitFields + "";
+		}
 	},
 	orgs: {
 		labelSingular                 : "org",
 		labelPlural                   : "orgs",
 		labelCapsSingular             : "Org",
 		labelCapsPlural               : "Orgs",
-		fontAwesomeIcon               : "fa-hospital-o",
+		// fontAwesomeIcon               : "fa-hospital-o",
 		statuses                      : ["Active","Hidden","Trashed"],
 		statusesIncludedInAllCount    : ["Active","Hidden"],
 		statusesIncludedInActiveCount : ["Active"],
@@ -82,7 +98,7 @@ export const appSettings = {
 		labelPlural                   : "kitbags",
 		labelCapsSingular             : "Kitbag",
 		labelCapsPlural               : "Kitbags",
-		fontAwesomeIcon               : "fa-medkit",
+		// fontAwesomeIcon               : "fa-medkit",
 		statuses                      : ["Active","Hidden","Retired","Trashed"],
 		statusesIncludedInAllCount    : ["Active","Hidden","Retired"],
 		statusesIncludedInActiveCount : ["Active","Retired"],
@@ -97,7 +113,7 @@ export const appSettings = {
 		labelPlural                   : "items",
 		labelCapsSingular             : "Item",
 		labelCapsPlural               : "Items",
-		fontAwesomeIcon               : "fa-stethoscope",
+		// fontAwesomeIcon               : "fa-stethoscope",
 		statuses                      : ["Active","Hidden","Retired","Trashed"],
 		statusesIncludedInAllCount    : ["Active","Hidden","Retired"],
 		statusesIncludedInActiveCount : ["Active","Retired"],
@@ -106,7 +122,11 @@ export const appSettings = {
 		standardSizes                 : ["One Size","Extra Small","Small","Medium","Large","Extra Large"],
 		patientAgeGroups              : ["One Size","New Born","Infant","Child","Adult","Geriatric"], /* http://www.medscape.com/viewarticle/495441 */
 		get omitFields () {
-			return appSettings.global.omitFields + "assocKitbagCount";
+			if( onAddOrEdit.toLowerCase() == "edit" ) {
+				return appSettings.global.omitFields + "assocKitbagCount isUnique";
+			} else {
+				return appSettings.global.omitFields + "assocKitbagCount";
+			}
 		}		
 	},
 	users: {
@@ -114,7 +134,7 @@ export const appSettings = {
 		labelPlural      : "users",
 		labelCapsSingular: "User",
 		labelCapsPlural  : "Users",
-		fontAwesomeIcon  : "fa-users",
+		// fontAwesomeIcon  : "fa-users",
 		allUserTypes     : [	// Suspected to be obsolete
 							{
 								label: "System Admin",

@@ -5,8 +5,8 @@ Use as follows - please note the string should be singular and with appropriate 
 	{{> listFilter
 	thisCollectionLc="org"
 	thisCollectionUc="Org"
-	thisCollectionthisCollectionFullUcLc="organisation"
-	thisCollectionthisCollectionFullUcUc="Organisation"
+	thisCollectionFullLc="organisation"
+	thisCollectionFullUc="Organisation"
 	}}
 -->
 
@@ -26,26 +26,28 @@ Use as follows - please note the string should be singular and with appropriate 
 
 		<!-- Freetext entry -->
 
-	<!-- <div>
+		<!-- <div>
 		<input type="text" name="focus" required class="search-box" placeholder="Enter search term" />
 			<button class="close-icon" type="reset">CLEAR</button>
-	</div> -->
-	<div class="filterInputWrapper">
-		<input type="text" name="{{thisCollectionLc}}ListFilter" id="{{thisCollectionLc}}ListFilter" class="filterField filterInput" data-submit="false" placeholder="Type here to filter {{thisCollectionthisCollectionFullUcLc}}s" value="{{filter}}">
-		<button class="listFilterClear close-button">&nbsp;</button>
-	</div>
-		thisCollectionLc: <code>{{thisCollectionLc}}</code> | 
-		listFilterString: <code>{{filterVar}}</code> | 
-		listDataSelect: <code>{{get_defineDataset}}</code>| 
-		int_resultsCount:
-		<code>
-			{{#if thisCollection thisCollectionLc "org"}} 		{{get_orgsFound}} 		{{/if}}
-			{{#if thisCollection thisCollectionLc "kitbag"}} 	{{get_orgBagsFound}} 	{{/if}}
-			{{#if thisCollection thisCollectionLc "itemBags"}} 	{{get_itemBagsFound}} 	{{/if}}
-			{{#if thisCollection thisCollectionLc "item"}} 		{{get_itemsFound}} 		{{/if}}
-			{{#if thisCollection thisCollectionLc "user"}} 		{{get_usersFound}} 		{{/if}}
-			{{#if thisCollection thisCollectionLc "orgUser"}} 	{{get_orgUsersFound}} 	{{/if}}
-		</code>
+		</div> -->
+		<div class="filterInputWrapper">
+			<input type="text" name="{{thisCollectionLc}}ListFilter" id="{{thisCollectionLc}}ListFilter" class="filterField filterInput" data-submit="false" placeholder="Type here to filter {{thisCollectionFullLc}}s" value="{{filter}}">
+			<button class="listFilterClear close-button">&nbsp;</button>
+		</div>
+		<div class="hidden-xs">
+			thisCollectionLc: <code>{{thisCollectionLc}}</code> | 
+			listFilterString: <code>{{filterVar}}</code> | 
+			listDataSelect: <code>{{get_defineDataset}}</code>| 
+			int_resultsCount:
+			<code>
+				{{#if thisCollection thisCollectionLc "org"}} 		{{get_orgsFound}} 		{{/if}}
+				{{#if thisCollection thisCollectionLc "kitbag"}} 	{{get_orgBagsFound}} 	{{/if}}
+				{{#if thisCollection thisCollectionLc "itemBags"}} 	{{get_itemBagsFound}} 	{{/if}}
+				{{#if thisCollection thisCollectionLc "item"}} 		{{get_itemsFound}} 		{{/if}}
+				{{#if thisCollection thisCollectionLc "user"}} 		{{get_usersFound}} 		{{/if}}
+				{{#if thisCollection thisCollectionLc "orgUser"}} 	{{get_orgUsersFound}} 	{{/if}}
+			</code>
+		</div>
 	</div>
 
 {{else}}

@@ -2,6 +2,36 @@
 	import { kb, appSettings } from "/imports/startup/both/sharedConstants.js";
 
 
+/* TEMPORARY */
+
+Template.registerHelper('qInitialAssign', function(thisItemId, thisKitbagId) {
+	console.log(" -- -   --- -> qInitialAssign", thisItemId, thisKitbagId, this);
+	// var qInitial = kb.collections.Kitbags.findOne(thisItemId)["qRecommended"] || "Not Set";
+	var qInitial = kb_reference_only.collections.Items.find(thisItemId).count() && kb_reference_only.collections.Items.findOne(thisItemId)["distributionToKitbags"][ thisKitbagId ].qInitialAssign || "Not Set";
+	return qInitial;
+});
+
+Template.registerHelper('qAvail', function() {
+	return "(qAv)";
+});
+
+Template.registerHelper('qAssign', function() {
+	return "(qAs)";
+});
+
+Template.registerHelper('getAppName', function() {
+	return appSettings.global.appName;
+});
+
+Template.registerHelper('getDefaultWhatsappText', function() {
+	var orig = appSettings.global.defaultWhatsappText;
+	var upd = orig.replace( "%br%" , decodeURIComponent("\n") );
+	var upd = upd.replace( "%appName%", appSettings.global.appName );
+	return upd;
+});
+
+
+
 /* NEW GENERIC HELPERS */
 
 Template.registerHelper('getOrgName', function() {
@@ -402,6 +432,11 @@ Template.registerHelper('get_kitbagUsersFound',function(){
 	return int_kitbagUsersFound.get();
 });
 
+Template.registerHelper('get_itemUsersFound',function(){
+	/* Users with this Item */
+	return int_itemUsersFound.get();
+});
+
 Template.registerHelper('get_userKitbagsFound',function(){
 	/* Kitbags assigned to this user */
 	return int_userKitbagsFound.get();
@@ -756,6 +791,21 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 		return kitbagUsersFound;
 	};
 
+	if (str_CollectionName == "ItemUsers"){
+		/* Users with this Item */
+		console.log("objectsFiltered('ItemUsers')", listSelect, userFilter);
+
+		// var queryObject = obj_listFilter;
+		// var kitbagUsersFound = kb.collections.Users.find( queryObject ).fetch();
+		var itemUsersFound = [];
+		if( typeof int_itemUsersFound != "undefined" ){
+			int_itemUsersFound.set(itemUsersFound.length);
+		}else{
+			console.log("ERROR - var 'int_itemUsersFound' was undefined!");
+		}
+		return itemUsersFound;
+	};
+
 	if (str_CollectionName == "kitbagsAssignedToThisUser"){
 		/* Minilist of "Kitbags assigned to this user" on USER VIEW page */
 		// console.log("kitbagsAssignedToThisUser",listSelect,userFilter,listSelect.kitbagstatus, typeof listSelect.kitbagstatus);
@@ -777,9 +827,9 @@ Template.registerHelper('objectsFiltered',function( str_CollectionName , str_use
 
 
 GlobalHelpers = {
-	getThisfontAwesomeIcon: function(collectionName) {
-		// console.log("\n\ngetThisfontAwesomeIcon\n\n",collectionName,this);
-		return appSettings[collectionName.toLowerCase()].fontAwesomeIcon || "fa-question-circle-o";
+	getThisfontAwesomeIcon: function(iconName) {
+		// console.log("\n\ngetThisfontAwesomeIcon\n\n",iconName,this);
+		return appSettings.fontAwesomeIcon[iconName.toLowerCase()] || "fa-question-circle-o";
 	},
 	// Random number generator for object IDs (to avoid using the Mongo doc Id)
 	// http://stackoverflow.com/questions/105034/

@@ -14,6 +14,7 @@ int_itemsFound = new ReactiveVar(0);
 int_usersFound = new ReactiveVar(0);
 int_orgUsersFound = new ReactiveVar(0);
 int_kitbagUsersFound = new ReactiveVar(0);		/* Users with this Kitbag */
+int_itemUsersFound = new ReactiveVar(0);		/* Users with this Item */
 int_userKitbagsFound = new ReactiveVar(0);		/* Kitbags assigned to this user */
 
 

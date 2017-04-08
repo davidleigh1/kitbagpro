@@ -1,12 +1,12 @@
-<template name="itemList">
+<template name="inventoryList">
 
-{{#if userHasPermission 'canViewItemList'}}
+{{#if userHasPermission 'canViewInventoryList'}}
 
 	<!-- Page Heading -->
 	{{> pageHeader
-		pageTitle = "Items"
+		pageTitle = "Inventory"
 		pageSubtitle = ""
-		faIcon = (global_getfontAwesomeIcon 'Items')
+		faIcon = (global_getfontAwesomeIcon 'inventory')
 		}}
 
 	<!-- TODO: Make this into a reusable template with only the JS changing each time? -->
@@ -16,16 +16,16 @@
 				<div class="panel-heading itemFilter">
 					<h3 class="panel-title">
 						{{>itemLogo}}
-						Items
+						Inventory
 					</h3>
 				</div>
 				<div class="panel-body">
 					<!-- Filtered list of itemanizations -->
 					{{> listFilter
-						thisCollectionLc="item"
-						thisCollectionUc="Item"
-						thisCollectionFullLc="item"
-						thisCollectionFullUc="Item"
+						thisCollectionLc="inventory"
+						thisCollectionUc="Inventory"
+						thisCollectionFullLc="inventory"
+						thisCollectionFullUc="Inventory"
 						}}
 
 				</div>
@@ -43,7 +43,7 @@
 					<table class="table table-bordered-XXX table-hover table-striped-XXX">
 						<thead class="hidden-xs">
 							<tr>
-								<th class="text-left">Item</th>
+								<th class="text-left">Inventory</th>
 								<th class="hidden-xs">Status</th>
 								<th class="hidden-xs">Detail</th>
 								<th class="hidden-xs">AgeGroup</th>
@@ -63,7 +63,7 @@
 									<th class="hidden-xs adminOnly">AssocOrg</th>
 								{{/if}}
 								{{#if glb_userIsSuperAdmin}}
-									<th class="hidden-xs hidden-sm hidden-md adminOnly">Item ID</th>
+									<th class="hidden-xs hidden-sm hidden-md adminOnly">Inventory ID</th>
 								{{/if}}
 								<th class="hidden-xs hidden-sm hidden-md">Controls</th>
 								<th class="hidden-xs text-right">Actions</th>
@@ -72,12 +72,12 @@
 						<tbody>
 
 							{{#if Template.subscriptionsReady}}
-								{{#if objectsFiltered "Items" filterVar}}
-									{{#each objectsFiltered "Items" filterVar}}
+								{{#if objectsFiltered "Inventory" filterVar}}
+									{{#each objectsFiltered "inventory" filterVar}}
 										{{ >itemLine thisItem=this listType="itemList" }}
 									{{/each}}
 								{{else}}
-									{{ >noListObjectsFound objectName="Items" customMessage="No Items found.  Please review any search keywords or filters." }}
+									{{ >noListObjectsFound objectName="inventory" customMessage="No Inventory found.  Please review any search keywords or filters." }}
 								{{/if}}
 							{{else}}
 								loading...

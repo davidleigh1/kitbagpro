@@ -1,4 +1,4 @@
-<template name="itemLine">
+<template name="inventoryLine">
 
 {{#with thisItem}}
 	<tr data-sorttitle="{{global_toLower title}}" data-sortcreated="{{createdAt}}" data-sortkbcount="{{#if assocKitbagCount }}{{assocKitbagCount}}{{else}}0{{/if}}" data-sortupdated="{{createdAt}}" >
@@ -159,8 +159,8 @@
 						</li>
 						{{#if glb_userIsSuperAdmin}}
 							<li class="adminOnly">
-								<a class="toggleStatus" data-action="toggleStatus" data-item="{{_id}}" href="#"><i class='fa fa-fw fa-{{changeItemStatus.icon}}'></i>
-									{{> changeItemStatus}}
+								<a class="toggleStatus" data-action="toggleStatus" data-item="{{_id}}" href="#"><i class='fa fa-fw fa-{{changeInventoryStatus.icon}}'></i>
+									{{> changeInventoryStatus}}
 								</a>
 							</li>
 						{{/if}}

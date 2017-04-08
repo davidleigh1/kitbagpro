@@ -6,26 +6,84 @@
 		<!-- Small screens only! -->
 		<td class="visible-xs col-xs-3">
 			<!-- Top line -->
-			<a href="/users/{{_id}}/view">
 			<div>
-				{{#unless username}}
-					<span class="resNote">Username not found (_id: {{itemId}})</span>
-				{{else}}
-					<a href="/users/{{_id}}/view">{{highlight username filterVar suppressHightlight}}</a>
-				{{/unless}}
+				{{#if isCurrentUser}}
+					<span class="thisUser cursor-help" title="Current User">
+						<i class="fa fa-user-md"></i>&nbsp;
+					</span>
+				{{/if}}
+				<a href="/users/{{_id}}/view">
+					{{#if getDisplayName}}
+						{{highlight getDisplayName filterVar suppressHightlight}}
+					{{else}}
+						<span class="resNote">Displayname not found</span>
+					{{/if}}
+				</a>
 			</div>
 			<!-- /Top line -->
 			<!-- Bottom line -->
 			<div>
-				<!-- {{#if itemAssocKitbagCount }}
-						<span class="itemlistSubtitle">{{plural itemAssocKitbagCount "kitbag" "kitbags"}}</span>
-				{{/if}} -->
+				<span class="userSubtitle">
+					<a href="/users/{{_id}}/view">
+						<!-- {{#if username}}<samp>{{highlight username filterVar suppressHightlight}}</samp>{{else}}<span class="resNote">Username not found</span>{{/if}} 
+						/ -->
+						{{#if getEmail}}<samp>{{highlight getEmail filterVar suppressHightlight}}</samp>{{else}}<span class="resNote">Email not found</span>{{/if}}
+					</a>
+					<!-- Email Icon -->
+					{{#if getEmail}}
+						<!-- NOTE: Uses global click handler via 'mainLayout.events' in '/imports/ui/layouts/mainLayout.js' -->
+						<a class="emailLinkConfirm contactIcon" data-email="{{getEmail}}" href="mailto:{{getEmail}}"><i class="fa fa-envelope"></i></a>
+					{{/if}}
+					<!-- Phone Icon -->
+					{{#if phoneNumber}}
+						<!-- NOTE: Uses global click handler via 'mainLayout.events' in '/imports/ui/layouts/mainLayout.js' -->
+						<a class="phoneLinkConfirm contactIcon" data-phone="{{phoneNumber}}" href="tel:{{phoneNumber}}"><i class="fa fa-phone"></i></a>
+					{{/if}}
+					<!-- SMS Icon -->
+					{{#if phoneNumber}}
+						<!-- NOTE: Uses global click handler via 'mainLayout.events' in '/imports/ui/layouts/mainLayout.js' -->
+						<a class="smsLinkConfirm contactIcon" data-sms="{{phoneNumber}}" href="sms:{{phoneNumber}}"><i class="fa fa-commenting-o"></i></a>
+					{{/if}}
+					<!-- Whatsapp Icon -->
+					{{#if phoneNumber}}
+						<!-- NOTE: Uses global click handler via 'mainLayout.events' in '/imports/ui/layouts/mainLayout.js' -->
+						<a class="whatsappMsgLinkConfirm contactIcon" data-sms="{{phoneNumber}}" href="whatsapp://send?text={{getDefaultWhatsappText}}&phone={{phoneNumber}}"><i class="fa fa-whatsapp"></i></a>
+					{{/if}}
+				</span>
 			</div>
+
+			{{#if glb_userIsSuperAdmin}}
+				<div class="adminOnly">
+					<small>
+					<a class="noLink" href="{{getOrgName.urlView}}" title="{{getOrgName.detail}}">
+						<i>{{highlight getOrgName.short filterVar suppressHightlight}}</i>
+					</a>
+					</small>
+				</div>
+			{{/if}}
 			<!-- /Bottom line -->
-			</a>
+		</td>
+		<td class="visible-xs userActionsCol col-sm-1 col-xs-9">
+			<!-- Show status on small screens -->
+			<div class="visible-xs-block ">
+				<span class="label {{global_getDocStatusTag.labelClass}}">{{global_getDocStatusTag.labelText}}</span>
+			</div>
+			<!-- /status label -->
+			<!-- Show User Type  on small screens -->
+			<div class="visible-xs-block">
+				<small>
+				{{#unless getType.value}}
+					<span class="cursor-help" title="User 'type' attribute not found">-</span>
+				{{else}}
+					{{getType.value}}
+				{{/unless}}
+				</small>
+			</div>
+			<!-- /user type label -->
 		</td>
 		<!-- /Small screens only! -->
 
+		<!-- Display Name -->
 		<td class="hidden-xs userProfileNameCol">
 			{{#unless getDisplayName}}
 				<span class="cursor-help" title="'displayName' not found">
@@ -48,6 +106,7 @@
 			<!-- {{/unless}} -->
 		</td>
 
+		<!-- Callsign -->
 		<td class="hidden-xs callsignCol">
 			{{#unless callsign}}
 				<span class="cursor-help" title="'callsign' not found">-</span>
@@ -56,6 +115,7 @@
 			{{/unless}}
 		</td>
 
+		<!-- Division -->
 		<td class="hidden-xs divisionCol">
 			{{#unless division}}
 				<span class="cursor-help" title="'division' not found">-</span>
@@ -64,6 +124,7 @@
 			{{/unless}}
 		</td>
 
+		<!-- Team -->
 		<td class="hidden-xs teamCol">
 			{{#unless team}}
 				<span class="cursor-help" title="'team' not found">-</span>
@@ -72,26 +133,39 @@
 			{{/unless}}
 		</td>
 
-		<td class="hidden-xs userKitbagCountCol">
-			{{#unless assocKitbagCount}}
-				<span class="cursor-help" title="'assocKitbagCount' not found">-</span>
-			{{else}}
-				{{assocKitbagCount}}
-			{{/unless}}
+		<!-- Serial IDs -->
+		{{#if isItemUsersList}}
+		<td class="hidden-xs serialCol">
+			<span class="" title="">(o)</span>
 		</td>
+		{{/if}}
 
-		<td class="hidden-xs userSuperAdminCol">
-			{{#unless getType.value}}
-				<span class="cursor-help" title="User 'type' attribute not found">-</span>
-			{{else}}
-				{{getType.value}}
-			{{/unless}}
-		</td>
+		<!-- Kitbag Count -->
+		{{#unless isItemUsersList}}
+			<td class="hidden-xs userKitbagCountCol">
+				{{#unless assocKitbagCount}}
+					<span class="cursor-help" title="'assocKitbagCount' not found">-</span>
+				{{else}}
+					{{assocKitbagCount}}
+				{{/unless}}
+			</td>
+		{{/unless}}
 
-		
+		<!-- User Role / User Type -->
+		{{#unless isItemUsersList}}
+			<td class="hidden-xs userRoleCol">
+				{{#unless getType.value}}
+					<span class="cursor-help" title="User 'type' attribute not found">-</span>
+				{{else}}
+					{{getType.value}}
+				{{/unless}}
+			</td>
+		{{/unless}}
+
+
+		<!-- User Organisation -->
 		{{#if glb_userIsSuperAdmin}}
 			{{#unless isOrgUsersList}}
-				<!-- User Organisation -->
 				<!-- NOTE: User Search/Filter also includes Associated Org ID - but not at this point, not the Org Title -->
 				<td class="hidden-xs hidden-sm userOrgCol adminOnly">
 					{{#unless assocOrgId}}
@@ -105,28 +179,32 @@
 		{{/if}}
 
 		<!-- Username -->
-		<td class="hidden-xs userNameCol">
-			{{#unless username}}
-				<span class="cursor-help" title="'username' not found">-</span>
-			{{else}}
-				<a href="/users/{{_id}}/view">{{highlight username filterVar suppressHightlight}}</a>
-			{{/unless}}
-		</td>
-
+		{{#unless isItemUsersList}}
+			<td class="hidden-xs userNameCol">
+				{{#unless username}}
+					<span class="cursor-help" title="'username' not found">-</span>
+				{{else}}
+					<a href="/users/{{_id}}/view">{{highlight username filterVar suppressHightlight}}</a>
+				{{/unless}}
+			</td>
+		{{/unless}}
 
 		<!-- User Email -->
-		<td class="hidden-xs hidden-sm userEmailCol">
-			{{#unless getEmail}}
-				<span class="cursor-help" title="'userEmail' not found">-</span>
-			{{else}}
-				{{highlight getEmail filterVar suppressHightlight}}
-			{{/unless}}
-		</td>
+		{{#unless isItemUsersList}}
+			<td class="hidden-xs hidden-sm userEmailCol">
+				{{#unless getEmail}}
+					<span class="cursor-help" title="'userEmail' not found">-</span>
+				{{else}}
+					{{highlight getEmail filterVar suppressHightlight}}
+				{{/unless}}
+			</td>
+		{{/unless}}
+
 
 		<!-- User ID -->
 		{{#if glb_userIsSuperAdmin}}
 			{{#unless isOrgUsersList}}
-				<td class="hidden-xs userIdCol adminOnly">
+				<td class="hidden-xs hidden-sm hidden-md userIdCol adminOnly">
 					<!-- {{#unless getUserId}}
 						<span class="cursor-help" title="'userId' not found">-</span>
 					{{else}} -->
@@ -136,42 +214,36 @@
 			{{/unless}}
 		{{/if}}
 
-		<!-- Account Service -->
-		<!--
-		<td class="hidden-xs hidden-sm hidden-md userServiceCol">
-			{{#unless userGetService 'serviceName'}}
-				<span class="resNote">'serviceName' not found</span>
-			{{else}}
-				{{userGetService 'serviceName'}} ({{userGetService 'serviceUsername'}})
-			{{/unless}}
-		</td>
-		-->
-
-		<td class="hidden-xs hidden-sm hidden-md userCreatedAtCol"><!-- {{formatDate createdAt}} -->
-			{{#unless createdAt}}
-				<span class="resNote">N/A</span>
-			{{else}}
-				{{formatDate createdAt 'naa!'}}
-			{{/unless}}
-			<!--
-			{{#if createdBy}}
-				<span class="text-muted small adminOnly"><br/>by <a href="/users/{{createdBy}}/view">{{lookupNameFromUserId createdBy}}</a></span>
-			{{/if}}
-			-->
-		</td>
+		<!-- Created Date -->
+		{{#if glb_userIsSuperAdmin}}	
+			<td class="hidden-xs hidden-sm hidden-md userCreatedAtCol"><!-- {{formatDate createdAt}} -->
+				{{#unless createdAt}}
+					<span class="resNote">N/A</span>
+				{{else}}
+					{{formatDate createdAt 'naa!'}}
+				{{/unless}}
+				<!--
+				{{#if createdBy}}
+					<span class="text-muted small adminOnly"><br/>by <a href="/users/{{createdBy}}/view">{{lookupNameFromUserId createdBy}}</a></span>
+				{{/if}}
+				-->
+			</td>
+		{{/if}}
 
 		<!-- CONTROL -->
-		<td class="hidden-xs userActionsCol">
-			<div class="controlWrapper">
-				<button class="view {{#unless getUserId}}disabled{{/unless}}" data-doc="{{_id}}" title="View"><i class="fa fa-fw fa-eye"></i></button>
-				{{#if userHasPermission 'canEditOrgUsers'}}
-				<button class="edit {{#unless getUserId}}disabled{{/unless}}" data-doc="{{_id}}" title="Edit"><i class="fa fa-fw fa-pencil"></i></button>
-				{{/if}}
-				{{#if userHasPermission 'canDeleteOrgUsers'}}
-				<button class="delete" data-doc="{{_id}}" title="Delete"><i class="fa fa-fw fa-trash"></i></button>
-				{{/if}}
-			</div>
-		</td>
+		{{#if glb_userIsSuperAdmin}}
+			<td class="hidden-xs userActionsCol">
+				<div class="controlWrapper">
+					<button class="view {{#unless getUserId}}disabled{{/unless}}" data-doc="{{_id}}" title="View"><i class="fa fa-fw fa-eye"></i></button>
+					{{#if userHasPermission 'canEditOrgUsers'}}
+					<button class="edit {{#unless getUserId}}disabled{{/unless}}" data-doc="{{_id}}" title="Edit"><i class="fa fa-fw fa-pencil"></i></button>
+					{{/if}}
+					{{#if userHasPermission 'canDeleteOrgUsers'}}
+					<button class="delete" data-doc="{{_id}}" title="Delete"><i class="fa fa-fw fa-trash"></i></button>
+					{{/if}}
+				</div>
+			</td>
+		{{/if}}
 
 	</tr>
 {{/with}}

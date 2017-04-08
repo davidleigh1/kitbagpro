@@ -51,6 +51,13 @@ body {
 
 /* TEXT */
 
+	.smallCaps {
+		text-decoration: inherit !important;
+		text-transform: uppercase;
+		color: gray !important;
+		font-size: 0.8em;
+	}
+
 	.huge {
 		font-size: 50px;
 		line-height: normal;
@@ -76,6 +83,7 @@ body {
 
 img.nav-logo {
 		display: inline-block;
+		margin-top: -5px;
 }
 
 div.nav-logotype {
@@ -106,6 +114,12 @@ div.nav-logotype {
 @media (max-width: 768px) {
 	.login-link-text {
 		display: none;
+	}
+	.tableControlPanel span.btn-text {
+		display: none;
+	}
+	.tableControlPanel a.btn {
+	    padding: 4px 7px !important;
 	}
 }
 

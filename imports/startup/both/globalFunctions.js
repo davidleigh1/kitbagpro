@@ -4,12 +4,17 @@ import { appSettings } 	from '/imports/startup/both/sharedConstants.js';
 
 /* GLOBAL GENERICS */
 
+global_thisObjId = function( thisUrlId ) {
+	console.log("global_thisObjId()", thisUrlId, FlowRouter.getParam( thisUrlId ));
+	return FlowRouter.getParam( thisUrlId );
+};
+
 globalOnSuccess = function(thisCollectionName, thisAction = 'created', resultObj = {id:'unknown'},	formType = 'unknown', alertMsgPrefix = '') {
 	console.log("FN: globalOnSuccess()", arguments);
 
 	var thisCollectionName = thisCollectionName || 'unknown';
 
-	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
+	var alertMsgPrefix = "<i class='fa "+GlobalHelpers.getThisfontAwesomeIcon(thisCollectionName)+" fa-lg'></i>&nbsp;&nbsp;";
 	var alertMessage = alertMsgPrefix + "<strong>SUCCESS: </strong> "+appSettings[thisCollectionName.toLowerCase()].labelCapsSingular+": '<i>"+resultObj.title+"</i>' was successfully "+thisAction+".";
 
 	sAlert.success(alertMessage, {
@@ -29,7 +34,7 @@ globalOnError = function(thisCollectionName, thisAction = null, error = 'Unknown
 
 	var thisCollectionName = thisCollectionName || 'unknown';
 
-	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
+	var alertMsgPrefix = "<i class='fa "+GlobalHelpers.getThisfontAwesomeIcon(thisCollectionName)+" fa-lg'></i>&nbsp;&nbsp;";
 
 	var alertText = error.reason || error.message || error.details || "Undefined Error";
 
@@ -53,7 +58,7 @@ globalDelete = function (origin = 'unknown', thisCollectionName, assocObj, userI
 		return false;
 	}
 
-	var alertMsgPrefix = "<i class='fa "+appSettings[thisCollectionName.toLowerCase()].fontAwesomeIcon+" fa-lg'></i>&nbsp;&nbsp;";
+	var alertMsgPrefix = "<i class='fa "+GlobalHelpers.getThisfontAwesomeIcon(thisCollectionName)+" fa-lg'></i>&nbsp;&nbsp;";
 	var areYouSure = "Permanently delete "+ appSettings[thisCollectionName.toLowerCase()].labelSingular + " '"+objTitle+"'?\n\nThere is no undo!\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n";
 	if ( skipUserConfirmation == true || confirm(areYouSure) ) {
 
@@ -386,32 +391,144 @@ forceUserPasswordChange = function (db_id,newpassword) {
 	}
 };
 
-// globalfn_deleteOrg = function (orgObj, userId, goUrl) {
-// 	// event.preventDefault();
-// 	var areYouSure = "_Are you sure you want to permanently delete org '"+orgObj.title+"'?\n\n>> There is no way back! <<\n\nSuggestion: Click 'Cancel' and then 'Trash' it instead...\n"
-// 	if ( confirm(areYouSure) ) {
-// 		Meteor.call("deleteOrg", orgObj._id, userId, function(error, result) {
-// 			console.log("error: " + error + "\n" + "result: " + result);
-// 			var alertMsgPrefix = "<i class='fa fa-building fa-lg'></i>&nbsp;&nbsp;";
-// 			if (!error && true === result){
-// 				sAlert.success(alertMsgPrefix + "<strong>SUCCESS: </strong>Org: <i>'"+orgObj.title+"'</i> was successfully deleted.",
-// 					{
-// 						html: true
-// 					}
-// 				);
-// 			} else {
-// 				sAlert.error(alertMsgPrefix + "<strong>ERROR: </strong>Failed to delete org: '<strong>"+orgObj.title+"</strong>' with error: <code>"+error+"</code>",
-// 					{
-// 						html: true,
-// 						timeout: appSettings.sAlert.longTimeout
-// 					}
-// 				);
-// 			}
-// 		});
-// 		if (typeof goUrl == "string" && goUrl != "") {
-// 			FlowRouter.go(goUrl);
-// 		}
-// 	} else {
-// 		return false;
-// 	}
-// };
+
+confirmOpenEmail = function (event) {
+	// console.log("FN: confirmOpenEmail()", event);
+	var confirmModal = bootbox.confirm({
+		title: "Create New Email?",
+		message: "Create new email to '" + event.currentTarget.dataset.email + "'?",
+		backdrop: true,
+		size: 'small',
+		buttons: {
+			cancel: {
+				label: '<i class="fa fa-times"></i> Cancel'
+			},
+			confirm: {
+				// label: '<i class="fa fa-check"></i> Confirm'
+				label: '<i class="fa fa-envelope"></i> Confirm'
+			}
+		},
+		callback: function (result) {
+			// console.log(result);
+			if ( result === true ){
+				window.location.href = event.currentTarget.href;
+			} else {
+				confirmModal.modal('hide');
+				return false;
+			}
+		}
+	});
+};
+
+confirmOpenEmail = function (event) {
+	// console.log("FN: confirmOpenEmail()", event);
+	var confirmModal = bootbox.confirm({
+		title: "Create New Email?",
+		message: "Create new email to '" + event.currentTarget.dataset.email + "'?",
+		backdrop: true,
+		size: 'small',
+		buttons: {
+			cancel: {
+				label: '<i class="fa fa-times"></i> Cancel'
+			},
+			confirm: {
+				// label: '<i class="fa fa-check"></i> Confirm'
+				label: '<i class="fa fa-envelope"></i> Confirm'
+			}
+		},
+		callback: function (result) {
+			// console.log(result);
+			if ( result === true ){
+				window.location.href = event.currentTarget.href;
+			} else {
+				confirmModal.modal('hide');
+				return false;
+			}
+		}
+	});
+};
+
+confirmOpenPhone = function (event) {
+	// console.log("FN: confirmOpenEmail()", event);
+	var confirmModal = bootbox.confirm({
+		title: "Start new call?",
+		message: "Call '" + event.currentTarget.dataset.phone + "'?",
+		backdrop: true,
+		size: 'small',
+		buttons: {
+			cancel: {
+				label: '<i class="fa fa-times"></i> Cancel'
+			},
+			confirm: {
+				// label: '<i class="fa fa-check"></i> Confirm'
+				label: '<i class="fa fa-phone"></i> Confirm'
+			}
+		},
+		callback: function (result) {
+			// console.log(result);
+			if ( result === true ){
+				window.location.href = event.currentTarget.href;
+			} else {
+				confirmModal.modal('hide');
+				return false;
+			}
+		}
+	});
+};
+
+confirmOpenSMS = function (event) {
+	// console.log("FN: confirmOpenEmail()", event);
+	var confirmModal = bootbox.confirm({
+		title: "Create New SMS Message?",
+		message: "Create new message to '" + event.currentTarget.dataset.sms + "'?",
+		backdrop: true,
+		size: 'small',
+		buttons: {
+			cancel: {
+				label: '<i class="fa fa-times"></i> Cancel'
+			},
+			confirm: {
+				// label: '<i class="fa fa-check"></i> Confirm'
+				label: '<i class="fa fa-commenting"></i> Confirm'
+			}
+		},
+		callback: function (result) {
+			// console.log(result);
+			if ( result === true ){
+				window.location.href = event.currentTarget.href;
+			} else {
+				confirmModal.modal('hide');
+				return false;
+			}
+		}
+	});
+};
+
+confirmOpenWhatsappMsg = function (event) {
+	// console.log("FN: confirmOpenEmail()", event);
+	var confirmModal = bootbox.confirm({
+		title: "Create New WhatsApp Message?",
+		message: "Create new WhatsApp message to '" + event.currentTarget.dataset.sms + "'?",
+		backdrop: true,
+		size: 'small',
+		buttons: {
+			cancel: {
+				label: '<i class="fa fa-times"></i> Cancel'
+			},
+			confirm: {
+				// label: '<i class="fa fa-check"></i> Confirm'
+				label: '<i class="fa fa-whatsapp"></i> Confirm'
+			}
+		},
+		callback: function (result) {
+			// console.log(result);
+			if ( result === true ){
+				window.location.href = event.currentTarget.href;
+			} else {
+				confirmModal.modal('hide');
+				return false;
+			}
+		}
+	});
+};
+

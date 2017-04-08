@@ -221,8 +221,9 @@ kb.schemas.UserSchema = new SimpleSchema({
 	},
 	"phoneNumber": {
 		type: String,
+		regEx: /^(?:\+)[. ()-]*(?:\d[. ()-]*){11,12}$/,
 		optional: true,
-		label: "Phone number"
+		label: "International Phone number"
 	},
 	"profilePicture": {
 		type: String,
