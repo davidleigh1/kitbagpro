@@ -122,11 +122,11 @@ export const appSettings = {
 		standardSizes                 : ["One Size","Extra Small","Small","Medium","Large","Extra Large"],
 		patientAgeGroups              : ["One Size","New Born","Infant","Child","Adult","Geriatric"], /* http://www.medscape.com/viewarticle/495441 */
 		get omitFields () {
-			if( onAddOrEdit.toLowerCase() == "edit" ) {
-				return appSettings.global.omitFields + "assocKitbagCount isUnique";
-			} else {
+			// if( onAddOrEdit && onAddOrEdit.toLowerCase() == "edit" ) {
+			// 	return appSettings.global.omitFields + "assocKitbagCount isUnique";
+			// } else {
 				return appSettings.global.omitFields + "assocKitbagCount";
-			}
+			// }
 		}		
 	},
 	users: {

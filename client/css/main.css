@@ -112,6 +112,9 @@ div.nav-logotype {
 }
 
 @media (max-width: 768px) {
+	.navbar-default {
+		box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+	}
 	.login-link-text {
 		display: none;
 	}
@@ -203,6 +206,13 @@ ul.alert-dropdown {
 
 @media(min-width:768px) {
 
+	.navbar-default .navbar-nav>.active>a,
+	.navbar-default .navbar-nav>.active>a:focus,
+	.navbar-default .navbar-nav>.active>a:hover {
+		border: 1px rgba(35, 82, 124, 0.1) solid;
+	}
+
+
 	.side-nav {
 		position: fixed;
 		top: 51px;
@@ -218,13 +228,6 @@ ul.alert-dropdown {
 		overflow-x: hidden;
 		padding-bottom: 40px;
 	}
-
-	.navbar-default .navbar-nav>.active>a,
-	.navbar-default .navbar-nav>.active>a:focus,
-	.navbar-default .navbar-nav>.active>a:hover {
-		border: 1px rgba(35, 82, 124, 0.1) solid;
-	}
-
 
 	.side-nav>li>a {
 		width: 225px;

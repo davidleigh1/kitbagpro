@@ -25,7 +25,7 @@
 
 
 /* HELPERS */
-	Template.itemLine.helpers({
+	Template.inventoryLine.helpers({
 		isItemList: function () {
 			/*
 			NOTE - We need to use parentData() in this helper because the {{#with thisKitbag}} used in the template has the effect of setting the Template.currentData() equal to the datacontext returned by thisKitbag() helper -- so... we need to go up a level (to the parent) to get the listType value that we passed in the original {{>kitbagLine}} declaration.
@@ -43,7 +43,7 @@
 
 
 /* EVENTS */
-Template.itemLine.events({
+Template.inventoryLine.events({
 	/* See: http://stackoverflow.com/questions/22962386/ for use of 'event.currentTarget' */
 	'click .showDetail': function(event) {
 		// var o = $(event.target).data("item");
@@ -65,7 +65,7 @@ Template.itemLine.events({
 				console.log("shift key was down!!!");
 				skipUserConfirmation = true;
 			}		
-		globalDelete("DeletedByUser", thisCollectionName, this, Meteor.userId(), "/"+ thisCollectionName.toLowerCase() +"/list", skipUserConfirmation);
+		globalDelete("DeletedByUser/Inventory", thisCollectionName, this, Meteor.userId(), "/"+ thisCollectionName.toLowerCase() +"/list", skipUserConfirmation);
 	},
 	'click .toggle-private': function(event){
 		Meteor.call("setPrivateItem",this._id, !this.private);

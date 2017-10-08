@@ -59,7 +59,7 @@
 			return;
 		},
 		minilistFilter_kitbag_users: function () {
-			// kb_reference_only.collections.Users.find({assocKitbagIds:"1221b9ebbb451487-2470bcecc16a9211"}).fetch()
+			// kb.collections.Users.find({assocKitbagIds:"1221b9ebbb451487-2470bcecc16a9211"}).fetch()
 			return {"assocKitbagIds": FlowRouter.getParam(thisUrlId) };
 		},		
 		minilistFilter_items: function () {

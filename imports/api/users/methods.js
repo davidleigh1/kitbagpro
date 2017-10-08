@@ -49,7 +49,7 @@ Meteor.methods({
 		// userObj.displayName = userObj.displayName || userObj.username || userObj["emails"][0]["address"];
 
 		/* CHECK() */
-		// console.log("\n\n", "check(userObj, kb_reference_only.schemas.UserSchema);", "\n\n\n");
+		// console.log("\n\n", "check(userObj, kb.schemas.UserSchema);", "\n\n\n");
 		// 'userObj' will contains the field that are in the 'Schema.User'
 		// var checkResult = check(userObj, kb.schemas.UserSchema);
 		// console.log("\n\n", checkResult, userObj, "\n\n\n");

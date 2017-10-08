@@ -50,7 +50,7 @@ globalDelete = function (origin = 'unknown', thisCollectionName, assocObj, userI
 	// event.preventDefault();
 	var objTitle = assocObj.title || assocObj.displayName || assocObj.username || assocObj["emails"] && assocObj["emails"][0]["address"] || "No title found";
 
-	console.log("FN globalDelete() - Deletion request for " + appSettings[thisCollectionName.toLowerCase()].labelSingular + " record: '" + objTitle + "' ("+assocObj._id+") by user '" + userId +"'");
+	console.log("FN globalDelete() - Deletion ("+origin+") request for " + appSettings[thisCollectionName.toLowerCase()].labelSingular + " record: '" + objTitle + "' ("+assocObj._id+") by user '" + userId +"'");
 
 	/* Check User has permission to delete */
 	if ( !fn_userHasPermission('canDeleteOrgUsers') ){

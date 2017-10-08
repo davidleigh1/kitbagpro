@@ -237,8 +237,10 @@
 										<th class="hidden-xs text-center todo">Items</th>
 										{{#unless isItemView}}
 											<th class="hidden-xs text-center todo">Users</th>
-										{{/unless}}	
-										<th class="hidden-xs hidden-sm">Bag ID</th>
+										{{/unless}}
+										{{#if glb_userIsSuperAdmin}}
+											<th class="hidden-xs hidden-sm adminOnly">Bag ID</th>
+										{{/if}}
 										<th class="visible-lg">Created</th>
 										<!-- <th class="hidden-xs hidden-sm hidden-md">Owner</th> -->
 										<th class="hidden-xs text-right">Actions</th>

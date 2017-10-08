@@ -128,7 +128,51 @@ kb.collections.Items.before.insert(function (userId, doc, fieldNames, modifier, 
 
 kb.collections.Items.before.update(function (userId, doc, fieldNames, modifier, options) {
 	console.log("HOOK: BEFORE ITEMS.UPDATE");
-	/* Update associated Kitbag Count */
+
+	if (modifier && !modifier.$set.distributionToKitbags && modifier.$set.assocKitbagsArray.length > 0 ) {
+		/* Add distributionToKitbags Object */
+		console.log("Copying distributionToKitbags object from doc to modifier.$set (was missing!)");
+		modifier.$set.distributionToKitbags = doc.distributionToKitbags;
+	} else {
+		modifier.distributionToKitbags = {};
+	}
+
+	/* REVERSING ORDER TO CHECK DISTRIBTION FIRST TO REMOVE ANY KITBAGS WHICH ARE NOW REMOVED FROM ASSOCKITBAGARRAY */
+
+
+	// _.each( modifier.$set.distributionToKitbags, function (distributionKitbagId, distributionObj) {
+	Object.keys( modifier.$set.distributionToKitbags ).forEach(function (distributionKitbagId, index) {
+		// modifier.$set.distributionToKitbags.forEach(function (kitbagId, key) {
+		// if ( modifier.$set.assocKitbagsArray.find( distributionKitbagId )  ){
+		if ( modifier.$set.assocKitbagsArray.indexOf( distributionKitbagId ) > -1 ){
+			console.log("OK! Kitbag (" + distributionKitbagId + ") found in 'distributionToKitbags' and 'assocKitbagsArray'");
+			return;
+		} else {
+			console.log("NO LONGER ASSOCIATED! Kitbag (" + distributionKitbagId + ") was not found in 'assocKitbagsArray'.  Will remove from 'distributionToKitbags'");
+			console.log( JSON.stringify( modifier.$set.distributionToKitbags) );
+			delete modifier.$set.distributionToKitbags[ distributionKitbagId ];
+			console.log( JSON.stringify( modifier.$set.distributionToKitbags) );
+		}
+	});
+
+	/* NOW CHECK ASSOCKITBAGS TO ENSURE ALL KITBAGS ARE ALSO IN DISTRIBUTION OBJECT */
+
+	modifier.$set.assocKitbagsArray.forEach(function (kitbagId, key) {
+		console.log(kitbagId, key);
+		if ( modifier.$set.distributionToKitbags[ kitbagId ]  ){
+			console.log("Kitbag (" + kitbagId + ") already exists in 'distributionToKitbags'");
+			return;
+		} else {
+			console.log("Kitbag (" + kitbagId + ") not found.  Adding to 'distributionToKitbags'");
+			modifier.$set.distributionToKitbags[ kitbagId ] = {
+				"qInitialAssign": modifier.$set.qRecommended || kb.collections.Kitbags.findOne(kitbagId)["qRecommended"]
+			}
+			console.log("Added 'qInitialAssign' of "+modifier.$set.distributionToKitbags[ kitbagId ] && modifier.$set.distributionToKitbags[ kitbagId ].qInitialAssign+" to kitbag: "+kitbagId);
+		}
+	});
+
+
+/* Update associated Kitbag Count */
 	globalBeforeUpdateHook("beforeItemUpdate", userId, doc, fieldNames, modifier, options);
 });
 

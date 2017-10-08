@@ -7,7 +7,7 @@
 Template.registerHelper('qInitialAssign', function(thisItemId, thisKitbagId) {
 	console.log(" -- -   --- -> qInitialAssign", thisItemId, thisKitbagId, this);
 	// var qInitial = kb.collections.Kitbags.findOne(thisItemId)["qRecommended"] || "Not Set";
-	var qInitial = kb_reference_only.collections.Items.find(thisItemId).count() && kb_reference_only.collections.Items.findOne(thisItemId)["distributionToKitbags"][ thisKitbagId ].qInitialAssign || "Not Set";
+	var qInitial = kb.collections.Items.find(thisItemId).count() && kb.collections.Items.findOne(thisItemId)["distributionToKitbags"][ thisKitbagId ] && kb.collections.Items.findOne(thisItemId)["distributionToKitbags"][ thisKitbagId ].qInitialAssign || "Not Set";
 	return qInitial;
 });
 
